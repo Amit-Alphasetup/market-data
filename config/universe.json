@@ -807,6 +807,328 @@
       "eod2File": null,
       "historyStart": null,
       "enabled": true
+    },
+    {
+      "id": "NSE:MIDSMALL",
+      "symbol": "MIDSMALL",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "MIDSMALL",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MOM100",
+      "symbol": "MOM100",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "MOM100",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MOREALTY",
+      "symbol": "MOREALTY",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "MOREALTY",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:ALPHA",
+      "symbol": "ALPHA",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "ALPHA",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:EVINDIA",
+      "symbol": "EVINDIA",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "EVINDIA",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MOENERGY",
+      "symbol": "MOENERGY",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "MOENERGY",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:TNIDETF",
+      "symbol": "TNIDETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "TNIDETF",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:HDFCSILVER",
+      "symbol": "HDFCSILVER",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "HDFCSILVER",
+      "assetClass": "silver",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:SILVERIETF",
+      "symbol": "SILVERIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "SILVERIETF",
+      "assetClass": "silver",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:TATAGOLD",
+      "symbol": "TATAGOLD",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "TATAGOLD",
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:GOLDIETF",
+      "symbol": "GOLDIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "GOLDIETF",
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:HDFCGOLD",
+      "symbol": "HDFCGOLD",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "HDFCGOLD",
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:SBISILVER",
+      "symbol": "SBISILVER",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "SBISILVER",
+      "assetClass": "silver",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:SILVER",
+      "symbol": "SILVER",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "SILVER",
+      "assetClass": "silver",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:GOLD1",
+      "symbol": "GOLD1",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "GOLD1",
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:GROWWPOWER",
+      "symbol": "GROWWPOWER",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "GROWWPOWER",
+      "assetClass": "equity",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
     }
   ],
   "indices": [
