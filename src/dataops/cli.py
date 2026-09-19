@@ -9,7 +9,8 @@ def _usage():
           "  lock-run -- <program> <args...>   run a program while holding the dataops lock\n"
           "  reconcile --app-universe FILE [--apply]\n"
           "  diagnose SYMBOL [--from D --to D] [--compare-yahoo]\n"
-          "  gen-v2 [--dry-run]                regenerate C:\\dev\\eod2_universe.json from config/universe.json", file=sys.stderr)
+          "  gen-v2 [--dry-run]                regenerate C:\\dev\\eod2_universe.json from config/universe.json\n"
+          "  export [--out DIR]                build a v3 snapshot into work/ (read-only on EOD2)", file=sys.stderr)
     return 2
 
 
@@ -36,8 +37,34 @@ def main(argv=None):
         except lk.LockBusy as e:
             print(str(e), file=sys.stderr)
             return lk.EXIT_BUSY
+    if cmd == "export":
+        return _export(rest)
     print("unknown command: " + cmd, file=sys.stderr)
     return _usage()
+
+
+def _export(argv):
+    """py -m dataops export [--eod2-data-root DIR] [--config FILE] [--out DIR]   (inside the lock; read-only on EOD2)"""
+    import argparse
+    import os
+
+    from . import export as ex
+    from . import report as rp
+    ap = argparse.ArgumentParser(prog="dataops export")
+    ap.add_argument("--eod2-data-root", default=r"C:\dev\eod2\src\eod2_data")
+    ap.add_argument("--config", default=os.path.join(ex.REPO, "config", "universe.json"))
+    ap.add_argument("--out", default=os.path.join(ex.REPO, "work"))
+    a = ap.parse_args(argv)
+    try:
+        with lk.DataOpsLock("export"):
+            res = ex.build_snapshot(a.eod2_data_root, a.config, a.out)
+    except lk.LockBusy as e:
+        print(str(e), file=sys.stderr)
+        return lk.EXIT_BUSY
+    print(rp.format_report(res))
+    if res.out_dir:
+        print("snapshot folder: " + res.out_dir)
+    return 0 if res.publish_status == "PUBLISHABLE" else 1
 
 
 if __name__ == "__main__":

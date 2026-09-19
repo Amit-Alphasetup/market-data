@@ -1,0 +1,71 @@
+{
+  "layoutVersion": 1,
+  "eod2Src": "C:\\dev\\eod2\\src",
+  "eod2GitCommit": "5c8c8dd65cc951899a8853c6628935c990f36ed5",
+  "dataRoot": "C:\\dev\\eod2\\src\\eod2_data",
+  "dailyFolder": "C:\\dev\\eod2\\src\\eod2_data\\daily",
+  "dailyFileNaming": "<lowercase symbol or index name>.csv (spaces kept, e.g. 'nifty 50.csv'); SME symbols use '<symbol>_sme.csv'",
+  "csvColumns": [
+    "Date",
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "Volume",
+    "Series",
+    "TOTAL_TRADES",
+    "QTY_PER_TRADE",
+    "DLV_QTY"
+  ],
+  "indexFilesInDailyFolder": true,
+  "indexFilesSample": [
+    "nifty 10 yr benchmark g-sec (clean price).csv",
+    "nifty 10 yr benchmark g-sec.csv",
+    "nifty 100.csv",
+    "nifty 11-15 yr g-sec index.csv",
+    "nifty 15 yr and above g-sec index.csv",
+    "nifty 1d rate index.csv",
+    "nifty 200.csv",
+    "nifty 4-8 yr g-sec index.csv",
+    "nifty 50 arbitrage.csv",
+    "nifty 50 futures index.csv"
+  ],
+  "sessionCalendarIndex": "NIFTY 50",
+  "meta": {
+    "path": "C:\\dev\\eod2\\src\\eod2_data\\meta.json",
+    "lastSyncKey": "lastUpdate",
+    "holidaysKey": "holidays",
+    "holidaysDateFormat": "%d-%b-%Y",
+    "holidaysYearKey": "year",
+    "holidaysCoverage": "current calendar year only (meta.year); earlier years are not stored",
+    "specialSessionsKey": "special_sessions",
+    "specialSessionsDateFormat": "ISO datetime",
+    "specialSessionsFile": "C:\\dev\\eod2\\src\\eod2_data\\special_sessions.txt",
+    "pendingDeliveryKey": "DLV_PENDING_DATES"
+  },
+  "isin": {
+    "eod2StoresIsin": true,
+    "symbolToIsinFile": "C:\\dev\\eod2\\src\\eod2_data\\isin_symbol_map.json",
+    "symbolToIsinKey": "sym2isin",
+    "isinCsv": "C:\\dev\\eod2\\src\\eod2_data\\isin.csv"
+  },
+  "update": {
+    "interpreter": "python",
+    "interpreterNote": "EOD2 runs under the PATH `python` (has the `nse` package); dataops itself runs under `py`.",
+    "workingDirectory": "C:\\dev\\eod2\\src",
+    "entryScript": "init.py",
+    "entryCommand": "python init.py",
+    "syncsDatesSince": "meta.lastUpdate (one date per loop; exits 0 when up to date)"
+  },
+  "singleDate": {
+    "downloadFunctions": {
+      "equity": "NSE.equityBhavcopy(date)",
+      "indices": "NSE.indicesBhavcopy(date)",
+      "delivery": "NSE.deliveryBhavcopy(date)"
+    },
+    "downloadFolderNote": "NSE(download_folder, server=True): pass a folder under work/ so raw files never land inside EOD2",
+    "updateRoutine": "defs.updateNseEOD(bhavFile, deliveryFile) then defs.updateIndexEOD(indexFile) then defs.adjustNseStocks()",
+    "updateAppendsOnly": true,
+    "updateNote": "EOD2's own update routine only APPENDS the day's row to the end of each symbol CSV (updateNseSymbol opens the file 'ab'); there is no routine that replaces a historical bar in place. Undo of the newest date = defs.rollback(DAILY_FOLDER) / deleteLastLineByDate, then re-sync. Repairing an older date therefore has no EOD2-supported path: D2 `repair` reports SOURCE_DIFFERS and stops (any write inside EOD2 is a human decision)."
+  }
+}
