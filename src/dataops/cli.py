@@ -26,7 +26,7 @@ USAGE = """usage: py -m dataops <command> [args]
   reconcile --app-universe FILE [--apply]
   gen-v2 [--dry-run]                regenerate C:\\dev\\eod2_universe.json from config/universe.json
   lock-run -- <program> <args...>   run a program while holding the lock
-  poll                              (D3) process control-panel requests
+  poll                              process control-panel requests (data/control/requests)
 """
 
 
@@ -130,8 +130,8 @@ def main(argv=None):
     if cmd == "rebuild-missing":
         return _locked("rebuild-missing", lambda: _rebuild_missing(ctx))
     if cmd == "poll":
-        print("poll is implemented in package D3", file=sys.stderr)
-        return 2
+        from . import poll as poller
+        return poller.poll(ctx, _layout(ctx))                                            # takes the lock itself
     return _mutations(ctx, cmd, rest)
 
 

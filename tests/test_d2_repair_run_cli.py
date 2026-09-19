@@ -297,7 +297,6 @@ def test_cli_publish_and_status_and_rebuild_missing(tmp_path, isolated_lock):
     r = cli(tmp_path, isolated_lock, ["rebuild-missing"], c, layout_path)
     assert r.returncode == 0, r.stderr + r.stdout
     assert "1 instrument(s) attempted" in r.stdout and "REPAIR BBB" in r.stdout and "new export" in r.stdout
-    assert cli(tmp_path, isolated_lock, ["poll"], c).returncode == 2
 
 
 def test_cli_verify_reports_unreachable_live_site(tmp_path, isolated_lock):

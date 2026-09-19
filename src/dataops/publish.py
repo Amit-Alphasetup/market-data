@@ -138,6 +138,29 @@ def verify_live(base_url, dataset_id=None, fetch=fetch_bytes):
     return {"ok": not failures, "datasetId": m["datasetId"], "checked": checked, "failures": failures}
 
 
+def push_or_rebase(repo, allowed_prefixes=("data/control/requests/",), guard=None):
+    """git push; when rejected: fetch, require that the remote changed ONLY files under `allowed_prefixes`, `git pull --rebase`, check that
+    `guard()` (e.g. published snapshot bytes unchanged) still holds, push once more. Raises PublishFail (the commit stays local)."""
+    r = git(repo, "push", check=False)
+    if r.returncode == 0:
+        return
+    try:
+        git(repo, "fetch", "origin")
+        branch = git(repo, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
+        changed = [x for x in git(repo, "diff", "--name-only", "HEAD...origin/%s" % branch).stdout.split() if x]
+        foreign = [x for x in changed if not x.replace("\\", "/").startswith(tuple(allowed_prefixes))]
+        if foreign:
+            raise PublishFail("push rejected and the remote changed unexpected files: %s (commit kept locally)" % ", ".join(foreign[:5]))
+        git(repo, "pull", "--rebase")
+        if guard is not None and not guard():
+            raise PublishFail("published data changed during rebase (commit kept locally)")
+        git(repo, "push")
+    except PublishFail as e:
+        if "commit kept locally" in str(e):
+            raise
+        raise PublishFail("push failed after rebase: %s (commit kept locally; the next run pushes it)" % e)
+
+
 def publish(repo=REPO, dataset_id=None, now=None, base_url=BASE_URL, verify_wait=90, fetch=fetch_bytes, sleep=time.sleep, push=True, live_verify=True, work_root=None):
     """Publish one snapshot. Returns the status dict (also written to data/control/status.json). Raises PublishRefused if nothing was published
     because the snapshot is UNPUBLISHABLE/missing; PublishFail after the status was recorded as FAIL."""
@@ -180,23 +203,10 @@ def publish(repo=REPO, dataset_id=None, now=None, base_url=BASE_URL, verify_wait
     msg = "data: %s %s\n\n%s\n" % (sid, manifest["certification"], TRAILER)
     git(repo, "commit", "-q", "-m", msg)
     if push:
-        r = git(repo, "push", check=False)
-        if r.returncode != 0:                                                            # 7
-            try:
-                git(repo, "fetch", "origin")
-                branch = git(repo, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
-                changed = [x for x in git(repo, "diff", "--name-only", "HEAD...origin/%s" % branch).stdout.split() if x]
-                foreign = [x for x in changed if not x.replace("\\", "/").startswith("data/control/requests/")]
-                if foreign:
-                    fail("push rejected and the remote changed unexpected files: %s (commit kept locally)" % ", ".join(foreign[:5]))
-                git(repo, "pull", "--rebase")
-                if tree_hash(dest) != before:
-                    fail("snapshot folder changed during rebase (commit kept locally)")
-                git(repo, "push")
-            except PublishFail as e:
-                if "commit kept locally" not in str(e):
-                    fail("push failed after rebase: %s (commit kept locally; the next run pushes it)" % e)
-                raise
+        try:
+            push_or_rebase(repo, allowed_prefixes=("data/control/requests/",), guard=lambda: tree_hash(dest) == before)
+        except PublishFail as e:
+            fail(str(e))
     if push and live_verify:                                                             # 8
         sleep(verify_wait)
         lv = verify_live(base_url, sid, fetch)

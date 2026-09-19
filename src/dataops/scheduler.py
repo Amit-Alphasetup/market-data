@@ -5,6 +5,7 @@
 Both: start when available after a missed start, one instance at a time, run as the current interactive user (limited).
 The interpreter is called by its direct path (never through the `py` launcher, which can start an install/update in a bare environment).
 """
+import os
 import subprocess
 import sys
 
@@ -37,6 +38,27 @@ def build_script(enabled=False, python=PY, workdir=WORKDIR, tasks=TASKS):
     return "\n".join(lines) + "\n"
 
 
+POLL_TASK = {"name": "Market Data Poll", "args": "-m dataops poll", "desc": "dataops poll: process control-panel requests every 10 min, 08:00-23:59"}
+
+
+def build_poll_script(enabled=False, python=PY, workdir=WORKDIR, task=POLL_TASK):
+    """Poller task (D3): every 10 minutes from 08:00 for 15 h 59 min, every day. NOT registered by the builder (only D0.5/D2 tasks are
+    pre-approved); Apd runs this script once, in any PowerShell."""
+    n = q(task["name"])
+    lines = [
+        "$ErrorActionPreference = 'Stop'",
+        "$a = New-ScheduledTaskAction -Execute '%s' -Argument '%s' -WorkingDirectory '%s'" % (q(python), q(task["args"]), q(workdir)),
+        "$t = New-ScheduledTaskTrigger -Daily -At '08:00'",
+        "$t.Repetition = (New-ScheduledTaskTrigger -Once -At '08:00' -RepetitionInterval (New-TimeSpan -Minutes 10) -RepetitionDuration (New-TimeSpan -Hours 15 -Minutes 59)).Repetition",
+        "$s = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -RunOnlyIfNetworkAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 3)",
+        "Register-ScheduledTask -TaskName '%s' -Action $a -Trigger $t -Settings $s -Description '%s' -Force | Out-Null" % (n, q(task["desc"])),
+    ]
+    if not enabled:
+        lines.append("Disable-ScheduledTask -TaskName '%s' | Out-Null" % n)
+    lines.append("Get-ScheduledTask -TaskName '%s' | Select-Object TaskName,State | Format-Table -AutoSize" % n)
+    return os.linesep.join(lines) + os.linesep
+
+
 def enable_script(tasks=TASKS):
     return "\n".join("Enable-ScheduledTask -TaskName '%s'" % q(t["name"]) for t in tasks) + "\n"
 
@@ -56,7 +78,9 @@ def register(enabled=False):
 
 
 if __name__ == "__main__":
-    if "--print" in sys.argv:
+    if "--poll" in sys.argv:
+        print(build_poll_script("--enabled" in sys.argv))
+    elif "--print" in sys.argv:
         print(build_script("--enabled" in sys.argv))
     else:
         rc, out = register("--enabled" in sys.argv)

@@ -36,3 +36,20 @@ def test_generated_script_is_valid_powershell_without_running_it():
         assert r.returncode == 0 and "PARSE OK" in r.stdout, r.stdout + r.stderr
     finally:
         os.unlink(path)
+
+
+def test_poll_task_script_is_generated_valid_and_disabled_by_default():
+    s = sc.build_poll_script()
+    assert "-Argument '-m dataops poll'" in s and "-TaskName 'Market Data Poll'" in s and "Disable-ScheduledTask" in s
+    assert "-RepetitionInterval (New-TimeSpan -Minutes 10)" in s and "-RepetitionDuration (New-TimeSpan -Hours 15 -Minutes 59)" in s and "-At '08:00'" in s
+    assert "Disable-ScheduledTask" not in sc.build_poll_script(enabled=True)
+    with tempfile.NamedTemporaryFile("w", suffix=".ps1", delete=False, encoding="utf-8") as f:
+        f.write(s)
+        path = f.name
+    try:
+        cmd = ("$e=$null;$t=$null;[void][System.Management.Automation.Language.Parser]::ParseFile('%s',[ref]$t,[ref]$e);"
+               "if($e.Count){$e|ForEach-Object{$_.Message};exit 1}else{'PARSE OK'}" % path)
+        r = subprocess.run(["powershell", "-NoProfile", "-Command", cmd], capture_output=True, text=True)
+        assert r.returncode == 0 and "PARSE OK" in r.stdout, r.stdout + r.stderr
+    finally:
+        os.unlink(path)

@@ -1,0 +1,1045 @@
+{
+ "cases": [
+  {
+   "name": "run",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": true,
+   "file": "20260310T141107Z-run-3f2b8c1e.json"
+  },
+  {
+   "name": "add minimal",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "NIFTYBEES"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-add-3f2b8c1e.json"
+  },
+  {
+   "name": "add full",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "GOLDBEES",
+     "kind": "ETF",
+     "engines": [
+      "LIFO",
+      "DM"
+     ],
+     "assetClass": "gold",
+     "isin": "INF204KB17I5"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-add-3f2b8c1e.json"
+  },
+  {
+   "name": "add empty isin and engines",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "engines": [],
+     "isin": ""
+    }
+   },
+   "valid": true
+  },
+  {
+   "name": "remove",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "remove",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MID150BEES"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-remove-3f2b8c1e.json"
+  },
+  {
+   "name": "symbol with & and -",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "remove",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "M&M-ETF"
+    }
+   },
+   "valid": true
+  },
+  {
+   "name": "set_engines",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_engines",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "NIFTYBEES",
+     "engines": [
+      "LIFO",
+      "DM",
+      "TENET"
+     ]
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-set_engines-3f2b8c1e.json"
+  },
+  {
+   "name": "set_engines empty (data-only)",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_engines",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "NIFTYBEES",
+     "engines": []
+    }
+   },
+   "valid": true
+  },
+  {
+   "name": "backfill",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "backfill",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "NIFTYBEES",
+     "from": "2019-01-14"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-backfill-3f2b8c1e.json"
+  },
+  {
+   "name": "set_listing",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_listing",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "SILVERBEES",
+     "date": "2022-02-07",
+     "evidence": "NSE circular 123"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-set_listing-3f2b8c1e.json"
+  },
+  {
+   "name": "diagnose no dates",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "diagnose",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MONQ50"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-diagnose-3f2b8c1e.json"
+  },
+  {
+   "name": "diagnose range",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "diagnose",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MONQ50",
+     "from": "2026-09-10",
+     "to": "2026-09-18"
+    }
+   },
+   "valid": true
+  },
+  {
+   "name": "repair",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "repair",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MOM100",
+     "from": "2022-05-11",
+     "to": "2022-05-11"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-repair-3f2b8c1e.json"
+  },
+  {
+   "name": "rebuild_missing",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "rebuild_missing",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": true,
+   "file": "20260310T141107Z-rebuild_missing-3f2b8c1e.json"
+  },
+  {
+   "name": "approve_move",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "approve_move",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MONQ50",
+     "date": "2026-09-16",
+     "evidence": "NSE price band circular"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-approve_move-3f2b8c1e.json"
+  },
+  {
+   "name": "add_split",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "GOLD1",
+     "date": "2021-07-22",
+     "ratio": "10:1",
+     "evidence": "NSE corporate action"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-add_split-3f2b8c1e.json"
+  },
+  {
+   "name": "leap day",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "backfill",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "from": "2024-02-29"
+    }
+   },
+   "valid": true
+  },
+  {
+   "name": "evidence exactly 500 chars",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_listing",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "evidence": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+   },
+   "valid": true
+  },
+  {
+   "name": "uuid4 with variant 8",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-8a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": true
+  },
+  {
+   "name": "unknown type",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "shutdown",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "errorContains": "unknown type"
+  },
+  {
+   "name": "type not a string",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": 7,
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false
+  },
+  {
+   "name": "unknown arg on run",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "cmd": "whoami"
+    }
+   },
+   "valid": false,
+   "errorContains": "unknown arg"
+  },
+  {
+   "name": "shell text as symbol",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "NIFTY; del *"
+    }
+   },
+   "valid": false,
+   "errorContains": "symbol"
+  },
+  {
+   "name": "lowercase symbol",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "niftybees"
+    }
+   },
+   "valid": false,
+   "errorContains": "symbol"
+  },
+  {
+   "name": "symbol too short",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "A"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "symbol too long",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AAAAAAAAAAAAAAAAAAAAA"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "symbol with space",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "remove",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "NIFTY BEES"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "symbol not a string",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "remove",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": 5
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "missing symbol",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "remove",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "errorContains": "missing arg"
+  },
+  {
+   "name": "missing evidence",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "approve_move",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MONQ50",
+     "date": "2026-09-16"
+    }
+   },
+   "valid": false,
+   "errorContains": "missing arg"
+  },
+  {
+   "name": "blank evidence",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "approve_move",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MONQ50",
+     "date": "2026-09-16",
+     "evidence": "   "
+    }
+   },
+   "valid": false,
+   "errorContains": "evidence"
+  },
+  {
+   "name": "evidence too long",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_listing",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "evidence": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+   },
+   "valid": false,
+   "errorContains": "longer"
+  },
+  {
+   "name": "evidence with newline",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_listing",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "evidence": "a\nb"
+    }
+   },
+   "valid": false,
+   "errorContains": "control"
+  },
+  {
+   "name": "evidence not a string",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_listing",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "evidence": [
+      "x"
+     ]
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "impossible date",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "backfill",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "from": "2025-02-30"
+    }
+   },
+   "valid": false,
+   "errorContains": "date"
+  },
+  {
+   "name": "non-leap 29 feb",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "backfill",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "from": "2023-02-29"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "date wrong format",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "backfill",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "from": "10-03-2026"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "date single digit",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "backfill",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "from": "2026-3-1"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "diagnose from after to",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "diagnose",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "from": "2026-09-18",
+     "to": "2026-09-10"
+    }
+   },
+   "valid": false,
+   "errorContains": "after"
+  },
+  {
+   "name": "engines unknown",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_engines",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "engines": [
+      "LIFO",
+      "XYZ"
+     ]
+    }
+   },
+   "valid": false,
+   "errorContains": "engines"
+  },
+  {
+   "name": "engines duplicate",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_engines",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "engines": [
+      "LIFO",
+      "LIFO"
+     ]
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "engines string not list",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_engines",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "engines": "LIFO,DM"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "engines lowercase",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "set_engines",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "engines": [
+      "lifo"
+     ]
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "ratio without colon",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "ratio": "10",
+     "evidence": "x"
+    }
+   },
+   "valid": false,
+   "errorContains": "ratio"
+  },
+  {
+   "name": "ratio zero",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "ratio": "0:1",
+     "evidence": "x"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "ratio zero denominator",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "ratio": "10:0",
+     "evidence": "x"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "ratio letters",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "ratio": "a:b",
+     "evidence": "x"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "ratio too big",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "ratio": "1000000:1",
+     "evidence": "x"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "ratio negative",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "ratio": "-2:1",
+     "evidence": "x"
+    }
+   },
+   "valid": false
+  },
+  {
+   "name": "kind not ETF",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "kind": "INDEX"
+    }
+   },
+   "valid": false,
+   "errorContains": "kind"
+  },
+  {
+   "name": "asset class invalid",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "assetClass": "crypto"
+    }
+   },
+   "valid": false,
+   "errorContains": "assetClass"
+  },
+  {
+   "name": "isin invalid",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "isin": "123"
+    }
+   },
+   "valid": false,
+   "errorContains": "isin"
+  },
+  {
+   "name": "createdBy not panel",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "script",
+    "args": {}
+   },
+   "valid": false,
+   "errorContains": "createdBy"
+  },
+  {
+   "name": "id not uuid",
+   "req": {
+    "id": "not-a-uuid",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "errorContains": "uuid4"
+  },
+  {
+   "name": "id uppercase",
+   "req": {
+    "id": "3F2B8C1E-5D4A-4B6F-9A7C-0E1D2C3B4A59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false
+  },
+  {
+   "name": "id uuid v1",
+   "req": {
+    "id": "3f2b8c1e-5d4a-1b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false
+  },
+  {
+   "name": "createdAt invalid",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "yesterday",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "errorContains": "createdAt"
+  },
+  {
+   "name": "createdAt not a string",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": 12345,
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false
+  },
+  {
+   "name": "extra top-level key",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {},
+    "extra": 1
+   },
+   "valid": false,
+   "errorContains": "unexpected key"
+  },
+  {
+   "name": "missing args",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel"
+   },
+   "valid": false,
+   "errorContains": "missing key"
+  },
+  {
+   "name": "args not an object",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": []
+   },
+   "valid": false,
+   "errorContains": "args must be an object"
+  },
+  {
+   "name": "request is an array",
+   "req": [
+    {
+     "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+     "type": "run",
+     "createdAt": "2026-03-10T14:11:07Z",
+     "createdBy": "panel",
+     "args": {}
+    }
+   ],
+   "valid": false
+  },
+  {
+   "name": "filename type mismatch",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB"
+    }
+   },
+   "valid": false,
+   "file": "20260310T141107Z-remove-3f2b8c1e.json",
+   "errorContains": "does not match"
+  },
+  {
+   "name": "filename id mismatch",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "file": "20260310T141107Z-run-deadbeef.json",
+   "errorContains": "does not match"
+  },
+  {
+   "name": "filename bad pattern",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "file": "run.json",
+   "errorContains": "bad file name"
+  },
+  {
+   "name": "filename path traversal",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "file": "../../config/universe.json"
+  },
+  {
+   "name": "filename uppercase type",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "file": "20260310T141107Z-RUN-3f2b8c1e.json"
+  },
+  {
+   "name": "symbol with trailing newline",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "remove",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB\n"
+    }
+   },
+   "valid": false,
+   "errorContains": "symbol"
+  },
+  {
+   "name": "ratio with trailing newline",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add_split",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "date": "2020-01-01",
+     "ratio": "10:1\n",
+     "evidence": "x"
+    }
+   },
+   "valid": false,
+   "errorContains": "ratio"
+  },
+  {
+   "name": "id with trailing newline",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59\n",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "errorContains": "uuid4"
+  },
+  {
+   "name": "filename with trailing newline",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "run",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {}
+   },
+   "valid": false,
+   "file": "20260310T141107Z-run-3f2b8c1e.json\n",
+   "errorContains": "bad file name"
+  },
+  {
+   "name": "isin with trailing newline",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "add",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "isin": "INF204KB14I2\n"
+    }
+   },
+   "valid": false,
+   "errorContains": "isin"
+  },
+  {
+   "name": "date with trailing newline",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "backfill",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "AB",
+     "from": "2026-01-01\n"
+    }
+   },
+   "valid": false,
+   "errorContains": "date"
+  }
+ ]
+}

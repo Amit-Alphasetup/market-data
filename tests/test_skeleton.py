@@ -19,9 +19,13 @@ def test_structure_exists():
         assert os.path.exists(os.path.join(ROOT, rel)), rel
 
 
-def test_placeholder_index():
+def test_index_is_the_control_panel():
+    """D0 shipped a placeholder; D3 replaced it with the control panel (still titled market-data, still a single file with no external libs)."""
     html = read("index.html")
-    assert "<title>market-data</title>" in html and "<p>market-data</p>" in html
+    assert "<title>market-data</title>" in html and "<h1>market-data</h1>" in html
+    assert "window.MDPanel" in html and "Content-Security-Policy" in html
+    import re
+    assert not re.findall(r'<script[^>]+src=|<link[^>]+href=["\']http', html), "the panel must not load external scripts or stylesheets"
 
 
 def test_gitattributes_and_gitignore():

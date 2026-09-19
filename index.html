@@ -1,3 +1,582 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>market-data</title></head>
-<body><p>market-data</p></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.github.com http://127.0.0.1:* http://localhost:*; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="data:,">
+<title>market-data</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--line:#30363d;--fg:#e6edf3;--mute:#8b949e;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--info:#58a6ff;--chip:#21262d}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:0 16px 32px}
+header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 0 6px}
+h1{font-size:18px;margin:0}
+h2{font-size:14px;margin:0 0 8px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+main{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow{flex:1 1 auto}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-weight:600;font-size:12px;border:1px solid transparent}
+.b-ok{color:var(--ok);border-color:var(--ok)}.b-warn{color:var(--warn);border-color:var(--warn)}.b-bad{color:var(--bad);border-color:var(--bad)}.b-none{color:var(--mute);border-color:var(--line)}.b-info{color:var(--info);border-color:var(--info)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+.kv div{background:var(--chip);border-radius:8px;padding:8px 10px}
+.kv b{display:block;font-size:11px;color:var(--mute);font-weight:500;text-transform:uppercase}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.mute{color:var(--mute)}
+input,select,textarea,button{font:inherit;color:var(--fg);background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:38px}
+textarea{width:100%;min-height:70px;resize:vertical}
+button{cursor:pointer;background:#238636;border-color:#2ea043;font-weight:600}
+button.sec{background:var(--chip);border-color:var(--line);font-weight:500}
+button.danger{background:#8e1519;border-color:var(--bad)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:var(--card);color:var(--mute);font-size:12px}
+td.wrap{white-space:normal;min-width:180px}
+.chip{display:inline-block;margin:0 3px 0 0;padding:0 7px;border-radius:6px;background:var(--chip);border:1px solid var(--line);font-size:11px}
+.field{display:grid;gap:4px;min-width:150px}
+.field label{font-size:12px;color:var(--mute)}
+.fields{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.checks label{margin-right:12px;color:var(--fg);font-size:13px}
+.checks input{min-height:auto;margin-right:4px}
+.err{color:var(--bad);margin:6px 0}
+.msg{margin:6px 0;color:var(--ok)}
+.tabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.tabs button{background:var(--chip);border-color:var(--line);font-weight:500}
+.tabs button[aria-selected=true]{border-color:var(--info);color:var(--info)}
+dialog{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:12px;max-width:520px;width:calc(100% - 32px)}
+dialog::backdrop{background:#000a}
+@media (max-width:480px){body{padding:0 12px 24px}h1{font-size:16px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>market-data</h1>
+  <span id="build" class="mute mono"></span>
+  <span class="grow"></span>
+  <span id="tokenState" class="badge b-none">no token</span>
+  <button id="btnSettings" class="sec" type="button">Settings</button>
+  <button id="btnRefresh" class="sec" type="button">Refresh</button>
+</header>
+<main>
+  <section class="card" id="statusCard" aria-live="polite">
+    <div class="row"><h2 class="grow">Status</h2><span id="statusBadge" class="badge b-none">loading…</span></div>
+    <div id="statusMsg" class="mute"></div>
+    <div class="kv" id="statusKv"></div>
+  </section>
+
+  <section class="card">
+    <h2>Instruments</h2>
+    <div class="row">
+      <input id="fltText" class="grow" placeholder="Filter by symbol" autocomplete="off" aria-label="Filter by symbol">
+      <select id="fltStatus" aria-label="Status"><option value="">All statuses</option><option>OK</option><option>WARN</option><option>EXCLUDED</option><option>QUARANTINED</option></select>
+      <select id="fltKind" aria-label="Kind"><option value="">ETF + index</option><option>ETF</option><option>INDEX</option></select>
+      <span id="instCount" class="mute"></span>
+    </div>
+    <div class="tablewrap" style="margin-top:10px"><table id="instTable"><thead><tr><th>Symbol</th><th>Kind</th><th>Engines</th><th>First</th><th>Last</th><th>Bars</th><th>Status</th><th>Reasons</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="card">
+    <h2>Send a request to the PC</h2>
+    <div class="row">
+      <div class="field"><label for="reqType">Action</label>
+        <select id="reqType"></select></div>
+      <div class="mute grow" id="reqHelp"></div>
+    </div>
+    <div class="fields" id="reqFields"></div>
+    <div id="reqErr" class="err" role="alert"></div>
+    <div id="reqMsg" class="msg" aria-live="polite"></div>
+    <div class="row"><button id="btnSend" type="button">Send request</button><button id="btnCancelReview" class="sec" type="button" hidden>Edit</button><span id="reviewText" class="mute"></span></div>
+  </section>
+
+  <section class="card">
+    <h2>Requests</h2>
+    <div class="tabs" role="tablist"><button type="button" role="tab" data-tab="requests" aria-selected="true">Pending</button><button type="button" role="tab" data-tab="inflight" aria-selected="false">Running</button><button type="button" role="tab" data-tab="history" aria-selected="false">History</button></div>
+    <div id="reqList"></div>
+  </section>
+</main>
+
+<dialog id="dlgSettings">
+  <h2>GitHub token</h2>
+  <p class="mute">A fine-grained personal access token limited to <b>Amit-Alphasetup/market-data</b> with <b>Contents: read and write</b>. It is encrypted (AES-GCM, non-extractable key in IndexedDB) in this browser only. Anyone who can run script on this page can still use it — use a token that can do nothing else.</p>
+  <div class="field"><label for="patInput">Token</label><input id="patInput" type="password" autocomplete="off" spellcheck="false"></div>
+  <div id="patMsg" class="msg" aria-live="polite"></div>
+  <div class="row" style="margin-top:10px"><button id="btnSaveToken" type="button">Save token</button><button id="btnTestToken" class="sec" type="button">Test token</button><button id="btnForgetToken" class="danger" type="button">Forget token</button><span class="grow"></span><button id="btnCloseSettings" class="sec" type="button">Close</button></div>
+</dialog>
+
+<script>
+(function () {
+'use strict';
+var OWNER = 'Amit-Alphasetup', REPO = 'market-data', BRANCH = 'main';
+var PANEL_VERSION = '1.0';
+var TYPES = ['run', 'add', 'remove', 'set_engines', 'backfill', 'set_listing', 'diagnose', 'repair', 'rebuild_missing', 'approve_move', 'add_split'];
+var ENGINES = ['LIFO', 'DM', 'TENET'];
+var ASSET_CLASSES = ['equity', 'gold', 'silver', 'international', 'debt', 'liquid'];
+var EVIDENCE_MAX = 500;
+// type -> arg -> [required, kind]     (mirror of src/dataops/requests_spec.py SPEC)
+var SPEC = {
+  run: {},
+  add: { symbol: [true, 'symbol'], kind: [false, 'kind'], engines: [false, 'engines'], assetClass: [false, 'assetClass'], isin: [false, 'isin'] },
+  remove: { symbol: [true, 'symbol'] },
+  set_engines: { symbol: [true, 'symbol'], engines: [true, 'engines'] },
+  backfill: { symbol: [true, 'symbol'], from: [true, 'date'] },
+  set_listing: { symbol: [true, 'symbol'], date: [true, 'date'], evidence: [true, 'evidence'] },
+  diagnose: { symbol: [true, 'symbol'], from: [false, 'date'], to: [false, 'date'] },
+  repair: { symbol: [true, 'symbol'], from: [false, 'date'], to: [false, 'date'] },
+  rebuild_missing: {},
+  approve_move: { symbol: [true, 'symbol'], date: [true, 'date'], evidence: [true, 'evidence'] },
+  add_split: { symbol: [true, 'symbol'], date: [true, 'date'], ratio: [true, 'ratio'], evidence: [true, 'evidence'] }
+};
+var HELP = {
+  run: 'sync → export → publish now (the PC does it within ~10 minutes).',
+  add: 'Add an ETF that EOD2 already has. Engines are optional.',
+  remove: 'Stop exporting this ETF (kept in the registry with its approvals).',
+  set_engines: 'Which strategies may use this ETF. Empty = data only.',
+  backfill: 'Start this ETF\'s history at an earlier date (reports what EOD2 really has).',
+  set_listing: 'Record the verified NSE listing date. Evidence is required.',
+  diagnose: 'Read-only report on a symbol\'s bars and anomalies. The result appears in History.',
+  repair: 'Re-download the day from NSE, compare with EOD2, re-export. Never uses a second source.',
+  rebuild_missing: 'Repair every instrument that is missing sessions, then export and publish.',
+  approve_move: 'Confirm a ≥15% one-day move is real, for ONE date. Evidence is required.',
+  add_split: 'Register a stock split with its date and ratio. Evidence is required.'
+};
+var TWO_STEP = { approve_move: 1, add_split: 1, remove: 1 };
+
+/* ---------- validation (must stay in sync with requests_spec.py; tests/data/request_cases.json runs against both) ---------- */
+function isDate(v) {
+  if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
+  var d = new Date(v + 'T00:00:00Z');
+  return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
+}
+function isIso(s) {
+  if (typeof s !== 'string') return false;
+  if (!/^\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})?)?$/.test(s)) return false;
+  return !isNaN(Date.parse(s.length === 10 ? s + 'T00:00:00Z' : s));
+}
+function checkValue(kind, v) {
+  var i;
+  switch (kind) {
+    case 'symbol': return (typeof v === 'string' && /^[A-Z0-9&-]{2,20}$/.test(v)) ? null : 'symbol must match ^[A-Z0-9&-]{2,20}$';
+    case 'date': return isDate(v) ? null : 'date must be a real YYYY-MM-DD date';
+    case 'evidence':
+      if (typeof v !== 'string' || !v.trim()) return 'evidence is required (non-empty text)';
+      if (v.length > EVIDENCE_MAX) return 'evidence longer than ' + EVIDENCE_MAX + ' characters';
+      for (i = 0; i < v.length; i++) if (v.charCodeAt(i) < 32) return 'evidence must not contain control characters';
+      return null;
+    case 'engines':
+      if (!Array.isArray(v)) return 'engines must be a duplicate-free list drawn from ' + JSON.stringify(ENGINES);
+      for (i = 0; i < v.length; i++) if (typeof v[i] !== 'string' || ENGINES.indexOf(v[i]) < 0 || v.indexOf(v[i]) !== i) return 'engines must be a duplicate-free list drawn from ' + JSON.stringify(ENGINES);
+      return null;
+    case 'ratio': return (typeof v === 'string' && /^[1-9]\d{0,5}:[1-9]\d{0,5}$/.test(v)) ? null : 'ratio must look like 10:1 (positive integers)';
+    case 'kind': return v === 'ETF' ? null : 'kind must be ETF';
+    case 'assetClass': return ASSET_CLASSES.indexOf(v) >= 0 ? null : 'assetClass must be one of ' + JSON.stringify(ASSET_CLASSES);
+    case 'isin': return (v === '' || (typeof v === 'string' && /^[A-Z]{2}[A-Z0-9]{9}\d$/.test(v))) ? null : 'isin must be empty or a 12-character ISIN';
+  }
+  return 'unknown arg kind';
+}
+function has(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
+function validateRequest(req, filename) {
+  var errs = [], k;
+  if (req === null || typeof req !== 'object' || Array.isArray(req)) return ['request must be a JSON object'];
+  var allowed = ['id', 'type', 'createdAt', 'createdBy', 'args'];
+  Object.keys(req).forEach(function (key) { if (allowed.indexOf(key) < 0) errs.push("unexpected key '" + key + "'"); });
+  allowed.forEach(function (key) { if (!has(req, key)) errs.push("missing key '" + key + "'"); });
+  if (errs.length) return errs;
+  if (typeof req.id !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(req.id)) errs.push('id must be a lowercase uuid4');
+  if (typeof req.type !== 'string' || TYPES.indexOf(req.type) < 0) errs.push('unknown type ' + (typeof req.type === 'string' ? JSON.stringify(req.type) : typeof req.type));
+  if (!isIso(req.createdAt)) errs.push('createdAt must be an ISO datetime');
+  if (req.createdBy !== 'panel') errs.push("createdBy must be 'panel'");
+  var args = req.args;
+  if (args === null || typeof args !== 'object' || Array.isArray(args)) { errs.push('args must be an object'); return errs; }
+  var spec = (typeof req.type === 'string' && has(SPEC, req.type)) ? SPEC[req.type] : null;
+  if (spec) {
+    Object.keys(args).forEach(function (a) { if (!has(spec, a)) errs.push("unknown arg '" + a + "' for type " + req.type); });
+    Object.keys(spec).forEach(function (a) {
+      if (!has(args, a)) { if (spec[a][0]) errs.push("missing arg '" + a + "'"); return; }
+      var e = checkValue(spec[a][1], args[a]);
+      if (e) errs.push(a + ': ' + e);
+    });
+    if (has(args, 'from') && has(args, 'to') && isDate(args.from) && isDate(args.to) && args.from > args.to) errs.push('from must not be after to');
+  }
+  if (filename !== undefined && filename !== null) {
+    var m = /^(\d{8}T\d{6}Z)-([a-z_]+)-([0-9a-f]{8})\.json$/.exec(filename);
+    if (!m) errs.push('bad file name ' + JSON.stringify(filename) + ' (expected <utcts>-<type>-<id8>.json)');
+    else if (typeof req.id === 'string' && (m[2] !== req.type || m[3] !== req.id.slice(0, 8))) errs.push("file name does not match the request's type/id");
+  }
+  return errs;
+}
+function uuid4() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  var b = crypto.getRandomValues(new Uint8Array(16)); b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+  var h = Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+  return h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20);
+}
+function newRequest(type, args, now, id) {
+  return { id: id || uuid4(), type: type, createdAt: (now || new Date()).toISOString().replace(/\.\d{3}Z$/, 'Z'), createdBy: 'panel', args: args || {} };
+}
+function requestFileName(req) {
+  var t = new Date(req.createdAt).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+  return t + '-' + req.type + '-' + req.id.slice(0, 8) + '.json';
+}
+
+/* ---------- status age (amber when older than 30 h on a weekday, IST) ---------- */
+function ageState(lastRunIso, nowMs) {
+  var t = Date.parse(lastRunIso);
+  if (isNaN(t)) return { hours: null, amber: true, label: 'unknown' };
+  var hours = (nowMs - t) / 3600000;
+  var istDay = new Date(nowMs + 19800000).getUTCDay();
+  var weekday = istDay >= 1 && istDay <= 5;
+  var label = hours < 1 ? Math.max(0, Math.round(hours * 60)) + ' min ago' : hours < 48 ? Math.round(hours) + ' h ago' : Math.round(hours / 24) + ' d ago';
+  return { hours: hours, amber: hours > 30 && weekday, label: label };
+}
+
+/* ---------- token vault: AES-GCM, non-extractable key in IndexedDB, ciphertext in localStorage ---------- */
+var LS_KEY = 'md_pat_enc';
+var tokenMem = '';
+function idb() {
+  return new Promise(function (res, rej) {
+    var rq = indexedDB.open('market_data_panel', 1);
+    rq.onupgradeneeded = function () { if (!rq.result.objectStoreNames.contains('keys')) rq.result.createObjectStore('keys'); };
+    rq.onsuccess = function () { res(rq.result); };
+    rq.onerror = function () { rej(rq.error); };
+  });
+}
+function idbReq(db, mode, fn) {
+  return new Promise(function (res, rej) { var r = fn(db.transaction('keys', mode).objectStore('keys')); r.onsuccess = function () { res(r.result); }; r.onerror = function () { rej(r.error); }; });
+}
+function getKey(create) {
+  return idb().then(function (db) {
+    return idbReq(db, 'readonly', function (s) { return s.get('patKey'); }).then(function (k) {
+      if (k || !create) return k || null;
+      return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']).then(function (nk) {
+        return idbReq(db, 'readwrite', function (s) { return s.put(nk, 'patKey'); }).then(function () { return nk; });
+      });
+    });
+  });
+}
+function b64e(buf) { var a = new Uint8Array(buf), s = ''; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }
+function b64d(str) { var s = atob(str), a = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
+function saveToken(plain) {
+  if (!plain) return Promise.reject(new Error('empty token'));
+  return getKey(true).then(function (key) {
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, new TextEncoder().encode(plain)).then(function (ct) {
+      localStorage.setItem(LS_KEY, JSON.stringify({ v: 1, iv: b64e(iv), ct: b64e(ct), ts: Date.now() }));
+      tokenMem = plain;
+    });
+  });
+}
+function loadToken() {
+  if (tokenMem) return Promise.resolve(tokenMem);
+  var raw = null; try { raw = localStorage.getItem(LS_KEY); } catch (e) { /* private mode */ }
+  if (!raw) return Promise.resolve('');
+  var o; try { o = JSON.parse(raw); } catch (e) { return Promise.resolve(''); }
+  return getKey(false).then(function (key) {
+    if (!key || !o.iv || !o.ct) return '';
+    return crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(o.iv) }, key, b64d(o.ct)).then(function (pt) { tokenMem = new TextDecoder().decode(pt); return tokenMem; });
+  }).catch(function () { return ''; });
+}
+function forgetToken() {
+  tokenMem = '';
+  try { localStorage.removeItem(LS_KEY); } catch (e) { /* ignore */ }
+  return idb().then(function (db) { return idbReq(db, 'readwrite', function (s) { return s.delete('patKey'); }); }).catch(function () { /* ignore */ });
+}
+
+/* ---------- network: data from Pages (same origin), requests through the GitHub contents API ---------- */
+function localOnly(u) { try { var x = new URL(u); return x.hostname === '127.0.0.1' || x.hostname === 'localhost'; } catch (e) { return false; } }
+var params = new URLSearchParams(location.search);
+var DATA_BASE = (params.get('base') && localOnly(params.get('base'))) ? params.get('base').replace(/\/?$/, '/') : './';
+var API_BASE = (params.get('api') && localOnly(params.get('api'))) ? params.get('api').replace(/\/$/, '') : 'https://api.github.com';
+function getJson(path) {
+  return fetch(DATA_BASE + path + (path.indexOf('?') < 0 ? '?' : '&') + 't=' + Date.now(), { cache: 'no-store' }).then(function (r) {
+    if (!r.ok) throw new Error(path + ' → HTTP ' + r.status);
+    return r.json();
+  });
+}
+function apiHeaders(tok) {
+  var h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+  if (tok) h['Authorization'] = 'Bearer ' + tok;
+  return h;
+}
+function utf8b64(str) { var b = new TextEncoder().encode(str), s = ''; for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]); return btoa(s); }
+function unb64utf8(b64) { var s = atob(String(b64).replace(/\s/g, '')), a = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return new TextDecoder().decode(a); }
+function contentsUrl(path) { return API_BASE + '/repos/' + OWNER + '/' + REPO + '/contents/' + path; }
+function putRequest(req) {
+  var errs = validateRequest(req);
+  if (errs.length) return Promise.reject(new Error('invalid request: ' + errs.join('; ')));
+  var name = requestFileName(req);
+  return loadToken().then(function (tok) {
+    if (!tok) throw new Error('no token: open Settings and paste a fine-grained token first');
+    var sym = req.args && req.args.symbol ? ' ' + req.args.symbol : '';
+    var headers = apiHeaders(tok); headers['Content-Type'] = 'application/json';
+    return fetch(contentsUrl('data/control/requests/' + name), {
+      method: 'PUT', headers: headers,
+      body: JSON.stringify({ message: 'panel: ' + req.type + sym, content: utf8b64(JSON.stringify(req, null, 2) + '\n'), branch: BRANCH })
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (r.status === 200 || r.status === 201) return { name: name, sha: j.content && j.content.sha };
+        var why = r.status === 401 ? 'token rejected (expired or wrong)' : r.status === 403 ? 'forbidden (token lacks Contents write, or rate limited)' : r.status === 404 ? 'repository or path not found (token cannot see it)' : r.status === 422 ? 'GitHub refused the file (already exists?)' : 'HTTP ' + r.status;
+        throw new Error(why + (j.message ? ' — ' + j.message : ''));
+      });
+    });
+  });
+}
+function listFolder(folder) {
+  return loadToken().then(function (tok) {
+    return fetch(contentsUrl('data/control/' + folder + '?ref=' + BRANCH), { headers: apiHeaders(tok), cache: 'no-store' }).then(function (r) {
+      if (r.status === 404) return [];
+      if (!r.ok) throw new Error(folder + ': HTTP ' + r.status);
+      return r.json();
+    }).then(function (list) {
+      return (Array.isArray(list) ? list : []).filter(function (e) { return e.type === 'file' && /\.json$/.test(e.name) && e.name !== 'processed_ids.json'; }).map(function (e) { return e.name; }).sort();
+    });
+  });
+}
+function readFile(folder, name) {
+  return loadToken().then(function (tok) {
+    return fetch(contentsUrl('data/control/' + folder + '/' + encodeURIComponent(name) + '?ref=' + BRANCH), { headers: apiHeaders(tok), cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error(name + ': HTTP ' + r.status);
+      return r.json();
+    }).then(function (j) { return JSON.parse(unb64utf8(j.content)); });
+  });
+}
+
+/* ---------- DOM helpers (no innerHTML with data: everything through textContent) ---------- */
+function $(id) { return document.getElementById(id); }
+function h(tag, attrs) {
+  var el = document.createElement(tag);
+  if (attrs) Object.keys(attrs).forEach(function (k) { if (k === 'text') el.textContent = attrs[k]; else if (k === 'class') el.className = attrs[k]; else el.setAttribute(k, attrs[k]); });
+  for (var i = 2; i < arguments.length; i++) { var c = arguments[i]; if (c == null) continue; el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); }
+  return el;
+}
+function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+function badge(text, cls) { return h('span', { class: 'badge ' + cls, text: text }); }
+
+/* ---------- status + instruments ---------- */
+var state = { status: null, manifest: null, rows: [], lastError: '' };
+function renderStatus() {
+  var s = state.status, m = state.manifest, kv = $('statusKv');
+  clear(kv);
+  var b = $('statusBadge');
+  if (!s && !m) { b.className = 'badge b-none'; b.textContent = state.lastError ? 'unreachable' : 'loading…'; $('statusMsg').textContent = state.lastError; return; }
+  var age = s ? ageState(s.lastRun, Date.now()) : { amber: true, label: 'no status.json', hours: null };
+  var result = s ? s.result : 'UNKNOWN';
+  var cls = result === 'PUBLISHED' ? (age.amber ? 'b-warn' : 'b-ok') : (result === 'FAIL' || result === 'UNPUBLISHABLE') ? 'b-bad' : 'b-none';
+  b.className = 'badge ' + cls;
+  b.textContent = result + (result === 'PUBLISHED' && age.amber ? ' · stale' : '');
+  $('statusMsg').textContent = (s && s.message) || '';
+  function add(label, val) { kv.appendChild(h('div', null, h('b', { text: label }), document.createTextNode(String(val == null ? '—' : val)))); }
+  add('Dataset', (m && m.datasetId) || (s && s.datasetId));
+  add('Latest session', (m && m.latestCompletedSession) || (s && s.latestCompletedSession));
+  var sum = (m && m.summary) || (s && s.summary) || {};
+  add('OK / WARN', (sum.ok == null ? '—' : sum.ok) + ' / ' + (sum.warn == null ? '—' : sum.warn));
+  add('Excluded / quarantined', (sum.excluded == null ? '—' : sum.excluded) + ' / ' + (sum.quarantined == null ? '—' : sum.quarantined));
+  add('Last run', s ? s.lastRun + ' (' + age.label + ')' : 'never');
+  add('Live verify', s && s.liveVerify != null ? s.liveVerify : '—');
+  add('Certification', m && m.certification);
+}
+function buildRows(m) {
+  var rows = [];
+  if (!m) return rows;
+  Object.keys(m.files || {}).forEach(function (k) {
+    var f = m.files[k];
+    rows.push({ symbol: k, kind: f.kind, engines: f.engines || [], first: f.first, last: f.last, bars: f.bars, status: f.status, reasons: (f.reasons || []).map(function (r) { return r.code; }) });
+  });
+  Object.keys(m.excluded || {}).forEach(function (k) {
+    var x = m.excluded[k];
+    rows.push({ symbol: k, kind: /^NIFTY|^IDX/.test(k) && k === k.toUpperCase() && k.indexOf(' ') >= 0 ? 'INDEX' : 'ETF', engines: [], first: null, last: null, bars: null, status: 'EXCLUDED', reasons: [x.code] });
+  });
+  Object.keys(m.quarantined || {}).forEach(function (k) {
+    var x = m.quarantined[k];
+    var ev = (x.events || []).map(function (e) { return e.date ? e.date + (e.ret != null ? ' ' + (e.ret > 0 ? '+' : '') + (e.ret * 100).toFixed(1) + '%' : '') : ''; }).filter(Boolean);
+    rows.push({ symbol: k, kind: 'ETF', engines: [], first: null, last: null, bars: null, status: 'QUARANTINED', reasons: [x.code].concat(ev) });
+  });
+  rows.sort(function (a, b) { return a.symbol < b.symbol ? -1 : a.symbol > b.symbol ? 1 : 0; });
+  return rows;
+}
+function filterRows(rows, text, status, kind) {
+  text = (text || '').trim().toUpperCase();
+  return rows.filter(function (r) { return (!text || r.symbol.toUpperCase().indexOf(text) >= 0) && (!status || r.status === status) && (!kind || r.kind === kind); });
+}
+function renderInstruments() {
+  var rows = filterRows(state.rows, $('fltText').value, $('fltStatus').value, $('fltKind').value);
+  var tb = $('instTable').tBodies[0];
+  clear(tb);
+  rows.forEach(function (r) {
+    var cls = r.status === 'OK' ? 'b-ok' : r.status === 'WARN' ? 'b-warn' : r.status === 'QUARANTINED' ? 'b-bad' : 'b-bad';
+    var engines = h('td');
+    (r.engines || []).forEach(function (e) { engines.appendChild(h('span', { class: 'chip', text: e })); });
+    tb.appendChild(h('tr', { 'data-symbol': r.symbol }, h('td', { text: r.symbol, class: 'mono' }), h('td', { text: r.kind || '' }), engines,
+      h('td', { text: r.first || '—', class: 'mono' }), h('td', { text: r.last || '—', class: 'mono' }), h('td', { text: r.bars == null ? '—' : String(r.bars) }),
+      h('td', null, badge(r.status, cls)), h('td', { text: r.reasons.join(' · '), class: 'wrap mono' })));
+  });
+  $('instCount').textContent = rows.length + ' of ' + state.rows.length;
+}
+function refreshStatus() {
+  return Promise.all([getJson('data/control/status.json').catch(function (e) { return { __err: e.message }; }), getJson('data/manifest.json').catch(function (e) { return { __err: e.message }; })]).then(function (r) {
+    state.status = r[0].__err ? null : r[0];
+    state.manifest = r[1].__err ? null : r[1];
+    state.lastError = (r[0].__err && r[1].__err) ? r[1].__err : '';
+    state.rows = buildRows(state.manifest);
+    renderStatus();
+    renderInstruments();
+    $('build').textContent = 'panel ' + PANEL_VERSION + ' · refreshed ' + new Date().toLocaleTimeString();
+  });
+}
+
+/* ---------- request form ---------- */
+var FIELD_LABEL = { symbol: 'Symbol', from: 'From', to: 'To', date: 'Date', evidence: 'Evidence (required)', ratio: 'Ratio (e.g. 10:1)', engines: 'Engines', assetClass: 'Asset class', isin: 'ISIN (optional)', kind: 'Kind' };
+var review = null;
+function renderForm() {
+  var type = $('reqType').value, spec = SPEC[type], box = $('reqFields');
+  clear(box); review = null; $('btnCancelReview').hidden = true; $('reviewText').textContent = ''; $('reqErr').textContent = ''; $('reqMsg').textContent = '';
+  $('btnSend').textContent = 'Send request';
+  $('reqHelp').textContent = HELP[type] || '';
+  Object.keys(spec).forEach(function (a) {
+    var kind = spec[a][1];
+    if (kind === 'kind') return;                                   // always ETF
+    var f = h('div', { class: 'field' });
+    var id = 'f_' + a;
+    f.appendChild(h('label', { for: id, text: FIELD_LABEL[a] || a }));
+    if (kind === 'symbol') f.appendChild(h('input', { id: id, type: 'text', autocomplete: 'off', autocapitalize: 'characters', placeholder: 'e.g. NIFTYBEES' }));
+    else if (kind === 'date') f.appendChild(h('input', { id: id, type: 'date' }));
+    else if (kind === 'evidence') { f.style.flex = '1 1 100%'; f.appendChild(h('textarea', { id: id, maxlength: String(EVIDENCE_MAX), placeholder: 'NSE circular number / corporate-action reference' })); }
+    else if (kind === 'ratio') f.appendChild(h('input', { id: id, type: 'text', autocomplete: 'off', placeholder: '10:1' }));
+    else if (kind === 'isin') f.appendChild(h('input', { id: id, type: 'text', autocomplete: 'off', placeholder: 'INF…' }));
+    else if (kind === 'assetClass') { var s = h('select', { id: id }, h('option', { value: '', text: '(auto)' })); ASSET_CLASSES.forEach(function (c) { s.appendChild(h('option', { value: c, text: c })); }); f.appendChild(s); }
+    else if (kind === 'engines') {
+      var w = h('div', { class: 'checks', id: id });
+      ENGINES.forEach(function (e) { w.appendChild(h('label', null, h('input', { type: 'checkbox', value: e }), e)); });
+      f.appendChild(w);
+    }
+    box.appendChild(f);
+  });
+}
+function collectArgs(type) {
+  var spec = SPEC[type], args = {};
+  Object.keys(spec).forEach(function (a) {
+    var kind = spec[a][1], el = $('f_' + a);
+    if (kind === 'kind' || !el) return;
+    if (kind === 'engines') {
+      var picked = []; ENGINES.forEach(function (e) { var cb = el.querySelector('input[value="' + e + '"]'); if (cb && cb.checked) picked.push(e); });
+      if (spec[a][0] || picked.length) args[a] = picked;
+      return;
+    }
+    var v = el.value;
+    if (kind === 'symbol') v = v.trim().toUpperCase();
+    else if (kind === 'ratio' || kind === 'isin') v = v.trim();
+    if (v === '' && !spec[a][0]) return;
+    if (kind === 'isin') v = v.toUpperCase();
+    args[a] = v;
+  });
+  return args;
+}
+function summarise(req) {
+  var a = (req && req.args && typeof req.args === 'object') ? req.args : {}, bits = Object.keys(a).map(function (k) { return k + '=' + (Array.isArray(a[k]) ? '[' + a[k].join(',') + ']' : a[k]); });
+  return String(req && req.type) + (bits.length ? ' · ' + bits.join(' · ') : '');
+}
+function onSend() {
+  var type = $('reqType').value;
+  $('reqErr').textContent = ''; $('reqMsg').textContent = '';
+  var req = newRequest(type, collectArgs(type));
+  var errs = validateRequest(req);
+  if (errs.length) { $('reqErr').textContent = errs.join(' · '); return Promise.resolve(); }
+  if (TWO_STEP[type] && !review) {
+    review = req; $('btnSend').textContent = 'Confirm and send'; $('btnCancelReview').hidden = false;
+    $('reviewText').textContent = 'Review: ' + summarise(req);
+    return Promise.resolve();
+  }
+  req = review || req; review = null;
+  $('btnSend').disabled = true;
+  return putRequest(req).then(function (r) {
+    $('reqMsg').textContent = 'Queued ' + r.name + ' — the PC picks it up within ~10 minutes.';
+    $('btnCancelReview').hidden = true; $('reviewText').textContent = ''; $('btnSend').textContent = 'Send request';
+    return refreshRequests();
+  }).catch(function (e) { $('reqErr').textContent = e.message; $('btnSend').textContent = 'Send request'; $('btnCancelReview').hidden = true; })
+    .then(function () { $('btnSend').disabled = false; });
+}
+
+/* ---------- requests lists ---------- */
+var currentTab = 'requests';
+function renderRequestRows(folder, items) {
+  var box = $('reqList'); clear(box);
+  if (!items.length) { box.appendChild(h('div', { class: 'mute', text: folder === 'history' ? 'No processed requests yet.' : 'Nothing here.' })); return; }
+  var tb = h('tbody');
+  items.forEach(function (it) {
+    var r = (it.data && typeof it.data === 'object') ? it.data : {}, res = typeof r.result === 'string' ? r.result : undefined;
+    var cls = res === 'OK' ? 'b-ok' : res === 'ERROR' ? 'b-bad' : res === 'DUPLICATE' ? 'b-warn' : 'b-info';
+    tb.appendChild(h('tr', { 'data-name': it.name }, h('td', { text: it.name, class: 'mono' }), h('td', { text: r.type ? summarise(r) : '(unreadable)', class: 'wrap' }),
+      h('td', null, badge(res || (folder === 'inflight' ? 'RUNNING' : 'PENDING'), cls)), h('td', { text: (typeof r.message === 'string' ? r.message : '') || it.error || '', class: 'wrap' })));
+  });
+  box.appendChild(h('div', { class: 'tablewrap' }, h('table', null, h('thead', null, h('tr', null, h('th', { text: 'File' }), h('th', { text: 'Request' }), h('th', { text: 'State' }), h('th', { text: 'Result' }))), tb)));
+}
+function refreshRequests() {
+  var folder = currentTab;
+  return loadToken().then(function () {
+    return listFolder(folder);
+  }).then(function (names) {
+    if (folder === 'history') names = names.slice(-15).reverse();
+    return Promise.all(names.map(function (n) { return readFile(folder, n).then(function (d) { return { name: n, data: d }; }).catch(function (e) { return { name: n, data: null, error: e.message }; }); }));
+  }).then(function (items) { if (folder === currentTab) renderRequestRows(folder, items); })
+    .catch(function (e) { $('reqList').textContent = 'Could not list requests: ' + e.message; });
+}
+function selectTab(t) {
+  currentTab = t;
+  Array.prototype.forEach.call(document.querySelectorAll('.tabs button'), function (b) { b.setAttribute('aria-selected', b.getAttribute('data-tab') === t ? 'true' : 'false'); });
+  return refreshRequests();
+}
+
+/* ---------- settings ---------- */
+function updateTokenBadge() {
+  return loadToken().then(function (t) { var b = $('tokenState'); b.className = 'badge ' + (t ? 'b-ok' : 'b-none'); b.textContent = t ? 'token stored' : 'no token'; return !!t; });
+}
+function testToken() {
+  return loadToken().then(function (tok) {
+    if (!tok) throw new Error('no token stored');
+    return fetch(API_BASE + '/repos/' + OWNER + '/' + REPO, { headers: apiHeaders(tok), cache: 'no-store' }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw new Error('HTTP ' + r.status + (j.message ? ' — ' + j.message : ''));
+        var push = j.permissions && j.permissions.push;
+        return push === false ? 'Token works but has NO write permission (needs Contents: read and write).' : 'Token works' + (push ? ' and can write.' : '.');
+      });
+    });
+  });
+}
+
+function init() {
+  TYPES.forEach(function (t) { $('reqType').appendChild(h('option', { value: t, text: t })); });
+  $('reqType').addEventListener('change', renderForm);
+  $('btnSend').addEventListener('click', onSend);
+  $('btnCancelReview').addEventListener('click', function () { review = null; $('btnSend').textContent = 'Send request'; $('btnCancelReview').hidden = true; $('reviewText').textContent = ''; });
+  $('btnRefresh').addEventListener('click', function () { refreshStatus(); refreshRequests(); });
+  ['fltText', 'fltStatus', 'fltKind'].forEach(function (id) { $(id).addEventListener('input', renderInstruments); $(id).addEventListener('change', renderInstruments); });
+  Array.prototype.forEach.call(document.querySelectorAll('.tabs button'), function (b) { b.addEventListener('click', function () { selectTab(b.getAttribute('data-tab')); }); });
+  var dlg = $('dlgSettings');
+  $('btnSettings').addEventListener('click', function () { $('patMsg').textContent = ''; $('patInput').value = ''; if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); });
+  $('btnCloseSettings').addEventListener('click', function () { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); });
+  $('btnSaveToken').addEventListener('click', function () {
+    var v = $('patInput').value.trim();
+    if (!v) { $('patMsg').textContent = 'Paste a token first.'; return; }
+    saveToken(v).then(function () { $('patInput').value = ''; $('patMsg').textContent = 'Saved (encrypted).'; return updateTokenBadge(); }).then(refreshRequests)
+      .catch(function (e) { $('patMsg').textContent = 'Could not save: ' + e.message; });
+  });
+  $('btnForgetToken').addEventListener('click', function () { forgetToken().then(updateTokenBadge).then(function () { $('patMsg').textContent = 'Token removed from this browser.'; }); });
+  $('btnTestToken').addEventListener('click', function () { $('patMsg').textContent = 'Testing…'; testToken().then(function (m) { $('patMsg').textContent = m; }).catch(function (e) { $('patMsg').textContent = 'Failed: ' + e.message; }); });
+  renderForm();
+  updateTokenBadge().then(function () { return Promise.all([refreshStatus(), refreshRequests()]); });
+  setInterval(function () { if (document.visibilityState !== 'hidden') { refreshStatus(); } }, 60000);
+}
+
+window.MDPanel = {
+  version: PANEL_VERSION, TYPES: TYPES, SPEC: SPEC, validateRequest: validateRequest, newRequest: newRequest, requestFileName: requestFileName, ageState: ageState,
+  saveToken: saveToken, loadToken: loadToken, forgetToken: forgetToken, putRequest: putRequest, buildRows: buildRows, filterRows: filterRows, isDate: isDate,
+  refreshStatus: refreshStatus, refreshRequests: refreshRequests, selectTab: selectTab, testToken: testToken, endpoints: { data: DATA_BASE, api: API_BASE }
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+</body>
+</html>
