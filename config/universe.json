@@ -1,0 +1,1085 @@
+{
+  "version": 3,
+  "defaultHistoryStart": "2019-01-14",
+  "calendar": {
+    "cutoffIST": "19:15",
+    "holidaySource": "eod2_meta"
+  },
+  "instruments": [
+    {
+      "id": "NSE:NIFTYBEES",
+      "symbol": "NIFTYBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty 50 Large Cap",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:JUNIORBEES",
+      "symbol": "JUNIORBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty Next 50",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:BANKBEES",
+      "symbol": "BANKBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty Bank",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:GOLDBEES",
+      "symbol": "GOLDBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Gold",
+      "assetClass": "gold",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:SILVERBEES",
+      "symbol": "SILVERBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Silver",
+      "assetClass": "silver",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:TATSILV",
+      "symbol": "TATSILV",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "TATSILV",
+      "assetClass": "silver",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MID150BEES",
+      "symbol": "MID150BEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty Midcap 150",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MIDCAPETF",
+      "symbol": "MIDCAPETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "MIDCAPETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:ITBEES",
+      "symbol": "ITBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty IT",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:ITIETF",
+      "symbol": "ITIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "ITIETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:AUTOBEES",
+      "symbol": "AUTOBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Automobiles",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:AUTOIETF",
+      "symbol": "AUTOIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "AUTOIETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:SETFNIF50",
+      "symbol": "SETFNIF50",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "SETFNIF50",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:SETFNN50",
+      "symbol": "SETFNN50",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "SETFNN50",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:SETFGOLD",
+      "symbol": "SETFGOLD",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "SETFGOLD",
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:HDFCNIFBAN",
+      "symbol": "HDFCNIFBAN",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "HDFCNIFBAN",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:CPSEETF",
+      "symbol": "CPSEETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "CPSE Govt PSU",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:LIQUIDBEES",
+      "symbol": "LIQUIDBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Liquid BeES (Debt)",
+      "assetClass": "liquid",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MAFANG",
+      "symbol": "MAFANG",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "US Tech FAANG",
+      "assetClass": "international",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:HNGSNGBEES",
+      "symbol": "HNGSNGBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Hang Seng",
+      "assetClass": "international",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MON100",
+      "symbol": "MON100",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nasdaq 100",
+      "assetClass": "international",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:PSUBNKBEES",
+      "symbol": "PSUBNKBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "PSU Bank",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:METALIETF",
+      "symbol": "METALIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty Metal",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:COMMOIETF",
+      "symbol": "COMMOIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "COMMOIETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:OILIETF",
+      "symbol": "OILIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Oil & Gas",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MOM30IETF",
+      "symbol": "MOM30IETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty Momentum 30",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": "2022-08-12",
+      "enabled": true
+    },
+    {
+      "id": "NSE:MONQ50",
+      "symbol": "MONQ50",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nasdaq Next 50",
+      "assetClass": "international",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MOMENTUM50",
+      "symbol": "MOMENTUM50",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Midcap150 Momentum 50",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:ICICIB22",
+      "symbol": "ICICIB22",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "ICICIB22",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:PVTBANIETF",
+      "symbol": "PVTBANIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "PVTBANIETF",
+      "assetClass": "equity",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:PHARMABEES",
+      "symbol": "PHARMABEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty Pharma",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:HEALTHIETF",
+      "symbol": "HEALTHIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "HEALTHIETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:MODEFENCE",
+      "symbol": "MODEFENCE",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Defence",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:INFRAIETF",
+      "symbol": "INFRAIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Infrastructure",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": "2022-08-24",
+      "enabled": true
+    },
+    {
+      "id": "NSE:CONSUMBEES",
+      "symbol": "CONSUMBEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Consumption",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:FMCGIETF",
+      "symbol": "FMCGIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "FMCGIETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:HDFCSML250",
+      "symbol": "HDFCSML250",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Smallcap 250",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:NEXT50IETF",
+      "symbol": "NEXT50IETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty Next50 ETF",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:NIF100BEES",
+      "symbol": "NIF100BEES",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "NIF100BEES",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:EQUAL50ADD",
+      "symbol": "EQUAL50ADD",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Nifty50 Equal Weight",
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    }
+  ],
+  "indices": [
+    {
+      "id": "IDX:NIFTY 50",
+      "name": "NIFTY 50",
+      "kind": "INDEX",
+      "eod2File": null,
+      "requiredFields": [
+        "open",
+        "high",
+        "close"
+      ],
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "IDX:NIFTY BANK",
+      "name": "NIFTY BANK",
+      "kind": "INDEX",
+      "eod2File": null,
+      "requiredFields": [
+        "open",
+        "high",
+        "close"
+      ],
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "IDX:NIFTY IT",
+      "name": "NIFTY IT",
+      "kind": "INDEX",
+      "eod2File": null,
+      "requiredFields": [
+        "open",
+        "high",
+        "close"
+      ],
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "IDX:NIFTY MIDCAP 150",
+      "name": "NIFTY MIDCAP 150",
+      "kind": "INDEX",
+      "eod2File": null,
+      "requiredFields": [
+        "open",
+        "high",
+        "close"
+      ],
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "IDX:NIFTY NEXT 50",
+      "name": "NIFTY NEXT 50",
+      "kind": "INDEX",
+      "eod2File": null,
+      "requiredFields": [
+        "open",
+        "high",
+        "close"
+      ],
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "IDX:NIFTY AUTO",
+      "name": "NIFTY AUTO",
+      "kind": "INDEX",
+      "eod2File": null,
+      "requiredFields": [
+        "open",
+        "high",
+        "close"
+      ],
+      "historyStart": null,
+      "enabled": true
+    }
+  ],
+  "splits": [
+    {
+      "symbol": "NIFTYBEES",
+      "date": "2019-12-19",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "BANKBEES",
+      "date": "2019-12-19",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "GOLDBEES",
+      "date": "2019-12-19",
+      "ratioNum": 100,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "PSUBNKBEES",
+      "date": "2019-12-19",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "HNGSNGBEES",
+      "date": "2019-12-19",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "MON100",
+      "date": "2021-06-17",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "SETFGOLD",
+      "date": "2022-01-06",
+      "ratioNum": 100,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "ITIETF",
+      "date": "2022-09-01",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "HDFCNIFBAN",
+      "date": "2024-02-02",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "AUTOIETF",
+      "date": "2024-03-01",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "PVTBANIETF",
+      "date": "2024-03-01",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "FMCGIETF",
+      "date": "2024-05-10",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    }
+  ],
+  "genuineMoves": [
+    {
+      "symbol": "SILVERBEES",
+      "date": "2026-01-30",
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11",
+      "note": "silver crash, matches TATSILV"
+    },
+    {
+      "symbol": "TATSILV",
+      "date": "2026-01-22",
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11",
+      "note": "silver crash, matches SILVERBEES"
+    },
+    {
+      "symbol": "TATSILV",
+      "date": "2026-02-02",
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11",
+      "note": "silver crash, matches SILVERBEES"
+    },
+    {
+      "symbol": "MID150BEES",
+      "date": "2020-03-19",
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11",
+      "note": "real NSE print verified on TradingView; off-NAV, thin liquidity"
+    },
+    {
+      "symbol": "NIF100BEES",
+      "date": "2020-03-12",
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11",
+      "note": "COVID crash day; off-NAV illiquid print"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-07",
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11",
+      "note": "real print verified TradingView; intl ETF premium spike, off-NAV"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-08",
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11",
+      "note": "real print verified TradingView; intl ETF premium spike, off-NAV"
+    }
+  ],
+  "quarantine": {},
+  "gapPolicy": {
+    "known_no_trade": {
+      "MID150BEES": [
+        "2019-02-05",
+        "2019-02-18",
+        "2019-02-20"
+      ],
+      "COMMOIETF": [
+        "2023-01-09"
+      ],
+      "NIF100BEES": [
+        "2020-03-25"
+      ]
+    },
+    "gap_allow_all": {
+      "HNGSNGBEES": "illiquid; frequent no-trade days"
+    }
+  },
+  "legacyV2": {
+    "jump_threshold": 0.15,
+    "patches": {
+      "2022-05-11": "EOD2 missed equity bhavcopy; ETF bars patched from NSE cm11MAY2022bhav"
+    }
+  }
+}

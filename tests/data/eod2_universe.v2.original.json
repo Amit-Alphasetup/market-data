@@ -1,0 +1,149 @@
+{
+  "start": "2019-01-14",
+  "jump_threshold": 0.15,
+  "etfs": [
+    "NIFTYBEES",
+    "JUNIORBEES",
+    "BANKBEES",
+    "GOLDBEES",
+    "SILVERBEES",
+    "TATSILV",
+    "MID150BEES",
+    "MIDCAPETF",
+    "ITBEES",
+    "ITIETF",
+    "AUTOBEES",
+    "AUTOIETF",
+    "SETFNIF50",
+    "SETFNN50",
+    "SETFGOLD",
+    "HDFCNIFBAN",
+    "CPSEETF",
+    "LIQUIDBEES",
+    "MAFANG",
+    "HNGSNGBEES",
+    "MON100",
+    "PSUBNKBEES",
+    "METALIETF",
+    "COMMOIETF",
+    "OILIETF",
+    "MOM30IETF",
+    "MONQ50",
+    "MOMENTUM50",
+    "ICICIB22",
+    "PVTBANIETF",
+    "PHARMABEES",
+    "HEALTHIETF",
+    "MODEFENCE",
+    "INFRAIETF",
+    "CONSUMBEES",
+    "FMCGIETF",
+    "HDFCSML250",
+    "NEXT50IETF",
+    "NIF100BEES",
+    "EQUAL50ADD"
+  ],
+  "indices": [
+    "NIFTY 50",
+    "NIFTY BANK",
+    "NIFTY IT",
+    "NIFTY MIDCAP 150",
+    "NIFTY NEXT 50",
+    "NIFTY AUTO"
+  ],
+  "splits": [
+    [
+      "NIFTYBEES",
+      "2019-12-19",
+      10
+    ],
+    [
+      "BANKBEES",
+      "2019-12-19",
+      10
+    ],
+    [
+      "GOLDBEES",
+      "2019-12-19",
+      100
+    ],
+    [
+      "PSUBNKBEES",
+      "2019-12-19",
+      10
+    ],
+    [
+      "HNGSNGBEES",
+      "2019-12-19",
+      10
+    ],
+    [
+      "MON100",
+      "2021-06-17",
+      10
+    ],
+    [
+      "SETFGOLD",
+      "2022-01-06",
+      100
+    ],
+    [
+      "ITIETF",
+      "2022-09-01",
+      10
+    ],
+    [
+      "HDFCNIFBAN",
+      "2024-02-02",
+      10
+    ],
+    [
+      "AUTOIETF",
+      "2024-03-01",
+      10
+    ],
+    [
+      "PVTBANIETF",
+      "2024-03-01",
+      10
+    ],
+    [
+      "FMCGIETF",
+      "2024-05-10",
+      10
+    ]
+  ],
+  "trim_before": {
+    "MOM30IETF": "2022-08-12",
+    "INFRAIETF": "2022-08-24"
+  },
+  "genuine": {
+    "SILVERBEES|2026-01-30": "silver crash, matches TATSILV",
+    "TATSILV|2026-01-22": "silver crash, matches SILVERBEES",
+    "TATSILV|2026-02-02": "silver crash, matches SILVERBEES",
+    "MID150BEES|2020-03-19": "real NSE print verified on TradingView; off-NAV, thin liquidity",
+    "NIF100BEES|2020-03-12": "COVID crash day; off-NAV illiquid print",
+    "MONQ50|2026-09-07": "real print verified TradingView; intl ETF premium spike, off-NAV",
+    "MONQ50|2026-09-08": "real print verified TradingView; intl ETF premium spike, off-NAV"
+  },
+  "quarantine": {},
+  "known_no_trade": {
+    "MID150BEES": [
+      "2019-02-05",
+      "2019-02-18",
+      "2019-02-20"
+    ],
+    "COMMOIETF": [
+      "2023-01-09"
+    ],
+    "NIF100BEES": [
+      "2020-03-25"
+    ]
+  },
+  "gap_allow_all": {
+    "HNGSNGBEES": "illiquid; frequent no-trade days"
+  },
+  "patches": {
+    "2022-05-11": "EOD2 missed equity bhavcopy; ETF bars patched from NSE cm11MAY2022bhav"
+  }
+}
