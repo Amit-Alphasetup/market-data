@@ -1,0 +1,6 @@
+secrets/
+logs/
+work/
+__pycache__/
+*.pyc
+.pytest_cache/
