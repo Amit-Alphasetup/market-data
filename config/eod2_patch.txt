@@ -1,0 +1,1 @@
+(int(dq) if str(dq).strip().isdigit() else 0)
