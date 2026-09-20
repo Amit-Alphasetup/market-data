@@ -1,5 +1,5 @@
 {
-  "lastRun": "2026-09-20T06:43:26+05:30",
+  "lastRun": "2026-09-20T06:45:45+05:30",
   "result": "PUBLISHED",
   "datasetId": "2026-09-18-r1",
   "latestCompletedSession": "2026-09-18",
@@ -11,5 +11,5 @@
     "quarantined": 7
   },
   "message": "published 2026-09-18-r1 (PARTIAL); retention kept 1, removed 0",
-  "liveVerify": "PENDING"
+  "liveVerify": "OK"
 }
