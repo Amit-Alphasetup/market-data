@@ -1,5 +1,5 @@
 {
-  "lastRun": "2026-09-22T08:52:43+05:30",
+  "lastRun": "2026-09-22T08:56:43+05:30",
   "result": "PUBLISHED",
   "datasetId": "2026-09-21-r11",
   "latestCompletedSession": "2026-09-21",
@@ -11,5 +11,5 @@
     "quarantined": 7
   },
   "message": "published 2026-09-21-r11 (PARTIAL); retention kept 9, removed 0",
-  "liveVerify": "PENDING"
+  "liveVerify": "FAIL: NIFTY IT: URLError: <urlopen error _ssl.c:1064: The handshake operation timed out>"
 }
