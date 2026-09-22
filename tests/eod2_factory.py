@@ -101,6 +101,10 @@ def dataops_move(sym, d, evidence="NSE circular 42"):
     return {"symbol": sym, "date": d, "evidence": evidence, "approvedAt": "2026-09-19T10:00:00+05:30", "provenance": "dataops"}
 
 
+def bad_print(sym, d, evidence="vendor glitch, confirmed against NSE bhavcopy"):
+    return {"symbol": sym, "date": d, "evidence": evidence, "approvedAt": "2026-09-19T10:00:00+05:30", "provenance": "dataops"}
+
+
 class World:
     """One consistent world: 320 weekdays from 2025-01-01 (minus two holidays), 3 ETFs + 2 indices, default window start 2025-06-02."""
     SKIP = {"2025-08-15", "2026-01-26"}

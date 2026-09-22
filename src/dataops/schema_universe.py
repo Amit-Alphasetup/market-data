@@ -16,7 +16,9 @@ TIME_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\d\Z")
 ISIN_RE = re.compile(r"^[A-Z]{2}[A-Z0-9]{9}\d\Z")
 
 _TOP_REQUIRED = ("version", "defaultHistoryStart", "calendar", "instruments", "indices", "splits", "genuineMoves", "quarantine", "gapPolicy")
-_TOP_OPTIONAL = ("legacyV2",)
+_TOP_OPTIONAL = ("legacyV2", "badPrints")  # badPrints: per-date flags that a printed bar is not real data (dropped before the anomaly
+                                            # scan, treated like a missing session) — optional so it need not be migrated into every
+                                            # existing registry; absent means none flagged, same as an empty list.
 _INSTR_KEYS = ("id", "symbol", "kind", "exchange", "isin", "name", "assetClass", "engines", "linkedIndex", "listingDate",
                "listingDateEvidence", "delistingDate", "aliases", "eod2File", "historyStart", "enabled")
 _INDEX_KEYS = ("id", "name", "kind", "eod2File", "requiredFields", "historyStart", "enabled")
@@ -205,8 +207,8 @@ def validate(reg):
         if not isinstance(x.get("enabled"), bool):
             errs.append(f"{p}.enabled: must be true/false")
 
-    for name, kind in (("splits", "split"), ("genuineMoves", "move")):
-        lst = reg.get(name)
+    for name, kind in (("splits", "split"), ("genuineMoves", "move"), ("badPrints", "move")):
+        lst = reg.get(name, [] if name == "badPrints" else None)   # badPrints is optional: absent == no flags, not an error
         if not isinstance(lst, list):
             errs.append(f"$.{name}: must be a list")
             continue

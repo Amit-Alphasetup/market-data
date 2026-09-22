@@ -27,7 +27,8 @@ ROWS = [("2026-09-11", 100, 101, 99, 100, 1000), ("2026-09-14", 100, 102, 99, 10
 def registry_file(tmp_path):
     reg = {"splits": [{"symbol": "TESTETF", "date": "2020-01-01", "ratioNum": 10, "ratioDen": 1, "evidence": None, "approvedAt": None, "provenance": "migrated-v2-2026-09-11"}],
            "genuineMoves": [{"symbol": "TESTETF", "date": "2026-09-07", "evidence": None, "approvedAt": None, "provenance": "migrated-v2-2026-09-11", "note": "real print"},
-                            {"symbol": "OTHER", "date": "2026-09-07", "evidence": None, "approvedAt": None, "provenance": "migrated-v2-2026-09-11"}]}
+                            {"symbol": "OTHER", "date": "2026-09-07", "evidence": None, "approvedAt": None, "provenance": "migrated-v2-2026-09-11"}],
+           "badPrints": [{"symbol": "TESTETF", "date": "2026-09-20", "evidence": "vendor glitch", "approvedAt": "2026-09-19T10:00:00+05:30", "provenance": "dataops"}]}
     p = tmp_path / "reg.json"
     p.write_text(json.dumps(reg), encoding="utf-8")
     return str(p)
@@ -51,6 +52,7 @@ def test_existing_approvals_are_listed_with_dates_and_only_for_that_symbol(tmp_p
     text, _ = dg.run("testetf", "2026-09-14", "2026-09-18", root, registry_file(tmp_path))
     assert "2026-09-07" in text and "provenance=migrated-v2-2026-09-11" in text and "real print" in text and "ratio 10:1" in text
     assert "OTHER" not in text
+    assert "2026-09-20" in text and "bad print (dropped)" in text and "vendor glitch" in text
     text2, _ = dg.run("TESTETF", "2026-09-14", "2026-09-18", root, None)   # no registry -> none
     assert "EXISTING APPROVALS for TESTETF" in text2 and "\n  none" in text2
 

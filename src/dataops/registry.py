@@ -14,11 +14,13 @@ class Registry:
         self.indices = [x for x in data["indices"] if x["enabled"]]
         self.quarantine = data["quarantine"]
         self.gap_policy = data["gapPolicy"]
-        self._splits, self._moves = {}, {}
+        self._splits, self._moves, self._bad = {}, {}, {}
         for s in data["splits"]:
             self._splits.setdefault(s["symbol"], []).append(s)
         for m in data["genuineMoves"]:
             self._moves.setdefault(m["symbol"], []).append(m)
+        for b in data.get("badPrints", []):
+            self._bad.setdefault(b["symbol"], []).append(b)
 
     @classmethod
     def load(cls, path):
@@ -36,6 +38,12 @@ class Registry:
         for e in self._splits.get(sym, []):
             out.setdefault(e["date"], e)
         return out
+
+    def bad_prints_on(self, sym):
+        """Dates flagged as not-real prints for sym — dropped from its bars before the anomaly scan runs,
+        so the exact same MISSING_EXPECTED_SESSION handling that already covers a genuinely absent
+        session covers a flagged one too. No new reason code, no new engine-facing behaviour."""
+        return {e["date"] for e in self._bad.get(sym, [])}
 
     def quarantine_reason(self, sym):
         q = self.quarantine

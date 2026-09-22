@@ -10,7 +10,7 @@ from datetime import datetime
 
 from . import schema_universe as su
 
-TYPES = ("run", "add", "remove", "set_engines", "backfill", "set_listing", "diagnose", "repair", "rebuild_missing", "approve_move", "add_split")
+TYPES = ("run", "add", "remove", "set_engines", "backfill", "set_listing", "diagnose", "repair", "rebuild_missing", "approve_move", "add_split", "flag_bad_print")
 UUID4_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\Z")
 FILE_RE = re.compile(r"^(\d{8}T\d{6}Z)-([a-z_]+)-([0-9a-f]{8})\.json\Z")
 RATIO_RE = re.compile(r"^[1-9]\d{0,5}:[1-9]\d{0,5}\Z")
@@ -28,8 +28,9 @@ SPEC = {
     "rebuild_missing": {},
     "approve_move": {"symbol": (True, "symbol"), "date": (True, "date"), "evidence": (True, "evidence")},
     "add_split": {"symbol": (True, "symbol"), "date": (True, "date"), "ratio": (True, "ratio"), "evidence": (True, "evidence")},
+    "flag_bad_print": {"symbol": (True, "symbol"), "date": (True, "date"), "evidence": (True, "evidence")},
 }
-MUTATING_REGISTRY = ("add", "remove", "set_engines", "backfill", "set_listing", "approve_move", "add_split")
+MUTATING_REGISTRY = ("add", "remove", "set_engines", "backfill", "set_listing", "approve_move", "add_split", "flag_bad_print")
 
 
 def _check_value(kind, v):

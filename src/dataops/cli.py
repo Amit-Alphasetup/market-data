@@ -21,6 +21,7 @@ USAGE = """usage: py -m dataops <command> [args]
   rebuild-missing                   repair every excluded instrument that can be rebuilt, then export + publish
   approve-move SYMBOL DATE --evidence TEXT
   add-split SYMBOL DATE NUM:DEN --evidence TEXT
+  flag-bad-print SYMBOL DATE --evidence TEXT   this printed bar is not real; drop it, keep every other day
   verify [--snapshot ID] [--base-url URL]   fetch every file from the live URL, sha256 over raw bytes
   status                            print data/control/status.json
   reconcile --app-universe FILE [--apply]
@@ -186,6 +187,13 @@ def _mutations(ctx, cmd, rest):
         ap.add_argument("--evidence", required=True)
         a = ap.parse_args(rest)
         return _locked("add-split", lambda: _opcmd(ctx, ops.op_add_split, a.symbol, a.date, a.ratio, a.evidence, after_repair=a.symbol.upper()))
+    if cmd == "flag-bad-print":
+        ap = P(prog="dataops flag-bad-print")
+        ap.add_argument("symbol")
+        ap.add_argument("date")
+        ap.add_argument("--evidence", required=True)
+        a = ap.parse_args(rest)
+        return _locked("flag-bad-print", lambda: _opcmd(ctx, ops.op_flag_bad_print, a.symbol, a.date, a.evidence, after_repair=a.symbol.upper()))
     print("unknown command: " + cmd, file=sys.stderr)
     print(USAGE, file=sys.stderr)
     return 2

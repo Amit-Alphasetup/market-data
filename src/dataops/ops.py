@@ -171,16 +171,47 @@ def op_set_listing(ctx, symbol, date, evidence):
     return "%s listingDate = %s (evidence recorded)" % (x["symbol"], date)
 
 
+def _assert_date_not_claimed(reg, symbol, date, writing_to):
+    """A single (symbol, date) may be recorded as a genuine move, a split, or a bad print — never
+    more than one, since they mean contradictory things about the same printed bar. writing_to is the
+    list this call is about to append to, so a fresh call into an empty list never trips on itself."""
+    for name in ("genuineMoves", "splits", "badPrints"):
+        if name == writing_to:
+            continue
+        for e in reg.get(name, []):
+            if e["symbol"] == symbol and e["date"] == date:
+                raise OpError("%s on %s is already recorded in %s — that record must be removed first if it was a mistake" % (symbol, date, name))
+
+
 def op_approve_move(ctx, symbol, date, evidence):
     _need_date(date)
     ev = _need_evidence(evidence)
     reg = load(ctx)
     x = _need_symbol(reg, symbol)
+    _assert_date_not_claimed(reg, x["symbol"], date, "genuineMoves")
     if any(m["symbol"] == x["symbol"] and m["date"] == date for m in reg["genuineMoves"]):
         raise OpError("a genuine-move approval for %s on %s already exists (approvals are per date)" % (x["symbol"], date))
     reg["genuineMoves"].append({"symbol": x["symbol"], "date": date, "evidence": ev, "approvedAt": now_iso(ctx), "provenance": "dataops"})
     save(ctx, reg)
     return "approved move %s on %s" % (x["symbol"], date)
+
+
+def op_flag_bad_print(ctx, symbol, date, evidence):
+    """The opposite of approve-move: this printed bar is not real (a vendor/exchange glitch, not a
+    genuine price move and not a split), so it is dropped before it can trigger an anomaly at all —
+    the date then reads exactly like a missing session (plan's existing MISSING_EXPECTED_SESSION rule),
+    never a fabricated price. Other days for this ETF are unaffected."""
+    _need_date(date)
+    ev = _need_evidence(evidence)
+    reg = load(ctx)
+    x = _need_symbol(reg, symbol)
+    _assert_date_not_claimed(reg, x["symbol"], date, "badPrints")
+    reg.setdefault("badPrints", [])
+    if any(m["symbol"] == x["symbol"] and m["date"] == date for m in reg["badPrints"]):
+        raise OpError("a bad-print flag for %s on %s already exists (flags are per date)" % (x["symbol"], date))
+    reg["badPrints"].append({"symbol": x["symbol"], "date": date, "evidence": ev, "approvedAt": now_iso(ctx), "provenance": "dataops"})
+    save(ctx, reg)
+    return "flagged %s on %s as a bad print — that day is now treated as if the session did not happen for this ETF" % (x["symbol"], date)
 
 
 def parse_ratio(s):
@@ -200,6 +231,7 @@ def op_add_split(ctx, symbol, date, ratio, evidence):
     n, d = parse_ratio(ratio)
     reg = load(ctx)
     x = _need_symbol(reg, symbol)
+    _assert_date_not_claimed(reg, x["symbol"], date, "splits")
     if any(s["symbol"] == x["symbol"] and s["date"] == date for s in reg["splits"]):
         raise OpError("a split for %s on %s already exists" % (x["symbol"], date))
     reg["splits"].append({"symbol": x["symbol"], "date": date, "ratioNum": n, "ratioDen": d, "evidence": ev, "approvedAt": now_iso(ctx), "provenance": "dataops"})

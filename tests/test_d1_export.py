@@ -10,7 +10,7 @@ import pytest
 from dataops import export as ex
 from dataops import hashing as H
 from dataops import reasons as R
-from eod2_factory import World, dataops_move, make_eod2, make_registry, migrated_move, walk, weekdays, write_registry
+from eod2_factory import World, bad_print, dataops_move, make_eod2, make_registry, migrated_move, walk, weekdays, write_registry
 
 IST = timezone(timedelta(hours=5, minutes=30))
 NOW = datetime(2026, 3, 10, 19, 41, 7, tzinfo=IST)
@@ -35,6 +35,16 @@ def jump(rows, i, factor):
     out = list(rows[:i])
     for r in rows[i:]:
         out.append((r[0], round(r[1] * factor, 4), round(r[2] * factor, 4), round(r[3] * factor, 4), round(r[4] * factor, 4), r[5]))
+    return out
+
+
+def spike(rows, i, factor):
+    """Scale ONLY rows[i] by `factor` — a one-day glitch, not a level shift: day i-1 -> i jumps, then
+    i -> i+1 jumps straight back, since day i+1 is untouched. This is the bad-print shape (a bad print
+    reverts on its own the next session), unlike jump()'s permanent shift (a genuine market move)."""
+    out = list(rows)
+    r = out[i]
+    out[i] = (r[0], round(r[1] * factor, 4), round(r[2] * factor, 4), round(r[3] * factor, 4), round(r[4] * factor, 4), r[5])
     return out
 
 
@@ -231,6 +241,49 @@ def test_unresolved_move_before_the_window_only_truncates_the_warmup(tmp_path):
     res, _ = build(tmp_path, w, reg, etf_rows=rows)
     assert "AAA" in res.files and "AAA" not in res.quarantined
     assert res.files["AAA"]["first"] == D and res.files["AAA"]["warmupTruncatedFrom"] == D
+
+
+def test_an_unflagged_one_day_spike_quarantines_on_BOTH_the_jump_and_the_revert(tmp_path):
+    # Baseline (no remediation): a one-day-only glitch is two anomalies, not one — the jump into it AND
+    # the revert straight back out of it the next session. This is what a real bad print looks like,
+    # and it is the scenario the next two tests flag away.
+    w = World(tmp_path)
+    rows = copy.deepcopy(w.etf_rows)
+    D = w.dates[200]
+    rows["aaa"] = spike(rows["aaa"], 200, 1.2)
+    res, _ = build(tmp_path, w, etf_rows=rows)
+    assert [e["date"] for e in res.quarantined["AAA"]["events"]] == [D, w.dates[201]]
+
+
+def test_a_flagged_bad_print_clears_the_quarantine_and_reads_as_a_missing_session(tmp_path):
+    # Flag the glitch day itself. It must never be treated as a genuine move (no approval exists for
+    # it), and it must never quarantine the ETF either — dropping the one bad day removes BOTH the jump
+    # into it and the revert out of it at once, and what is left is an ordinary missing session, the
+    # same outcome test_etf_missing_a_midlife_session_... covers.
+    w = World(tmp_path)
+    rows = copy.deepcopy(w.etf_rows)
+    D = w.dates[200]
+    rows["aaa"] = spike(rows["aaa"], 200, 1.2)
+    reg = make_registry(overrides={"badPrints": [bad_print("AAA", D)]})
+    res, _ = build(tmp_path, w, reg, etf_rows=rows)
+    assert "AAA" not in res.quarantined and "AAA" not in res.files
+    x = res.excluded["AAA"]
+    assert x["code"] == "MISSING_EXPECTED_SESSION" and D in x["detail"]
+    assert res.publish_status == "PUBLISHABLE" and res.manifest["certification"] == "PARTIAL"
+
+
+def test_a_flagged_bad_print_touches_only_its_own_date(tmp_path):
+    # ETFs and indices this flag was never asked about are untouched, and the excluded detail names
+    # exactly the one flagged date — proving the drop did not widen into anything more than that day.
+    w = World(tmp_path)
+    rows = copy.deepcopy(w.etf_rows)
+    D = w.dates[200]
+    rows["aaa"] = spike(rows["aaa"], 200, 1.2)
+    reg = make_registry(overrides={"badPrints": [bad_print("AAA", D)]})
+    res, _ = build(tmp_path, w, reg, etf_rows=rows)
+    assert set(res.excluded) == {"AAA"} and res.excluded["AAA"]["detail"].count(D) == 1
+    assert set(res.files) == {"BBB", "CCC", "NIFTY 50", "NIFTY BANK"}
+    assert [r["code"] for r in res.files["BBB"]["reasons"]] == ["ISIN_MISSING"]   # BBB: normal, nothing leaked onto it
 
 
 def test_indices_are_not_subject_to_the_anomaly_gate(tmp_path):

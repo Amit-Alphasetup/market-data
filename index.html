@@ -37,6 +37,10 @@ th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left;white
 th{position:sticky;top:0;background:var(--card);color:var(--mute);font-size:12px}
 td.wrap{white-space:normal;min-width:180px}
 .chip{display:inline-block;margin:0 3px 0 0;padding:0 7px;border-radius:6px;background:var(--chip);border:1px solid var(--line);font-size:11px}
+.rev-actions{display:flex;flex-direction:column;gap:4px;align-items:flex-start;white-space:normal;min-width:170px}
+.rev-actions .rev-date{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.rev-actions button{padding:2px 8px;min-height:auto;font-size:11px}
+.rev-actions a{font-size:11px;color:var(--info)}
 .field{display:grid;gap:4px;min-width:150px}
 .field label{font-size:12px;color:var(--mute)}
 .fields{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
@@ -76,7 +80,7 @@ dialog::backdrop{background:#000a}
       <select id="fltKind" aria-label="Kind"><option value="">ETF + index</option><option>ETF</option><option>INDEX</option></select>
       <span id="instCount" class="mute"></span>
     </div>
-    <div class="tablewrap" style="margin-top:10px"><table id="instTable"><thead><tr><th>Symbol</th><th>Kind</th><th>Engines</th><th>First</th><th>Last</th><th>Bars</th><th>Status</th><th>Reasons</th></tr></thead><tbody></tbody></table></div>
+    <div class="tablewrap" style="margin-top:10px"><table id="instTable"><thead><tr><th>Symbol</th><th>Kind</th><th>Engines</th><th>First</th><th>Last</th><th>Bars</th><th>Status</th><th>Reasons</th><th>Review</th></tr></thead><tbody></tbody></table></div>
   </section>
 
   <section class="card">
@@ -112,7 +116,7 @@ dialog::backdrop{background:#000a}
 'use strict';
 var OWNER = 'Amit-Alphasetup', REPO = 'market-data', BRANCH = 'main';
 var PANEL_VERSION = '1.0';
-var TYPES = ['run', 'add', 'remove', 'set_engines', 'backfill', 'set_listing', 'diagnose', 'repair', 'rebuild_missing', 'approve_move', 'add_split'];
+var TYPES = ['run', 'add', 'remove', 'set_engines', 'backfill', 'set_listing', 'diagnose', 'repair', 'rebuild_missing', 'approve_move', 'add_split', 'flag_bad_print'];
 var ENGINES = ['LIFO', 'DM', 'TENET'];
 var ASSET_CLASSES = ['equity', 'gold', 'silver', 'international', 'debt', 'liquid'];
 var EVIDENCE_MAX = 500;
@@ -128,7 +132,8 @@ var SPEC = {
   repair: { symbol: [true, 'symbol'], from: [false, 'date'], to: [false, 'date'] },
   rebuild_missing: {},
   approve_move: { symbol: [true, 'symbol'], date: [true, 'date'], evidence: [true, 'evidence'] },
-  add_split: { symbol: [true, 'symbol'], date: [true, 'date'], ratio: [true, 'ratio'], evidence: [true, 'evidence'] }
+  add_split: { symbol: [true, 'symbol'], date: [true, 'date'], ratio: [true, 'ratio'], evidence: [true, 'evidence'] },
+  flag_bad_print: { symbol: [true, 'symbol'], date: [true, 'date'], evidence: [true, 'evidence'] }
 };
 var HELP = {
   run: 'sync → export → publish now (the PC does it within ~10 minutes).',
@@ -141,9 +146,10 @@ var HELP = {
   repair: 'Re-download the day from NSE, compare with EOD2, re-export. Never uses a second source.',
   rebuild_missing: 'Repair every instrument that is missing sessions, then export and publish.',
   approve_move: 'Confirm a ≥15% one-day move is real, for ONE date. Evidence is required.',
-  add_split: 'Register a stock split with its date and ratio. Evidence is required.'
+  add_split: 'Register a stock split with its date and ratio. Evidence is required.',
+  flag_bad_print: 'The opposite of Approve: this one printed bar is not real (a vendor glitch, not a genuine move and not a split). It is dropped — that day reads as if the session did not happen for this ETF, every other day is unaffected. Evidence is required.'
 };
-var TWO_STEP = { approve_move: 1, add_split: 1, remove: 1 };
+var TWO_STEP = { approve_move: 1, add_split: 1, flag_bad_print: 1, remove: 1 };
 
 /* ---------- validation (must stay in sync with requests_spec.py; tests/data/request_cases.json runs against both) ---------- */
 function isDate(v) {
@@ -392,7 +398,9 @@ function buildRows(m) {
   Object.keys(m.quarantined || {}).forEach(function (k) {
     var x = m.quarantined[k];
     var ev = (x.events || []).map(function (e) { return e.date ? e.date + (e.ret != null ? ' ' + (e.ret > 0 ? '+' : '') + (e.ret * 100).toFixed(1) + '%' : '') : ''; }).filter(Boolean);
-    rows.push({ symbol: k, kind: 'ETF', engines: [], first: null, last: null, bars: null, status: 'QUARANTINED', reasons: [x.code].concat(ev) });
+    // events kept alongside the display strings: the review buttons need each flagged date on its own,
+    // not re-parsed back out of the human-readable "2026-09-16 +19.8%" text built above.
+    rows.push({ symbol: k, kind: 'ETF', engines: [], first: null, last: null, bars: null, status: 'QUARANTINED', reasons: [x.code].concat(ev), events: x.events || [] });
   });
   rows.sort(function (a, b) { return a.symbol < b.symbol ? -1 : a.symbol > b.symbol ? 1 : 0; });
   return rows;
@@ -400,6 +408,38 @@ function buildRows(m) {
 function filterRows(rows, text, status, kind) {
   text = (text || '').trim().toUpperCase();
   return rows.filter(function (r) { return (!text || r.symbol.toUpperCase().indexOf(text) >= 0) && (!status || r.status === status) && (!kind || r.kind === kind); });
+}
+// A flagged move is reviewed against a real chart, then either confirmed real (Approve, the existing
+// approve_move request) or declared a bad print (Skip, the new flag_bad_print request) — never both,
+// the registry refuses that server-side. Each button only fills in the Requests form below and puts the
+// cursor in Evidence; nothing is queued or sent until you review it there and press Send yourself.
+function chartUrl(symbol) { return 'https://www.google.com/finance/quote/' + encodeURIComponent(symbol) + ':NSE'; }
+function prefillRequest(type, args) {
+  $('reqType').value = type;
+  renderForm();
+  Object.keys(args || {}).forEach(function (k) { var el = $('f_' + k); if (el) el.value = args[k]; });
+  $('reqErr').textContent = ''; $('reqMsg').textContent = '';
+  var target = $('f_evidence') || $('reqType');
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (target.focus) target.focus();
+}
+function reviewCellFor(r) {
+  var td = h('td');
+  if (r.status !== 'QUARANTINED' || (r.reasons && r.reasons[0]) !== 'ANOMALOUS_MOVE_UNRESOLVED' || !r.events || !r.events.length) return td;
+  var box = h('div', { class: 'rev-actions' });
+  box.appendChild(h('a', { href: chartUrl(r.symbol), target: '_blank', rel: 'noopener' }, 'View chart (Google Finance)'));
+  r.events.forEach(function (e) {
+    if (!e.date) return;
+    var row = h('div', { class: 'rev-date' }, h('span', { class: 'mono', text: e.date }));
+    var approve = h('button', { type: 'button', text: 'Approve' });
+    approve.addEventListener('click', function () { prefillRequest('approve_move', { symbol: r.symbol, date: e.date }); });
+    var skip = h('button', { type: 'button', class: 'sec', text: 'Skip (bad print)' });
+    skip.addEventListener('click', function () { prefillRequest('flag_bad_print', { symbol: r.symbol, date: e.date }); });
+    row.appendChild(approve); row.appendChild(skip);
+    box.appendChild(row);
+  });
+  td.appendChild(box);
+  return td;
 }
 function renderInstruments() {
   var rows = filterRows(state.rows, $('fltText').value, $('fltStatus').value, $('fltKind').value);
@@ -411,7 +451,7 @@ function renderInstruments() {
     (r.engines || []).forEach(function (e) { engines.appendChild(h('span', { class: 'chip', text: e })); });
     tb.appendChild(h('tr', { 'data-symbol': r.symbol }, h('td', { text: r.symbol, class: 'mono' }), h('td', { text: r.kind || '' }), engines,
       h('td', { text: r.first || '—', class: 'mono' }), h('td', { text: r.last || '—', class: 'mono' }), h('td', { text: r.bars == null ? '—' : String(r.bars) }),
-      h('td', null, badge(r.status, cls)), h('td', { text: r.reasons.join(' · '), class: 'wrap mono' })));
+      h('td', null, badge(r.status, cls)), h('td', { text: r.reasons.join(' · '), class: 'wrap mono' }), reviewCellFor(r)));
   });
   $('instCount').textContent = rows.length + ' of ' + state.rows.length;
 }

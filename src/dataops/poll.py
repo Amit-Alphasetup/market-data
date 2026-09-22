@@ -67,9 +67,10 @@ def execute(ctx, layout, req, run_fn=None):
             return "OK", ops.op_backfill(ctx, a["symbol"], a["from"]), mut, False
         if t == "set_listing":
             return "OK", ops.op_set_listing(ctx, a["symbol"], a["date"], a["evidence"]), mut, False
-        if t in ("approve_move", "add_split"):
+        if t in ("approve_move", "add_split", "flag_bad_print"):
             msg = (ops.op_approve_move(ctx, a["symbol"], a["date"], a["evidence"]) if t == "approve_move"
-                   else ops.op_add_split(ctx, a["symbol"], a["date"], a["ratio"], a["evidence"]))
+                   else ops.op_add_split(ctx, a["symbol"], a["date"], a["ratio"], a["evidence"]) if t == "add_split"
+                   else ops.op_flag_bad_print(ctx, a["symbol"], a["date"], a["evidence"]))
             rep = rp.repair(ctx, a["symbol"], downloader=_downloader(layout), strict=False)
             return "OK", "%s · %s" % (msg, rp.main_text(rep).replace("\n", " | ")), True, False
         if t == "diagnose":

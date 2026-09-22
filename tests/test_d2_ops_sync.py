@@ -143,6 +143,40 @@ def test_approve_move_records_evidence_provenance_and_time(env):
     assert_consistent(c)
 
 
+def test_flag_bad_print_records_evidence_and_is_per_date(env):
+    c, _ = env
+    with pytest.raises(ops.OpError, match="evidence"):
+        ops.op_flag_bad_print(c, "AAA", "2025-09-01", "")
+    ops.op_flag_bad_print(c, "AAA", "2025-09-01", "vendor glitch, confirmed against NSE bhavcopy")
+    m = reg(c)["badPrints"][-1]
+    assert m == {"symbol": "AAA", "date": "2025-09-01", "evidence": "vendor glitch, confirmed against NSE bhavcopy",
+                 "approvedAt": "2026-03-10T19:41:07+05:30", "provenance": "dataops"}
+    with pytest.raises(ops.OpError, match="already exists"):
+        ops.op_flag_bad_print(c, "AAA", "2025-09-01", "again")
+    ops.op_flag_bad_print(c, "AAA", "2025-09-02", "another date is a separate flag")
+    assert_consistent(c)
+
+
+def test_a_date_can_only_ever_be_one_of_genuine_move_split_or_bad_print(env):
+    c, _ = env
+    ops.op_approve_move(c, "AAA", "2025-09-01", "NSE circular 42")
+    with pytest.raises(ops.OpError, match="already recorded in genuineMoves"):
+        ops.op_flag_bad_print(c, "AAA", "2025-09-01", "actually a glitch")
+    with pytest.raises(ops.OpError, match="already recorded in genuineMoves"):
+        ops.op_add_split(c, "AAA", "2025-09-01", "3:2", "actually a split")
+
+    ops.op_flag_bad_print(c, "AAA", "2025-09-05", "vendor glitch")
+    with pytest.raises(ops.OpError, match="already recorded in badPrints"):
+        ops.op_approve_move(c, "AAA", "2025-09-05", "no, it was real")
+    with pytest.raises(ops.OpError, match="already recorded in badPrints"):
+        ops.op_add_split(c, "AAA", "2025-09-05", "3:2", "no, it was a split")
+
+    ops.op_add_split(c, "AAA", "2025-09-10", "3:2", "NSE corporate action ref")
+    with pytest.raises(ops.OpError, match="already recorded in splits"):
+        ops.op_flag_bad_print(c, "AAA", "2025-09-10", "actually a glitch")
+    assert_consistent(c)
+
+
 def test_add_split_parses_ratio_and_records_it(env):
     c, _ = env
     for bad in ("10", "0:1", "a:b", "10:0", "-2:1"):

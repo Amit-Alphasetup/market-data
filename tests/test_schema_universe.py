@@ -101,6 +101,20 @@ def test_two_approvals_on_different_dates_are_fine():
     assert su.validate(r) == []
 
 
+def test_bad_prints_is_optional_but_validated_like_genuine_moves_when_present():
+    r = base()
+    assert "badPrints" not in r and su.validate(r) == []            # absent entirely: still a valid document
+    r["badPrints"] = [{"symbol": "NIFTYBEES", "date": "2020-04-01", "evidence": "vendor glitch, confirmed against NSE bhavcopy",
+                        "approvedAt": "2026-09-19T10:00:00+05:30", "provenance": "dataops"}]
+    assert su.validate(r) == []
+    r["badPrints"][0]["evidence"] = None
+    assert any("requires non-empty evidence" in e for e in su.validate(r))
+    r2 = base()
+    r2["badPrints"] = [{"symbol": "NIFTYBEES", "date": "2020-03-12", "evidence": "e", "approvedAt": "2026-09-19T10:00:00+05:30", "provenance": "dataops"},
+                        {"symbol": "NIFTYBEES", "date": "2020-03-12", "evidence": "e2", "approvedAt": "2026-09-19T10:00:00+05:30", "provenance": "dataops"}]
+    assert any("per date" in e for e in su.validate(r2))            # duplicate flag for the same date is rejected, same as genuineMoves
+
+
 def test_is_date_rejects_impossible_dates():
     assert su.is_date("2024-02-29") and not su.is_date("2023-02-29") and not su.is_date("2024-2-9") and not su.is_date(None)
 

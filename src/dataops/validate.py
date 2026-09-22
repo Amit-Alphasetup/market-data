@@ -145,6 +145,10 @@ def prepare(kind, item, rows, findings, registry, src_isin_check=None):
     # anomaly gate FIRST (ETFs; indices cannot split — same as v2): an unresolved move BEFORE the window start (i.e. only inside the warm-up
     # range that v2 never looked at) truncates the warm-up right after it instead of quarantining an ETF whose window data is clean.
     if kind == "ETF":
+        bad_dates = registry.bad_prints_on(prep.key)
+        if bad_dates:
+            rows = [b for b in rows if b["date"] not in bad_dates]
+            prep.rows = rows
         approvals = registry.approvals_on(prep.key)
         pre_window, unresolved = [], []
         for i in range(1, len(rows)):

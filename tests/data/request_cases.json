@@ -1040,6 +1040,69 @@
    },
    "valid": false,
    "errorContains": "date"
+  },
+  {
+   "name": "flag_bad_print",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "flag_bad_print",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MOM100",
+     "date": "2022-05-11",
+     "evidence": "vendor glitch, confirmed against NSE bhavcopy"
+    }
+   },
+   "valid": true,
+   "file": "20260310T141107Z-flag_bad_print-3f2b8c1e.json"
+  },
+  {
+   "name": "flag_bad_print missing evidence",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "flag_bad_print",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MOM100",
+     "date": "2022-05-11"
+    }
+   },
+   "valid": false,
+   "errorContains": "missing arg"
+  },
+  {
+   "name": "flag_bad_print blank evidence",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "flag_bad_print",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MOM100",
+     "date": "2022-05-11",
+     "evidence": "   "
+    }
+   },
+   "valid": false,
+   "errorContains": "evidence"
+  },
+  {
+   "name": "flag_bad_print bad date",
+   "req": {
+    "id": "3f2b8c1e-5d4a-4b6f-9a7c-0e1d2c3b4a59",
+    "type": "flag_bad_print",
+    "createdAt": "2026-03-10T14:11:07Z",
+    "createdBy": "panel",
+    "args": {
+     "symbol": "MOM100",
+     "date": "11-05-2022",
+     "evidence": "vendor glitch"
+    }
+   },
+   "valid": false,
+   "errorContains": "date"
   }
  ]
 }

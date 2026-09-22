@@ -81,7 +81,7 @@ def analyse(rows, start, end):
 
 def approvals_for(reg, symbol):
     res = []
-    for kind, key in (("split", "splits"), ("genuine move", "genuineMoves")):
+    for kind, key in (("split", "splits"), ("genuine move", "genuineMoves"), ("bad print (dropped)", "badPrints")):
         for e in reg.get(key, []):
             if e["symbol"] == symbol:
                 res.append({"kind": kind, "date": e["date"], "provenance": e["provenance"], "evidence": e.get("evidence"),
