@@ -1,0 +1,9 @@
+{
+  "id": "fa42a085-ea57-43d0-a738-d6fb92a44132",
+  "type": "diagnose",
+  "createdAt": "2026-09-22T00:53:18Z",
+  "createdBy": "panel",
+  "args": {
+    "symbol": "METALIETF"
+  }
+}
