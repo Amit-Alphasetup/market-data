@@ -1,0 +1,9 @@
+{
+  "id": "1bef3727-40fc-43c2-9010-39b2bc968234",
+  "type": "diagnose",
+  "createdAt": "2026-09-22T00:53:08Z",
+  "createdBy": "panel",
+  "args": {
+    "symbol": "CPSEETF"
+  }
+}
