@@ -1,5 +1,5 @@
 {
-  "lastRun": "2026-09-22T09:04:20+05:30",
+  "lastRun": "2026-09-22T09:09:25+05:30",
   "result": "PUBLISHED",
   "datasetId": "2026-09-21-r15",
   "latestCompletedSession": "2026-09-21",
@@ -11,5 +11,5 @@
     "quarantined": 7
   },
   "message": "published 2026-09-21-r15 (PARTIAL); retention kept 10, removed 1",
-  "liveVerify": "PENDING"
+  "liveVerify": "FAIL: PVTBANIETF: TimeoutError: The read operation timed out; PHARMABEES: URLError: <urlopen error _ssl.c:1064: The handshake operation timed out>; MODEFENCE: URLError: <urlopen error [WinError 10051] A socket operation was attempted to an unreachable network>"
 }
