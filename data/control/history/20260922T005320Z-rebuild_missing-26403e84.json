@@ -1,0 +1,10 @@
+{
+  "id": "26403e84-03b1-42bd-a2bf-0ad41c156644",
+  "type": "rebuild_missing",
+  "createdAt": "2026-09-22T00:53:20Z",
+  "createdBy": "panel",
+  "args": {},
+  "result": "OK",
+  "message": "REPAIR ALPHA: NO_CHANGE_NEEDED\nno source difference found; export skipped\n  2022-05-11  DOWNLOAD_FAILED: EOD2 download failed for 2022-05-11: Traceback (most recent call last):\n  File \"<string>\", line 4, in <module>\n    from nse import NSE\nModuleNotFoundError: No module named 'nse'\nREPAIR GOLDIETF: NO_CHANGE_NEEDED\nno source difference found; export skipped\n  2022-05-11  DOWNLOAD_FAILED: EOD2 download failed for 2022-05-11: Traceback (most recent call last):\n  File \"<string>\", line 4, in <module>\n    from nse import NSE\nModuleNotFoundError: No module named 'nse'\nREPAIR MOM100: NO_CHANGE_NEEDED\nno source difference found; export skipped\n  2022-05-11  DOWNLOAD_FAILED: EOD2 download failed for 2022-05-11: Traceback (most recent call last):\n  File \"<string>\", line 4, in <module>\n    from nse import NSE\nModuleNotFoundError: No module named 'nse'\nREPAIR TNIDETF: NO_CHANGE_NEEDED\nno source difference found; export skipped\n  2022-05-11  DOWNLOAD_FAILED: EOD2 download failed for 2022-05-11: Traceback (most recent call last):\n  File \"<string>\", line 4, in <module>\n    from nse import NSE\nModuleNotFoundError: No module named 'nse'\nrebuild-missing: 4 instrument(s) attempted; new export 2026-09-21-r6 (PUBLISHABLE)\npublished 2026-09-21-r6",
+  "finishedAt": "2026-09-22T08:40:03+05:30"
+}
