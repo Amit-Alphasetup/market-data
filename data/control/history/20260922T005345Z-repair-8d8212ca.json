@@ -1,0 +1,12 @@
+{
+  "id": "8d8212ca-15da-446d-a22b-950c84227397",
+  "type": "repair",
+  "createdAt": "2026-09-22T00:53:45Z",
+  "createdBy": "panel",
+  "args": {
+    "symbol": "MAFANG"
+  },
+  "result": "OK",
+  "message": "REPAIR MAFANG: REPAIRED_EXPORT_OK\nMAFANG is now exported OK in 2026-09-21-r8\n  step: exported 2026-09-21-r8 (PUBLISHABLE)\n  step: published 2026-09-21-r8",
+  "finishedAt": "2026-09-22T08:40:03+05:30"
+}
