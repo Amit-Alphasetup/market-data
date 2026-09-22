@@ -1,0 +1,70 @@
+# D6 Phase 0 — the make-or-break probe.
+#
+# The entire cloud-migration plan rests on one unknown: will NSE answer a request coming from a GitHub
+# runner's IP, or does it only tolerate a home connection? Nothing else gets built until this is green.
+# This workflow downloads nothing into the repo and writes nothing back — it only asks NSE for one recent
+# bhavcopy and reports what happened.
+#
+# Run it by hand: Actions tab -> "D6 probe: can a cloud runner reach NSE?" -> Run workflow.
+name: D6 probe: can a cloud runner reach NSE?
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install the same NSE client EOD2 uses
+        run: pip install "nse[server]==4.0.1"
+
+      - name: Ask NSE for a recent bhavcopy (server mode, exactly as EOD2 calls it)
+        run: |
+          python - <<'PY'
+          import datetime as dt
+          import sys
+          import tempfile
+          from pathlib import Path
+
+          from nse import NSE
+
+          folder = Path(tempfile.mkdtemp())
+          print(f"runner IP family check / download folder: {folder}")
+
+          # server=True is what eod2/src/init.py passes; it selects the httpx HTTP/2 transport the
+          # package documents as the one for AWS/Azure/GCP-style hosts.
+          try:
+              nse = NSE(folder, server=True)
+          except Exception as e:
+              print(f"::error::session warm-up FAILED: {type(e).__name__}: {e}")
+              sys.exit(1)
+          print("session warm-up OK (cookies obtained from nseindia.com)")
+
+          # Walk back from yesterday to the most recent weekday that has a published bhavcopy.
+          # A holiday or a not-yet-published day is not a failure, so try a few.
+          day = dt.date.today() - dt.timedelta(days=1)
+          last_error = None
+          for _ in range(7):
+              if day.weekday() < 5:          # Mon-Fri
+                  try:
+                      f = nse.equityBhavcopy(day)
+                      size = Path(f).stat().st_size
+                      print(f"::notice::SUCCESS - {day} bhavcopy downloaded, {size} bytes")
+                      print("VERDICT: a cloud runner CAN reach NSE. Phase 1 onwards is viable.")
+                      nse.exit()
+                      sys.exit(0)
+                  except Exception as e:
+                      last_error = f"{day}: {type(e).__name__}: {e}"
+                      print(f"  {last_error}")
+              day -= dt.timedelta(days=1)
+
+          nse.exit()
+          print(f"::error::no bhavcopy could be downloaded. Last error - {last_error}")
+          print("VERDICT: inconclusive or blocked. Do NOT proceed past Phase 1; see plan section 6.")
+          sys.exit(1)
+          PY

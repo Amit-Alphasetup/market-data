@@ -35,7 +35,7 @@ def fake_eod2_src(tmp_path, meta=None, init_extra="", defs_extra=""):
 
 def test_discover_layout_records_the_facts(tmp_path):
     L = lay.discover_layout(fake_eod2_src(tmp_path))
-    assert L["dailyFolder"].endswith("eod2_data\\daily") and L["meta"]["lastSyncKey"] == "lastUpdate" and L["meta"]["holidaysKey"] == "holidays"
+    assert L["dailyFolder"].endswith(os.path.join("eod2_data", "daily")) and L["meta"]["lastSyncKey"] == "lastUpdate" and L["meta"]["holidaysKey"] == "holidays"
     assert L["isin"]["eod2StoresIsin"] is True and L["update"]["entryCommand"] == "python init.py"
     assert L["singleDate"]["downloadFunctions"]["equity"] == "NSE.equityBhavcopy(date)" and L["singleDate"]["updateAppendsOnly"] is True
     assert "APPENDS" in L["singleDate"]["updateNote"] and L["sessionCalendarIndex"] == "NIFTY 50"
@@ -57,6 +57,17 @@ def test_discover_layout_refuses_to_guess(tmp_path, what):
         open(os.path.join(src, "defs", "defs.py"), "w").write("def updateNseEOD(a, b):\n    pass\n")
     with pytest.raises(lay.LayoutError):
         lay.discover_layout(src)
+
+
+def test_native_paths_follow_the_running_os(monkeypatch):
+    # D6: discover_layout used to hardcode .replace("/", "\\") on every path it recorded, which is right
+    # on Windows and silently corrupts the layout on a Linux cloud runner. Both branches are asserted
+    # here so this holds whichever OS the suite runs on.
+    monkeypatch.setattr(lay.os, "sep", "\\")
+    assert lay._native("C:/dev/eod2/src") == "C:\\dev\\eod2\\src"
+    assert lay._native("C:\\dev\\eod2\\src") == "C:\\dev\\eod2\\src"      # already native, unchanged
+    monkeypatch.setattr(lay.os, "sep", "/")
+    assert lay._native("/home/runner/eod2/src") == "/home/runner/eod2/src"  # never mangled into backslashes
 
 
 def test_committed_real_layout_is_consistent():

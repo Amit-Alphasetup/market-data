@@ -1,0 +1,42 @@
+# D6 Phase 1 — portability proof.
+#
+# The pipeline has only ever run on Apd's Windows laptop. Before any of it can be trusted on a cloud
+# runner, the existing suite has to pass on Linux too. This runs the same tests on both, so a
+# Windows-only assumption (a hardcoded backslash, a .exe name, a path separator) fails here rather than
+# at 23:00 on a night when the data is needed.
+name: tests
+
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'config/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install test dependencies
+        # psutil is not optional on Linux: lock.py's fallback process lookup is Windows-only ctypes,
+        # so without psutil a lock-holder check would raise instead of answering.
+        run: pip install pytest psutil
+
+      - name: Run the suite
+        run: python -m pytest tests -q
+        env:
+          PYTHONUTF8: '1'

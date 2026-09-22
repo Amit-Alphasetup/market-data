@@ -12,6 +12,16 @@ LAYOUT_PATH = os.path.join(REPO, "config", "eod2_layout.json")
 EOD2_SRC = r"C:\dev\eod2\src"
 
 
+def _native(path):
+    """Record a path the way the running OS writes it.
+
+    Windows keeps the historical backslash form byte-for-byte (the stored layout and its tests predate
+    any other platform); on Linux/macOS the path is left alone instead of being mangled into backslashes,
+    which is what made a layout generated on a cloud runner unusable.
+    """
+    return path.replace("/", "\\") if os.sep == "\\" else path
+
+
 class LayoutError(Exception):
     pass
 
@@ -61,17 +71,17 @@ def discover_layout(eod2_src=EOD2_SRC, interpreter="python"):
         pass
     return {
         "layoutVersion": 1,
-        "eod2Src": eod2_src.replace("/", "\\"),
+        "eod2Src": _native(eod2_src),
         "eod2GitCommit": commit,
-        "dataRoot": data_root.replace("/", "\\"),
-        "dailyFolder": daily.replace("/", "\\"),
+        "dataRoot": _native(data_root),
+        "dailyFolder": _native(daily),
         "dailyFileNaming": "<lowercase symbol or index name>.csv (spaces kept, e.g. 'nifty 50.csv'); SME symbols use '<symbol>_sme.csv'",
         "csvColumns": ["Date", "Open", "High", "Low", "Close", "Volume", "Series", "TOTAL_TRADES", "QTY_PER_TRADE", "DLV_QTY"],
         "indexFilesInDailyFolder": True,
         "indexFilesSample": indices[:10],
         "sessionCalendarIndex": "NIFTY 50",
         "meta": {
-            "path": meta_path.replace("/", "\\"),
+            "path": _native(meta_path),
             "lastSyncKey": "lastUpdate",
             "holidaysKey": "holidays",
             "holidaysDateFormat": "%d-%b-%Y",
@@ -79,15 +89,15 @@ def discover_layout(eod2_src=EOD2_SRC, interpreter="python"):
             "holidaysCoverage": "current calendar year only (meta.year); earlier years are not stored",
             "specialSessionsKey": "special_sessions",
             "specialSessionsDateFormat": "ISO datetime",
-            "specialSessionsFile": sess.replace("/", "\\") if os.path.isfile(sess) else None,
+            "specialSessionsFile": _native(sess) if os.path.isfile(sess) else None,
             "pendingDeliveryKey": "DLV_PENDING_DATES",
         },
-        "isin": {"eod2StoresIsin": stores_isin, "symbolToIsinFile": isin_map.replace("/", "\\") if os.path.isfile(isin_map) else None,
-                 "symbolToIsinKey": "sym2isin", "isinCsv": isin_csv.replace("/", "\\") if os.path.isfile(isin_csv) else None},
+        "isin": {"eod2StoresIsin": stores_isin, "symbolToIsinFile": _native(isin_map) if os.path.isfile(isin_map) else None,
+                 "symbolToIsinKey": "sym2isin", "isinCsv": _native(isin_csv) if os.path.isfile(isin_csv) else None},
         "update": {
             "interpreter": interpreter,
             "interpreterNote": "EOD2 runs under the PATH `python` (has the `nse` package); dataops itself runs under `py`.",
-            "workingDirectory": eod2_src.replace("/", "\\"),
+            "workingDirectory": _native(eod2_src),
             "entryScript": "init.py",
             "entryCommand": "%s init.py" % interpreter,
             "syncsDatesSince": "meta.lastUpdate (one date per loop; exits 0 when up to date)",
