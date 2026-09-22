@@ -1,0 +1,9 @@
+{
+  "id": "181f84bf-b3e1-4091-9d7d-b436ffe80900",
+  "type": "diagnose",
+  "createdAt": "2026-09-22T00:53:05Z",
+  "createdBy": "panel",
+  "args": {
+    "symbol": "MON100"
+  }
+}
