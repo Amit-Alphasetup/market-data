@@ -1,0 +1,69 @@
+# D6 Phase 2 — can a cloud runner restore the eod2-data mirror and export a snapshot from it?
+#
+# The cloud runner starts empty every run, so the 448 MB EOD2 archive (eod2_data/: daily/ + meta.json +
+# isin.csv + isin_symbol_map.json + market_tracker.csv + special_sessions.txt) needs a home outside the
+# runner. The plan (C:\dev\MARKETDATA_D6_CLOUD_PLAN.md, phase 2) is a dedicated private repo, eod2-data,
+# seeded once from the laptop (scripts/seed_eod2_data_mirror.ps1) and cloned shallow each run.
+#
+# This workflow proves the restore half only: clone the mirror, point dataops export straight at it, and
+# check a v3 snapshot comes out. It writes nothing back anywhere - not to market-data, not to the mirror.
+# Manual trigger only. It cannot run until Amit-Alphasetup/eod2-data exists and DATA_MIRROR_PAT is set as
+# an Actions secret on this repo (fine-grained PAT, contents:read on eod2-data is enough for this check;
+# read/write is needed once the nightly save step is added in a later phase).
+#
+# Run it by hand: Actions tab -> "D6 phase 2: restore eod2-data mirror + export" -> Run workflow.
+name: "D6 phase 2: restore eod2-data mirror + export"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  restore-and-export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout market-data (dataops code + config/universe.json)
+        uses: actions/checkout@v4
+        with:
+          path: market-data
+
+      - name: Checkout eod2-data mirror (shallow)
+        uses: actions/checkout@v4
+        with:
+          repository: Amit-Alphasetup/eod2-data
+          token: ${{ secrets.DATA_MIRROR_PAT }}
+          path: eod2-data-mirror
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dataops
+        run: pip install psutil
+        working-directory: market-data
+
+      - name: Restore sanity check (the files export.py actually reads)
+        run: |
+          test -d ../eod2-data-mirror/daily || { echo "::error::mirror has no daily/ folder - seed script did not run or repo is empty"; exit 1; }
+          test -f ../eod2-data-mirror/meta.json || { echo "::error::mirror has no meta.json"; exit 1; }
+          echo "daily/ file count: $(find ../eod2-data-mirror/daily -type f | wc -l)"
+        working-directory: market-data
+
+      - name: dataops export straight from the restored mirror
+        run: python -m dataops export --eod2-data-root ../eod2-data-mirror --out "$RUNNER_TEMP/snapshot"
+        working-directory: market-data
+        env:
+          PYTHONUTF8: '1'
+          PYTHONPATH: src
+
+      - name: Verdict
+        run: |
+          if [ -f "$RUNNER_TEMP/snapshot/manifest.json" ]; then
+            echo "::notice::SUCCESS - snapshot produced at $RUNNER_TEMP/snapshot ($(find "$RUNNER_TEMP/snapshot" -type f | wc -l) files)"
+            echo "VERDICT: phase 2 restore + export works on a cloud runner. Phase 3 (shadow mode) is next."
+          else
+            echo "::error::export ran but produced no manifest.json"
+            echo "VERDICT: restore or export is broken - do not proceed to phase 3."
+            exit 1
+          fi
