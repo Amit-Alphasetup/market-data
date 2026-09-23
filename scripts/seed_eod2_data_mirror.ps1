@@ -47,10 +47,16 @@ if ($LASTEXITCODE -ge 8) { throw "robocopy failed with exit code $LASTEXITCODE" 
 
 Push-Location $WorkDir
 try {
+    # A freshly cloned repo has no git identity of its own even when other repos on this machine do -
+    # set it repo-local so `git commit` below doesn't fail with "Author identity unknown".
+    git config user.name "Amit-Alphasetup"
+    git config user.email "apdash95@gmail.com"
+
     git add -A
     $fileCount = (git status --porcelain | Measure-Object -Line).Lines
     $today = Get-Date -Format "yyyy-MM-dd"
     git commit -m "Initial seed: EOD2 data archive as of $today ($fileCount files)"
+    if ($LASTEXITCODE -ne 0) { throw "commit failed" }
     git push origin main
     if ($LASTEXITCODE -ne 0) { throw "push failed" }
     Write-Host "Seeded. Verify: git ls-remote $MirrorRepoUrl"
