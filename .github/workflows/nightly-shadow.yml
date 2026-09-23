@@ -1,0 +1,108 @@
+# D6 phase 3 — nightly workflow, SHADOW MODE.
+#
+# Runs the real pipeline (EOD2 sync via NSE -> v3 export) on a GitHub-hosted runner, on the same schedule
+# the laptop will eventually use, but publishes NOTHING: no `dataops publish`, no push to market-data, no
+# push back to the eod2-data mirror. The laptop's own pipeline keeps running and publishing exactly as
+# before - this workflow is purely a side-by-side rehearsal. Compare the datasetHash this prints against
+# the laptop's own datasetHash for the same session (`py -m dataops status` after tonight's laptop run, or
+# the manifest.json in work/<datasetId>/) for ~5 sessions before phase 4 (cutover) is even considered.
+#
+# Deliberately does NOT save the restored archive back to the eod2-data mirror, so a bad shadow run can
+# never corrupt the shared mirror - every run starts fresh from the same seeded point (2026-09-22) and
+# independently catches up via NSE. That means each run downloads more days than the last as the seed date
+# gets further behind (a bounded, known cost for the ~5-session trial; phase 4 will add the save-back step
+# once this trial passes, so subsequent real nightly runs stay incremental).
+#
+# eod2_data is declared as a git submodule in BennyThadikaran/eod2's .gitmodules, pointing at the upstream
+# public BennyThadikaran/eod2_data repo. That is NOT what this restores - actions/checkout below never
+# initialises submodules, so eod2/src/eod2_data stays an empty directory (verified locally against a real
+# fresh clone) and this workflow populates it entirely from OUR OWN eod2-data mirror instead. Using the
+# upstream data here would silently substitute a different, independently-sourced history and break
+# datasetHash comparison against the laptop.
+name: "D6 phase 3: nightly shadow-mode sync + export"
+
+on:
+  schedule:
+    - cron: '30 17 * * 1-5'   # 17:30 UTC = 23:00 IST, Mon-Fri
+  workflow_dispatch:
+
+jobs:
+  shadow-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout market-data
+        uses: actions/checkout@v4
+        with:
+          path: market-data
+
+      - name: Checkout eod2 @ pinned commit (no submodules)
+        uses: actions/checkout@v4
+        with:
+          repository: BennyThadikaran/eod2
+          ref: 5c8c8dd65cc951899a8853c6628935c990f36ed5
+          path: eod2
+
+      - name: Checkout eod2-data mirror (shallow)
+        uses: actions/checkout@v4
+        with:
+          repository: Amit-Alphasetup/eod2-data
+          token: ${{ secrets.DATA_MIRROR_PAT }}
+          path: eod2-data-mirror
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dataops + EOD2 dependencies
+        run: |
+          pip install psutil
+          pip install -r eod2/requirements.txt
+
+      - name: Restore the archive into the fresh eod2 checkout
+        run: |
+          rm -rf eod2/src/eod2_data
+          cp -r eod2-data-mirror eod2/src/eod2_data
+          rm -rf eod2/src/eod2_data/.git
+          test -d eod2/src/eod2_data/daily || { echo "::error::restore failed - no daily/ after copy"; exit 1; }
+          test -f eod2/src/eod2_data/meta.json || { echo "::error::restore failed - no meta.json after copy"; exit 1; }
+
+      - name: Apply the local EOD2 patch (config/eod2_patch.txt)
+        run: python market-data/scripts/apply_eod2_patch.py eod2/src
+
+      - name: Generate a Linux-native layout for this checkout
+        run: python market-data/scripts/ci_discover_layout.py eod2/src "$RUNNER_TEMP/eod2_layout_ci.json"
+
+      - name: dataops sync (downloads via NSE into THIS run's disposable eod2 checkout only)
+        working-directory: market-data
+        run: python -m dataops sync
+        env:
+          PYTHONUTF8: '1'
+          PYTHONPATH: src
+          DATAOPS_LAYOUT: ${{ runner.temp }}/eod2_layout_ci.json
+          DATAOPS_LOCK_FILE: ${{ runner.temp }}/dataops.lock
+
+      - name: dataops export -> v3 snapshot + datasetHash
+        working-directory: market-data
+        run: python -m dataops export --eod2-data-root ../eod2/src/eod2_data --out "$RUNNER_TEMP/snapshot"
+        env:
+          PYTHONUTF8: '1'
+          PYTHONPATH: src
+          DATAOPS_LOCK_FILE: ${{ runner.temp }}/dataops.lock
+
+      - name: Report the datasetHash (compare by hand against the laptop's for the same session)
+        run: |
+          manifest=$(find "$RUNNER_TEMP/snapshot" -maxdepth 2 -name manifest.json -print -quit)
+          if [ -z "$manifest" ]; then
+            echo "::error::export produced no manifest.json"
+            exit 1
+          fi
+          echo "::notice::SHADOW MODE - nothing published, nothing saved back to the mirror."
+          python - "$manifest" <<'PY'
+          import json, sys
+          d = json.load(open(sys.argv[1], encoding="utf-8"))
+          print("datasetId:   ", d.get("datasetId"))
+          print("datasetHash: ", d.get("datasetHash"))
+          print("latestSession:", d.get("latestCompletedSession") or d.get("latestSession"))
+          PY
