@@ -47,7 +47,9 @@ jobs:
 
           # Walk back from yesterday to the most recent weekday that has a published bhavcopy.
           # A holiday or a not-yet-published day is not a failure, so try a few.
-          day = dt.date.today() - dt.timedelta(days=1)
+          # NSE.equityBhavcopy expects a datetime.datetime (it calls .date() internally), exactly
+          # as eod2/src/defs/dates.py's Dates.dt is - not a plain datetime.date.
+          day = dt.datetime.now() - dt.timedelta(days=1)
           last_error = None
           for _ in range(7):
               if day.weekday() < 5:          # Mon-Fri
