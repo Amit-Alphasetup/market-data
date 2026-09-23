@@ -6,7 +6,7 @@
 # bhavcopy and reports what happened.
 #
 # Run it by hand: Actions tab -> "D6 probe: can a cloud runner reach NSE?" -> Run workflow.
-name: D6 probe: can a cloud runner reach NSE?
+name: "D6 probe: can a cloud runner reach NSE?"
 
 on:
   workflow_dispatch:
