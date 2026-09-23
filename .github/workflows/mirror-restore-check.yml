@@ -59,11 +59,15 @@ jobs:
 
       - name: Verdict
         run: |
-          if [ -f "$RUNNER_TEMP/snapshot/manifest.json" ]; then
-            echo "::notice::SUCCESS - snapshot produced at $RUNNER_TEMP/snapshot ($(find "$RUNNER_TEMP/snapshot" -type f | wc -l) files)"
+          # build_snapshot writes to out_root/<datasetId>/manifest.json, not out_root/manifest.json directly -
+          # search for it rather than assuming the dataset-id folder name.
+          manifest=$(find "$RUNNER_TEMP/snapshot" -maxdepth 2 -name manifest.json -print -quit)
+          if [ -n "$manifest" ]; then
+            echo "::notice::SUCCESS - $manifest ($(find "$RUNNER_TEMP/snapshot" -type f | wc -l) files under snapshot/)"
             echo "VERDICT: phase 2 restore + export works on a cloud runner. Phase 3 (shadow mode) is next."
           else
-            echo "::error::export ran but produced no manifest.json"
+            echo "::error::export ran but no manifest.json was found under $RUNNER_TEMP/snapshot"
             echo "VERDICT: restore or export is broken - do not proceed to phase 3."
+            find "$RUNNER_TEMP/snapshot" -maxdepth 2 || true
             exit 1
           fi
