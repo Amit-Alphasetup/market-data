@@ -59,6 +59,9 @@ jobs:
         run: |
           pip install psutil
           pip install -r eod2/requirements.txt
+          # eod2/requirements.txt pins nse[server] but not its own httpx dependency; that drifted
+          # upstream and broke every run from 2026-09-28 onward until pinned here explicitly.
+          pip install "httpx==0.28.1"
 
       - name: Restore the archive into the fresh eod2 checkout
         run: |
