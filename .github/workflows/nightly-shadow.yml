@@ -59,8 +59,6 @@ jobs:
         run: |
           pip install psutil
           pip install -r eod2/requirements.txt
-          # eod2/requirements.txt pins nse[server] but not its own httpx dependency; that drifted
-          # upstream and broke every run from 2026-09-28 onward until pinned here explicitly.
           pip install "httpx==0.28.1"
 
       - name: Restore the archive into the fresh eod2 checkout
@@ -85,6 +83,10 @@ jobs:
           PYTHONPATH: src
           DATAOPS_LAYOUT: ${{ runner.temp }}/eod2_layout_ci.json
           DATAOPS_LOCK_FILE: ${{ runner.temp }}/dataops.lock
+
+      - name: Show EOD2 update log (only if sync failed)
+        if: failure()
+        run: tail -n 80 market-data/logs/eod2_*.log || true
 
       - name: dataops export -> v3 snapshot + datasetHash
         working-directory: market-data
