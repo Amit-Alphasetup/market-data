@@ -186,6 +186,21 @@ def test_run_only_if_needed_skips_when_todays_session_is_published(tmp_path):
     assert runner.run(c, layout, only_if_needed=True, sync_fn=lambda l, now=None: calls.append(2) or ("SKIPPED", "x"), **kw) == 0 and calls == [2]
 
 
+def test_run_does_not_republish_an_identical_dataset(tmp_path):
+    c, w, layout = setup(tmp_path)
+    sync = lambda l, now=None: ("SKIPPED", "x")  # noqa: E731
+    seen = []
+    assert runner.run(c, layout, sync_fn=sync, **run_kw(tmp_path)) == 0
+    head = sh("git", "-C", c.repo, "rev-parse", "HEAD")
+    kw = run_kw(tmp_path)
+    kw["verbose"] = seen.append
+    assert runner.run(c, layout, sync_fn=sync, **kw) == 0
+    assert sh("git", "-C", c.repo, "rev-parse", "HEAD") == head                       # nothing committed
+    assert not os.path.isdir(os.path.join(c.repo, "data", "snapshots", w.latest + "-r2"))
+    assert pub.read_status(c.repo)["datasetId"] == w.latest + "-r1"
+    assert any("unchanged" in str(s) for s in seen)
+
+
 def test_run_sync_failure_records_fail_and_stops(tmp_path):
     c, w, layout = setup(tmp_path)
 

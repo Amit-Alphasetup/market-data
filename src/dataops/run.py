@@ -20,6 +20,14 @@ def already_published(ctx, holidays, now, cutoff="19:15"):
     return bool(st and st.get("result") == "PUBLISHED" and (st.get("latestCompletedSession") or "") >= want), want
 
 
+def _live_dataset_hash(repo):
+    try:
+        with open(os.path.join(repo, "data", "manifest.json"), encoding="utf-8") as f:
+            return json.load(f).get("datasetHash")
+    except (OSError, ValueError):
+        return None
+
+
 def run(ctx, layout, now=None, only_if_needed=False, sync_fn=None, publish_kwargs=None, notify_kwargs=None, verbose=print):
     """Returns the process exit code: 0 ok, 1 failure, 75 busy."""
     now = now or datetime.now(sy.IST)
@@ -49,6 +57,11 @@ def run(ctx, layout, now=None, only_if_needed=False, sync_fn=None, publish_kwarg
                 if res.dataset_id and res.manifest:
                     pub.write_status(ctx.repo, pub._status(now, "UNPUBLISHABLE", res.dataset_id, res.manifest.get("latestCompletedSession"), res.summary, res.message))
                 return fail("UNPUBLISHABLE", "export: UNPUBLISHABLE — %s" % res.message)
+            live = _live_dataset_hash(ctx.repo)
+            prev = pub.read_status(ctx.repo) or {}
+            if live and live == res.manifest.get("datasetHash") and prev.get("result") == "PUBLISHED":
+                verbose("publish: SKIPPED — dataset unchanged (datasetHash %s already live as %s)" % (live[:16], prev.get("datasetId")))
+                return 0
             try:
                 st = pub.publish(ctx.repo, res.dataset_id, now=now, **(publish_kwargs or {}))
             except (pub.PublishFail, pub.PublishRefused) as e:
