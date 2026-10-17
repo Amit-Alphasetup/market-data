@@ -55,8 +55,10 @@ jobs:
           stats = ast.literal_eval(out[0])
           if stats.get('conflicting_dupes', 0) != 0:
               sys.exit("conflicting duplicate rows found - not pushing")
-          if stats.get('files_changed', 0) < 3000:
-              sys.exit(f"only {stats.get('files_changed', 0)} files changed (laptop repair changed 3576) - not pushing")
+          # Verified by a read-only dry run on the 2026-09-23 seed: 466 files / 466 fused lines / 0 conflicts.
+          # (The laptop needed 3576 because failed runs kept appending rows after the mirror was seeded.)
+          if not 400 <= stats.get('files_changed', 0) <= 600:
+              sys.exit(f"{stats.get('files_changed', 0)} files changed, expected ~466 - not pushing")
           bad = []
           for f in glob.glob('eod2-data-mirror/daily/*.csv'):
               try:
