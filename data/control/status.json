@@ -1,15 +1,15 @@
 {
-  "lastRun": "2026-09-25T23:10:01+05:30",
+  "lastRun": "2026-10-17T23:20:12+05:30",
   "result": "PUBLISHED",
-  "datasetId": "2026-09-25-r1",
-  "latestCompletedSession": "2026-09-25",
+  "datasetId": "2026-10-16-r1",
+  "latestCompletedSession": "2026-10-16",
   "summary": {
     "requested": 62,
     "ok": 6,
-    "warn": 45,
-    "excluded": 4,
+    "warn": 46,
+    "excluded": 3,
     "quarantined": 7
   },
-  "message": "published 2026-09-25-r1 (PARTIAL); retention kept 10, removed 1",
-  "liveVerify": "OK"
+  "message": "published 2026-10-16-r1 (PARTIAL); retention kept 10, removed 1",
+  "liveVerify": "PENDING"
 }

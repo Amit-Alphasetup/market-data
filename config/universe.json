@@ -659,8 +659,8 @@
         "DM"
       ],
       "linkedIndex": null,
-      "listingDate": null,
-      "listingDateEvidence": null,
+      "listingDate": "2024-08-27",
+      "listingDateEvidence": "Motilal Oswal AMC press release: ETF listing on NSE 27 Aug 2024; TradingView first trade 27 Aug 2024; matches first EOD2 bar. Web-verified by Claude 2026-10-17 at Apd's request (not an NSE notice).",
       "delistingDate": null,
       "aliases": [],
       "eod2File": null,
@@ -861,8 +861,8 @@
         "DM"
       ],
       "linkedIndex": null,
-      "listingDate": null,
-      "listingDateEvidence": null,
+      "listingDate": "2024-03-21",
+      "listingDateEvidence": "Motilal Oswal Nifty Realty ETF inception 21 Mar 2024 (StockAnalysis, SID), listed on NSE; matches first EOD2 bar. Web-verified by Claude 2026-10-17 at Apd's request (not an NSE notice).",
       "delistingDate": null,
       "aliases": [],
       "eod2File": null,
@@ -1122,8 +1122,8 @@
         "DM"
       ],
       "linkedIndex": null,
-      "listingDate": null,
-      "listingDateEvidence": null,
+      "listingDate": "2025-08-07",
+      "listingDateEvidence": "TradingView: Groww BSE Power ETF started trading 7 Aug 2025 on NSE; matches first EOD2 bar. Web-verified by Claude 2026-10-17 at Apd's request (not an NSE notice).",
       "delistingDate": null,
       "aliases": [],
       "eod2File": null,
@@ -1377,6 +1377,48 @@
       "approvedAt": null,
       "provenance": "migrated-v2-2026-09-11",
       "note": "real print verified TradingView; intl ETF premium spike, off-NAV"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-16",
+      "evidence": "Apd confirmed 2026-10-17 these are real exchange moves (MONQ50 +20%x3 then -20%x3 on 16-23 Sep 2026; price stayed in a 188-258 range through 16 Oct, consistent with genuine circuit-limit moves).",
+      "approvedAt": "2026-10-17T23:19:22+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-17",
+      "evidence": "Apd confirmed 2026-10-17 these are real exchange moves (MONQ50 +20%x3 then -20%x3 on 16-23 Sep 2026; price stayed in a 188-258 range through 16 Oct, consistent with genuine circuit-limit moves).",
+      "approvedAt": "2026-10-17T23:19:23+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-18",
+      "evidence": "Apd confirmed 2026-10-17 these are real exchange moves (MONQ50 +20%x3 then -20%x3 on 16-23 Sep 2026; price stayed in a 188-258 range through 16 Oct, consistent with genuine circuit-limit moves).",
+      "approvedAt": "2026-10-17T23:19:23+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-21",
+      "evidence": "Apd confirmed 2026-10-17 these are real exchange moves (MONQ50 +20%x3 then -20%x3 on 16-23 Sep 2026; price stayed in a 188-258 range through 16 Oct, consistent with genuine circuit-limit moves).",
+      "approvedAt": "2026-10-17T23:19:23+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-22",
+      "evidence": "Apd confirmed 2026-10-17 these are real exchange moves (MONQ50 +20%x3 then -20%x3 on 16-23 Sep 2026; price stayed in a 188-258 range through 16 Oct, consistent with genuine circuit-limit moves).",
+      "approvedAt": "2026-10-17T23:19:23+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-09-23",
+      "evidence": "Apd confirmed 2026-10-17 these are real exchange moves (MONQ50 +20%x3 then -20%x3 on 16-23 Sep 2026; price stayed in a 188-258 range through 16 Oct, consistent with genuine circuit-limit moves).",
+      "approvedAt": "2026-10-17T23:19:23+05:30",
+      "provenance": "dataops"
     }
   ],
   "quarantine": {},
@@ -1392,6 +1434,9 @@
       ],
       "NIF100BEES": [
         "2020-03-25"
+      ],
+      "ALPHA": [
+        "2022-05-11"
       ]
     },
     "gap_allow_all": {
