@@ -32,6 +32,7 @@ for sub in ("daily",):
                         changed = True
                         if seen[key] == p:
                             stats["identical_dupes_removed"] += 1
+                            continue
                         else:
                             stats["conflicting_dupes"] += 1
                             conflicts.append((os.path.basename(f), key))
