@@ -1,11 +1,11 @@
 {
   "contract": "alphadesk-eod2/3",
   "dataset": "EOD2",
-  "datasetId": "2026-10-16-r1",
-  "datasetHash": "ea4808fcdb64474d78494fa1c8e76381bbbcc4e96c18d4fbeb59a70f4c1b5224",
-  "policyHash": "d0f3425e71ee1a9eac931e6bd90ab7477122cd30bee2f1c7086e654eb27ef58e",
-  "snapshotBase": "snapshots/2026-10-16-r1/",
-  "createdAt": "2026-10-17T23:20:12+05:30",
+  "datasetId": "2026-10-16-r2",
+  "datasetHash": "60b7ae1d70934f1e1a97a0da6932feab1c190ae47a5dec9e38569c5d47c7fb57",
+  "policyHash": "244bc1b9ae55e8a4743dd4239f03873d6addf98caa2f3671f0815230637aedd7",
+  "snapshotBase": "snapshots/2026-10-16-r2/",
+  "createdAt": "2026-10-17T23:46:18+05:30",
   "exporterVersion": "3.0.0",
   "latestSession": "2026-10-16",
   "latestCompletedSession": "2026-10-16",
@@ -1004,6 +1004,54 @@
         }
       ]
     },
+    "MONQ50": {
+      "id": "NSE:MONQ50",
+      "kind": "ETF",
+      "path": "etf/MONQ50.json",
+      "sha256": "e2260d9ba428c65cb7921add39cb78f7731493e9b8304d2e1bab7c41097eef54",
+      "bytes": 53621,
+      "bars": 1191,
+      "first": "2021-12-29",
+      "last": "2026-10-16",
+      "firstObservedDate": "2021-12-29",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "international",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2026-09-07",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2026-09-08",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-12-29"
+        }
+      ]
+    },
     "MOMENTUM50": {
       "id": "NSE:MOMENTUM50",
       "kind": "ETF",
@@ -1515,6 +1563,42 @@
         }
       ]
     },
+    "MOM100": {
+      "id": "NSE:MOM100",
+      "kind": "ETF",
+      "path": "etf/MOM100.json",
+      "sha256": "855557f893d758ad8e8fc90eb1fefd0adfb12c80520d955eaeaeee17d3e19f88",
+      "bytes": 97591,
+      "bars": 2189,
+      "first": "2017-12-11",
+      "last": "2026-10-16",
+      "firstObservedDate": "2011-02-04",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ],
+      "noTradeDays": [
+        "2022-05-11"
+      ]
+    },
     "MOREALTY": {
       "id": "NSE:MOREALTY",
       "kind": "ETF",
@@ -1668,6 +1752,46 @@
         }
       ]
     },
+    "TNIDETF": {
+      "id": "NSE:TNIDETF",
+      "kind": "ETF",
+      "path": "etf/TNIDETF.json",
+      "sha256": "d03a2ad4f7155ddda2fd8374d6e9159f9a3b3e056119390f48c633068ab88c6c",
+      "bytes": 49654,
+      "bars": 1121,
+      "first": "2022-04-08",
+      "last": "2026-10-16",
+      "firstObservedDate": "2022-04-08",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-04-08"
+        }
+      ],
+      "noTradeDays": [
+        "2022-05-11"
+      ]
+    },
     "TATAGOLD": {
       "id": "NSE:TATAGOLD",
       "kind": "ETF",
@@ -1704,6 +1828,43 @@
           "firstObservedDate": "2024-01-17"
         }
       ]
+    },
+    "GOLDIETF": {
+      "id": "NSE:GOLDIETF",
+      "kind": "ETF",
+      "path": "etf/GOLDIETF.json",
+      "sha256": "dbb15270a057e99b280a7694c2ebaf5a744ff78c3e35fa2f25eb2152dec63426",
+      "bytes": 89830,
+      "bars": 1960,
+      "first": "2018-11-15",
+      "last": "2026-10-16",
+      "firstObservedDate": "2010-09-02",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ],
+      "noTradeDays": [
+        "2022-05-11"
+      ],
+      "warmupTruncatedFrom": "2018-11-15"
     },
     "GROWWPOWER": {
       "id": "NSE:GROWWPOWER",
@@ -1905,72 +2066,8 @@
       "reasons": []
     }
   },
-  "excluded": {
-    "MOM100": {
-      "code": "MISSING_EXPECTED_SESSION",
-      "detail": "{\"count\": 1, \"dates\": [\"2022-05-11\"]}",
-      "reasons": [
-        {
-          "code": "MISSING_EXPECTED_SESSION",
-          "count": 1,
-          "dates": [
-            "2022-05-11"
-          ]
-        }
-      ]
-    },
-    "TNIDETF": {
-      "code": "MISSING_EXPECTED_SESSION",
-      "detail": "{\"count\": 1, \"dates\": [\"2022-05-11\"]}",
-      "reasons": [
-        {
-          "code": "MISSING_EXPECTED_SESSION",
-          "count": 1,
-          "dates": [
-            "2022-05-11"
-          ]
-        }
-      ]
-    },
-    "GOLDIETF": {
-      "code": "MISSING_EXPECTED_SESSION",
-      "detail": "{\"count\": 1, \"dates\": [\"2022-05-11\"]}",
-      "reasons": [
-        {
-          "code": "MISSING_EXPECTED_SESSION",
-          "count": 1,
-          "dates": [
-            "2022-05-11"
-          ]
-        }
-      ]
-    }
-  },
+  "excluded": {},
   "quarantined": {
-    "MONQ50": {
-      "code": "ANOMALOUS_MOVE_UNRESOLVED",
-      "events": [
-        {
-          "date": "2026-10-07",
-          "prevClose": 219.2,
-          "close": 258.57,
-          "ret": 0.1796
-        }
-      ],
-      "reasons": [
-        {
-          "code": "ANOMALOUS_MOVE_UNRESOLVED",
-          "events": [
-            {
-              "date": "2026-10-07",
-              "prevClose": 219.2,
-              "close": 258.57,
-              "ret": 0.1796
-            }
-          ]
-        }
-      ]
-    },
     "HDFCSILVER": {
       "code": "ANOMALOUS_MOVE_UNRESOLVED",
       "events": [
@@ -2159,8 +2256,8 @@
   "summary": {
     "requested": 62,
     "ok": 6,
-    "warn": 46,
-    "excluded": 3,
-    "quarantined": 7
+    "warn": 50,
+    "excluded": 0,
+    "quarantined": 6
   }
 }

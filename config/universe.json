@@ -1419,6 +1419,13 @@
       "evidence": "Apd confirmed 2026-10-17 these are real exchange moves (MONQ50 +20%x3 then -20%x3 on 16-23 Sep 2026; price stayed in a 188-258 range through 16 Oct, consistent with genuine circuit-limit moves).",
       "approvedAt": "2026-10-17T23:19:23+05:30",
       "provenance": "dataops"
+    },
+    {
+      "symbol": "MONQ50",
+      "date": "2026-10-07",
+      "evidence": "Apd 2026-10-17: MONQ50 anomalies are real moves (same ETF as the approved 16-23 Sep moves). 2026-10-07 close 258.57 vs 219.20 (+18.0%) on 2.9M volume; next sessions 243-254, no reversal.",
+      "approvedAt": "2026-10-17T23:46:08+05:30",
+      "provenance": "dataops"
     }
   ],
   "quarantine": {},
@@ -1436,6 +1443,15 @@
         "2020-03-25"
       ],
       "ALPHA": [
+        "2022-05-11"
+      ],
+      "MOM100": [
+        "2022-05-11"
+      ],
+      "TNIDETF": [
+        "2022-05-11"
+      ],
+      "GOLDIETF": [
         "2022-05-11"
       ]
     },
