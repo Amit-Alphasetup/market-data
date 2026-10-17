@@ -4,6 +4,7 @@
 2. Skip when EOD2's own meta says the expected latest session is already synced.
 3. Refuse (busy) while the legacy job or another EOD2 update is running — the legacy scheduled task is not wrapped in the lock until Apd
    applies the elevated command in PENDING_APD.md 1b, so this process check is the defence in depth.
+3b. Refuse (FAIL, naming the files) when EOD2's daily CSVs are corrupt (dataops.integrity) — EOD2 itself would crash or add damage.
 4. Run EOD2's update entry script (`python init.py` in EOD2's src dir, from config/eod2_layout.json), log to logs\\eod2_YYYYMMDD.log.
 """
 import os
@@ -11,6 +12,7 @@ import subprocess
 from datetime import datetime, timedelta, timezone
 
 from . import eod2_reader as er
+from . import integrity as ig
 from . import lock as lk
 
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -83,6 +85,9 @@ def sync(layout, now=None, cutoff="19:15", runner=None, running_check=None, log_
     busy = (running_check or legacy_job_running)()
     if busy:
         raise lk.LockBusy({"pid": None, "command": "EOD2 update already running: " + "; ".join(busy), "startedAt": None})
+    rep = ig.scan_daily(layout["dataRoot"])                  # running EOD2 on corrupt files only appends more damage
+    if rep["bad"]:
+        raise SyncFail(ig.summary(rep))
     log_dir = log_dir or os.path.join(REPO, "logs")
     os.makedirs(log_dir, exist_ok=True)
     log_path = os.path.join(log_dir, "eod2_%s.log" % now.astimezone(IST).strftime("%Y%m%d"))

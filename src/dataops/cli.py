@@ -24,6 +24,7 @@ USAGE = """usage: py -m dataops <command> [args]
   flag-bad-print SYMBOL DATE --evidence TEXT   this printed bar is not real; drop it, keep every other day
   verify [--snapshot ID] [--base-url URL]   fetch every file from the live URL, sha256 over raw bytes
   status                            print data/control/status.json
+  check-eod2 [--data-root DIR]      read-only scan of EOD2 daily CSVs (empty / fused rows / duplicate dates / ragged); exit 1 if any
   reconcile --app-universe FILE [--apply]
   gen-v2 [--dry-run]                regenerate C:\\dev\\eod2_universe.json from config/universe.json
   lock-run -- <program> <args...>   run a program while holding the lock
@@ -98,6 +99,14 @@ def main(argv=None):
     if cmd == "export":
         return _export(rest)
     ctx = _ctx()
+    if cmd == "check-eod2":
+        from . import integrity as ig
+        ap = argparse.ArgumentParser(prog="dataops check-eod2")
+        ap.add_argument("--data-root", default=ctx.eod2_root)
+        a = ap.parse_args(rest)
+        rep = ig.scan_daily(a.data_root)
+        print(ig.summary(rep, show=50))
+        return 1 if rep["bad"] else 0
     if cmd == "status":
         from . import publish as pub
         st = pub.read_status(ctx.repo)
