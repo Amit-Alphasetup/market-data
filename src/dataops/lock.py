@@ -99,11 +99,19 @@ def holder_alive(holder, allowed_names=ALLOWED_PROCESS_NAMES, use_psutil=True):
 
 
 def _write_exclusive(path, payload):
-    fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    """Create `path` with the complete payload, atomically: FileExistsError if it already exists.
+    The payload goes into a private temp file first and is then hard-linked into place, so no other process can ever read the
+    lock file half-written (an empty file read as 'unreadable holder, pid None' used to be reclaimed as dead -> two winners)."""
+    tmp = "%s.tmp-%s-%s" % (path, os.getpid(), uuid.uuid4().hex[:8])
+    fd = os.open(tmp, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     try:
         os.write(fd, json.dumps(payload).encode("utf-8"))
     finally:
         os.close(fd)
+    try:
+        os.link(tmp, path)
+    finally:
+        os.remove(tmp)
 
 
 def _log(msg):

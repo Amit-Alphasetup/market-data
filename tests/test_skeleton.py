@@ -1,5 +1,6 @@
 """D0 skeleton tests: repo structure (plan 4.2), git attributes/ignore, CONTRACT.md == plan section 4 verbatim."""
 import os
+import pytest
 import re
 import subprocess
 
@@ -16,6 +17,8 @@ def test_structure_exists():
     for rel in ["index.html", "CONTRACT.md", ".gitattributes", ".gitignore", "src/dataops/__init__.py", "config", "tests",
                 "data/control/requests", "data/control/inflight", "data/control/history", "data/snapshots", "clients",
                 "logs", "secrets", "work"]:
+        if rel in ("logs", "secrets", "work") and os.environ.get("GITHUB_ACTIONS"):
+            continue                        # git-ignored runtime folders: present on the laptop, absent in a fresh CI checkout
         assert os.path.exists(os.path.join(ROOT, rel)), rel
 
 
@@ -48,6 +51,7 @@ def test_no_line_ending_crlf_in_text_files():
             assert b"\r\n" not in f.read(), rel
 
 
+@pytest.mark.skipif(not os.path.isfile(PLAN), reason="laptop-only: the build plan lives outside the repo")
 def test_contract_md_is_plan_section_4_verbatim():
     plan = open(PLAN, encoding="utf-8", newline="").read()
     a = plan.index("## 4. DATA CONTRACT v3")

@@ -74,6 +74,7 @@ def test_live_pid_is_never_reclaimed_regardless_of_age(isolated_lock):
         sleeper.wait()
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows-only: needs cmd.exe")
 def test_recycled_pid_of_a_foreign_process_counts_as_dead(isolated_lock):
     foreign = subprocess.Popen(["cmd", "/c", "ping -n 20 127.0.0.1 >nul"], stdout=subprocess.DEVNULL)
     try:
@@ -174,6 +175,7 @@ def test_release_after_crash_of_owner_frees_lock_for_next_run(isolated_lock):
         pass
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows-only: needs kernel32 via ctypes")
 def test_ctypes_fallback_works_without_psutil(isolated_lock):
     me = lk.process_name(os.getpid(), use_psutil=False)
     assert me and me.startswith("python"), me

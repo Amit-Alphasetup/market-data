@@ -28,6 +28,7 @@ def test_round_trip_every_key_the_v2_exporter_reads():
     assert list(out) == list(V2)  # same key order as the original file
 
 
+@pytest.mark.skipif(not os.path.isfile(r"C:\dev\eod2_export.py"), reason="laptop-only: the legacy exporter lives outside the repo")
 def test_exporter_reads_only_known_keys():
     exp = open(r"C:\dev\eod2_export.py", encoding="utf-8").read()
     for k in V2_EXPORTER_KEYS:

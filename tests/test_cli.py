@@ -1,5 +1,6 @@
 """D0.5: `py -m dataops ...` end to end in a child process, exactly as the wrapped Task Scheduler action would run it."""
 import os
+import pytest
 import subprocess
 import sys
 import time
@@ -20,6 +21,7 @@ def test_lock_run_exit_codes_propagate(isolated_lock):
     assert run(["lock-run", "--", "no-such-program-zzz"], isolated_lock).returncode == 127
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows-only: needs powershell")
 def test_lock_run_powershell_child_like_the_scheduled_task(isolated_lock):
     r = run(["lock-run", "--", "powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
              "Write-Host ('token=' + ($env:DATAOPS_LOCK_TOKEN.Length)); exit 5"], isolated_lock)

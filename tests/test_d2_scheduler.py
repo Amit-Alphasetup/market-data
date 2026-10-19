@@ -1,5 +1,6 @@
 """D2: scheduler script generation (nothing is registered by these tests)."""
 import os
+import pytest
 import subprocess
 import sys
 import tempfile
@@ -25,6 +26,7 @@ def test_quotes_are_escaped_for_powershell():
     assert "-TaskName 'O''Neil'" in s and "-Description 'it''s fine'" in s
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows-only: needs powershell")
 def test_generated_script_is_valid_powershell_without_running_it():
     with tempfile.NamedTemporaryFile("w", suffix=".ps1", delete=False, encoding="utf-8") as f:
         f.write(sc.build_script() + sc.enable_script())
@@ -38,6 +40,7 @@ def test_generated_script_is_valid_powershell_without_running_it():
         os.unlink(path)
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows-only: needs powershell")
 def test_poll_task_script_is_generated_valid_and_disabled_by_default():
     s = sc.build_poll_script()
     assert "-Argument '-m dataops poll'" in s and "-TaskName 'Market Data Poll'" in s and "Disable-ScheduledTask" in s
