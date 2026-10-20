@@ -1,0 +1,79 @@
+﻿# One-off repair #2 of the eod2-data mirror (2026-10-20). Repair #1 (2026-10-16, f985716) ran
+# scripts/repair_eod2_csvs.py BEFORE its identical-duplicate bug was fixed (4a4a028): it split the fused rows
+# but left identical duplicate rows in 466 files. The integrity check added in d263266 then stopped the
+# 2026-10-19 nightly shadow run ("466 corrupt EOD2 daily CSV files ... DUPLICATE_DATE"). This re-runs the
+# fixed script on the mirror's own data; nothing is copied out of C:\dev\eod2.
+#
+# Manual trigger only. Needs DATA_MIRROR_PAT (contents read/write on eod2-data). push=false = dry run.
+# Gate: refuses to push unless 0 conflicting duplicates AND `dataops check-eod2` finds 0 problems.
+name: "Repair eod2-data mirror (one-off #2: identical duplicates)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      push:
+        description: "Push the repair commit to eod2-data (false = report only)"
+        type: boolean
+        default: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout market-data (repair script + integrity check)
+        uses: actions/checkout@v4
+        with:
+          path: market-data
+
+      - name: Checkout eod2-data mirror
+        uses: actions/checkout@v4
+        with:
+          repository: Amit-Alphasetup/eod2-data
+          token: ${{ secrets.DATA_MIRROR_PAT }}
+          path: eod2-data-mirror
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - run: pip install pandas psutil
+
+      - name: Integrity scan BEFORE (expected to fail; report only)
+        working-directory: market-data
+        run: python -m dataops check-eod2 --data-root ../eod2-data-mirror || true
+        env: { PYTHONPATH: src, PYTHONUTF8: '1' }
+
+      - name: Dry run (numbers only)
+        run: python market-data/scripts/repair_eod2_csvs.py eod2-data-mirror dry 2026-09-27
+
+      - name: Apply repair (on the runner's copy)
+        run: python market-data/scripts/repair_eod2_csvs.py eod2-data-mirror apply 2026-09-27 | tee repair.out
+
+      - name: Gate - no conflicting duplicates
+        run: |
+          python - <<'EOF'
+          import ast, sys
+          stats = ast.literal_eval(open('repair.out').read().splitlines()[0])
+          print("stats", stats)
+          if stats.get('conflicting_dupes', 0) != 0:
+              sys.exit("conflicting duplicate rows found - not pushing")
+          EOF
+
+      - name: Gate - integrity scan AFTER must be clean (the check that stopped the shadow run)
+        working-directory: market-data
+        run: python -m dataops check-eod2 --data-root ../eod2-data-mirror
+        env: { PYTHONPATH: src, PYTHONUTF8: '1' }
+
+      - name: Commit and push to eod2-data
+        if: ${{ inputs.push }}
+        working-directory: eod2-data-mirror
+        run: |
+          git config user.name "Amit-Alphasetup"
+          git config user.email "apdash95@gmail.com"
+          git add -A
+          git diff --cached --quiet && { echo "nothing to commit"; exit 0; }
+          git commit -m "fix: remove identical duplicate rows left by repair #1 (466 files)"
+          git push origin HEAD:main
+          git log --oneline -1
