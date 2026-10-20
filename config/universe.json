@@ -459,8 +459,8 @@
         "DM"
       ],
       "linkedIndex": null,
-      "listingDate": null,
-      "listingDateEvidence": null,
+      "listingDate": "2024-08-20",
+      "listingDateEvidence": "Apd 2026-10-20: use the first bar in EOD2 as the listing date (NSE listing notice not sourced). First EOD2 bar = 2024-08-20.",
       "delistingDate": null,
       "aliases": [],
       "eod2File": null,
@@ -498,8 +498,8 @@
         "DM"
       ],
       "linkedIndex": null,
-      "listingDate": null,
-      "listingDateEvidence": null,
+      "listingDate": "2024-07-24",
+      "listingDateEvidence": "Apd 2026-10-20: use the first bar in EOD2 as the listing date (NSE listing notice not sourced). First EOD2 bar = 2024-07-24.",
       "delistingDate": null,
       "aliases": [],
       "eod2File": null,
@@ -561,8 +561,8 @@
         "DM"
       ],
       "linkedIndex": null,
-      "listingDate": null,
-      "listingDateEvidence": null,
+      "listingDate": "2024-09-30",
+      "listingDateEvidence": "Apd 2026-10-20: use the first bar in EOD2 as the listing date (NSE listing notice not sourced). First EOD2 bar = 2024-09-30.",
       "delistingDate": null,
       "aliases": [],
       "eod2File": null,
