@@ -1,0 +1,2263 @@
+{
+  "contract": "alphadesk-eod2/3",
+  "dataset": "EOD2",
+  "datasetId": "2026-10-23-r1",
+  "datasetHash": "5a6d096032974267737900b9e2024fe10bc0f87d8881fe14536ff8f363131971",
+  "policyHash": "244bc1b9ae55e8a4743dd4239f03873d6addf98caa2f3671f0815230637aedd7",
+  "snapshotBase": "snapshots/2026-10-23-r1/",
+  "createdAt": "2026-10-23T23:10:01+05:30",
+  "exporterVersion": "3.0.0",
+  "latestSession": "2026-10-23",
+  "latestCompletedSession": "2026-10-23",
+  "windowStart": "2019-01-14",
+  "publishStatus": "PUBLISHABLE",
+  "certification": "PARTIAL",
+  "providerMixing": false,
+  "fallbackUsed": false,
+  "holidays": [
+    "2026-01-15",
+    "2026-01-26",
+    "2026-02-15",
+    "2026-03-03",
+    "2026-03-21",
+    "2026-03-26",
+    "2026-03-31",
+    "2026-04-03",
+    "2026-04-14",
+    "2026-05-01",
+    "2026-05-28",
+    "2026-06-26",
+    "2026-08-15",
+    "2026-09-14",
+    "2026-10-02",
+    "2026-10-20",
+    "2026-11-08",
+    "2026-11-10",
+    "2026-11-24",
+    "2026-12-25"
+  ],
+  "calendar": {
+    "id": "nse-eq-2026-10-23",
+    "path": "calendar.json",
+    "sha256": "95cba6c06c5026ba365519ee6ce3bcb792acae9c78db271222545dde70f663b7",
+    "bytes": 26397,
+    "cutoffIST": "19:15",
+    "coverageFrom": "2019-01-01",
+    "coverageTo": "2026-12-31",
+    "verifiedThrough": "2026-12-31"
+  },
+  "adjustmentPolicy": "eod2-split-adjusted-price-only",
+  "files": {
+    "NIFTYBEES": {
+      "id": "NSE:NIFTYBEES",
+      "kind": "ETF",
+      "path": "etf/NIFTYBEES.json",
+      "sha256": "ca0e646e5dee63a8cede83deb1c3f0a8e43efdb39b4c48b01c8ce463b0972c2d",
+      "bytes": 109748,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2002-01-08",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "JUNIORBEES": {
+      "id": "NSE:JUNIORBEES",
+      "kind": "ETF",
+      "path": "etf/JUNIORBEES.json",
+      "sha256": "8539c72cedf68dfb80c9e577443449310831f6604754d9715f28965a36f9a6e9",
+      "bytes": 104931,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2003-03-06",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "BANKBEES": {
+      "id": "NSE:BANKBEES",
+      "kind": "ETF",
+      "path": "etf/BANKBEES.json",
+      "sha256": "78e11cd38160ee4f2b17ef31856f8669dc216a19263a1c87012f345a4e1e0ea6",
+      "bytes": 108370,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2004-06-04",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "GOLDBEES": {
+      "id": "NSE:GOLDBEES",
+      "kind": "ETF",
+      "path": "etf/GOLDBEES.json",
+      "sha256": "dc9a976e72f9a83aef7445b3a58287005afe36d0f2849f0809d6c68cbce2d9ee",
+      "bytes": 105224,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2007-03-19",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "gold",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "SILVERBEES": {
+      "id": "NSE:SILVERBEES",
+      "kind": "ETF",
+      "path": "etf/SILVERBEES.json",
+      "sha256": "3907e588b9eaef6deea4c76ae56b320fd32d6c9dc77eb5e1b0d73690ac5eb889",
+      "bytes": 55646,
+      "bars": 1168,
+      "first": "2022-02-07",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-02-07",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "silver",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2026-01-30",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-02-07"
+        }
+      ]
+    },
+    "TATSILV": {
+      "id": "NSE:TATSILV",
+      "kind": "ETF",
+      "path": "etf/TATSILV.json",
+      "sha256": "b975c4703c9fb7cec458285e2d5024578c982c1c69c793723452a6da69dd375c",
+      "bytes": 30888,
+      "bars": 686,
+      "first": "2024-01-17",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-01-17",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "silver",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2026-01-22",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2026-02-02",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2024-01-17"
+        }
+      ]
+    },
+    "MID150BEES": {
+      "id": "NSE:MID150BEES",
+      "kind": "ETF",
+      "path": "etf/MID150BEES.json",
+      "sha256": "b92f42c3e765c56df2b00388220fcebd2ae537c9d35245d8c245ad7622ba1b89",
+      "bytes": 90824,
+      "bars": 1907,
+      "first": "2019-02-04",
+      "last": "2026-10-23",
+      "firstObservedDate": "2019-02-04",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2020-03-19",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2019-02-04"
+        }
+      ],
+      "noTradeDays": [
+        "2019-02-05",
+        "2019-02-18",
+        "2019-02-20"
+      ]
+    },
+    "MIDCAPETF": {
+      "id": "NSE:MIDCAPETF",
+      "kind": "ETF",
+      "path": "etf/MIDCAPETF.json",
+      "sha256": "192d2c1d18b0f1f048a2170e94451601673b74a7962b584953e709c80e52cfab",
+      "bytes": 52221,
+      "bars": 1143,
+      "first": "2022-03-15",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-03-15",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-03-15"
+        }
+      ]
+    },
+    "ITBEES": {
+      "id": "NSE:ITBEES",
+      "kind": "ETF",
+      "path": "etf/ITBEES.json",
+      "sha256": "4678aa7aa575dbda0e6aede5d1629fe5899db2ab0d03e44b47452720bd3aadd1",
+      "bytes": 72424,
+      "bars": 1568,
+      "first": "2020-07-01",
+      "last": "2026-10-23",
+      "firstObservedDate": "2020-07-01",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2020-07-01"
+        }
+      ]
+    },
+    "ITIETF": {
+      "id": "NSE:ITIETF",
+      "kind": "ETF",
+      "path": "etf/ITIETF.json",
+      "sha256": "17e2baadc19959ea1c46494c29d58157631aea0d5d443ae1c2d6fa5589721cb3",
+      "bytes": 71207,
+      "bars": 1532,
+      "first": "2020-08-20",
+      "last": "2026-10-23",
+      "firstObservedDate": "2020-08-20",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2020-08-20"
+        }
+      ]
+    },
+    "AUTOBEES": {
+      "id": "NSE:AUTOBEES",
+      "kind": "ETF",
+      "path": "etf/AUTOBEES.json",
+      "sha256": "96432a8f25b35d21e0fc7722eccf1363c47783b0494525ee9b0fcbd8e2fe43d0",
+      "bytes": 57363,
+      "bars": 1176,
+      "first": "2022-01-25",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-01-25",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-01-25"
+        }
+      ]
+    },
+    "AUTOIETF": {
+      "id": "NSE:AUTOIETF",
+      "kind": "ETF",
+      "path": "etf/AUTOIETF.json",
+      "sha256": "6bbe736b0c7cb52c90ec2358dd6fa267d22a36eec4f1cebce4215e9fdf82ba1e",
+      "bytes": 55591,
+      "bars": 1181,
+      "first": "2022-01-18",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-01-18",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-01-18"
+        }
+      ]
+    },
+    "SETFNIF50": {
+      "id": "NSE:SETFNIF50",
+      "kind": "ETF",
+      "path": "etf/SETFNIF50.json",
+      "sha256": "3eb939435c6fa57a8696e49702bc973eb5f4f2db4a4ccd4ac6331ce4b272d94b",
+      "bytes": 106805,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2015-07-27",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "SETFNN50": {
+      "id": "NSE:SETFNN50",
+      "kind": "ETF",
+      "path": "etf/SETFNN50.json",
+      "sha256": "1e852e61f35adf5d10dae254efd99112377879d26500a2a690c0fcd7e16d3bef",
+      "bytes": 103596,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2015-03-27",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "SETFGOLD": {
+      "id": "NSE:SETFGOLD",
+      "kind": "ETF",
+      "path": "etf/SETFGOLD.json",
+      "sha256": "be6db8564423bbe54e67bba0d130a7893b84d636f49150d33027dcded44a6c25",
+      "bytes": 105926,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2009-05-28",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "HDFCNIFBAN": {
+      "id": "NSE:HDFCNIFBAN",
+      "kind": "ETF",
+      "path": "etf/HDFCNIFBAN.json",
+      "sha256": "7696672e3e3da956da4bffe41f133a1889f303b7b2ee7f4760e09acd67bb120b",
+      "bytes": 70932,
+      "bars": 1526,
+      "first": "2020-08-28",
+      "last": "2026-10-23",
+      "firstObservedDate": "2020-08-28",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2020-08-28"
+        }
+      ]
+    },
+    "CPSEETF": {
+      "id": "NSE:CPSEETF",
+      "kind": "ETF",
+      "path": "etf/CPSEETF.json",
+      "sha256": "a86f0dcf0aae593f0dcb52b455e6b486f5d9cf4c4a2c8d23a66cd12045ef7727",
+      "bytes": 101005,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2014-04-04",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "LIQUIDBEES": {
+      "id": "NSE:LIQUIDBEES",
+      "kind": "ETF",
+      "path": "etf/LIQUIDBEES.json",
+      "sha256": "4cc27cdeb25ec5d1389109c4661314d4c723e6229c767383b384e577b64d79b1",
+      "bytes": 113193,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2003-07-16",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "liquid",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "MAFANG": {
+      "id": "NSE:MAFANG",
+      "kind": "ETF",
+      "path": "etf/MAFANG.json",
+      "sha256": "df1d1c42b1baee4305b45e0e841d04a0f871f7003330d5faf223b8eb7ab9bc80",
+      "bytes": 63125,
+      "bars": 1352,
+      "first": "2021-05-14",
+      "last": "2026-10-23",
+      "firstObservedDate": "2021-05-14",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "international",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-05-14"
+        }
+      ]
+    },
+    "HNGSNGBEES": {
+      "id": "NSE:HNGSNGBEES",
+      "kind": "ETF",
+      "path": "etf/HNGSNGBEES.json",
+      "sha256": "fca2cd8b333c7f1262ce3f689c982e65d93ba01bb26bd252326cf3c4dc87e165",
+      "bytes": 102223,
+      "bars": 2173,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2010-03-18",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "international",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ],
+      "noTradeDays": [
+        "2019-01-29",
+        "2019-07-11",
+        "2019-07-31",
+        "2019-08-07",
+        "2019-08-08",
+        "2019-09-25",
+        "2019-10-09",
+        "2019-10-16",
+        "2019-10-17",
+        "2020-03-31",
+        "2022-05-11"
+      ]
+    },
+    "MON100": {
+      "id": "NSE:MON100",
+      "kind": "ETF",
+      "path": "etf/MON100.json",
+      "sha256": "7ae0030e97ab4147e3c463ce47fa77000d5eeccfbdf7650eee42cf4cbb47dda0",
+      "bytes": 104428,
+      "bars": 2193,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2011-03-31",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "international",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "PSUBNKBEES": {
+      "id": "NSE:PSUBNKBEES",
+      "kind": "ETF",
+      "path": "etf/PSUBNKBEES.json",
+      "sha256": "b9b0df1036339cc345a1b0eebf0b717de5dc6d53f2581f32e138169da33d0c51",
+      "bytes": 100507,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2007-11-01",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "METALIETF": {
+      "id": "NSE:METALIETF",
+      "kind": "ETF",
+      "path": "etf/METALIETF.json",
+      "sha256": "d874d6c2b1a857f2da951e400fe9cf6cf37d3e9aea3f25cf9a37622cdbab0733",
+      "bytes": 24444,
+      "bars": 541,
+      "first": "2024-08-20",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-08-20",
+      "listingDate": "2024-08-20",
+      "listingDateSource": "registry-evidence",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "NOT_YET_LISTED",
+          "listingDate": "2024-08-20"
+        }
+      ]
+    },
+    "COMMOIETF": {
+      "id": "NSE:COMMOIETF",
+      "kind": "ETF",
+      "path": "etf/COMMOIETF.json",
+      "sha256": "496522f84232b6a59cd22c0f44d7d60f0ce862751ac7ce1e87d8f4b7de1991df",
+      "bytes": 42742,
+      "bars": 951,
+      "first": "2022-12-21",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-12-21",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-12-21"
+        }
+      ],
+      "noTradeDays": [
+        "2023-01-09"
+      ]
+    },
+    "OILIETF": {
+      "id": "NSE:OILIETF",
+      "kind": "ETF",
+      "path": "etf/OILIETF.json",
+      "sha256": "e3041f2905943e7034cea17e8667930cdb1caee5d88b7ce2045cc3892f6e5d77",
+      "bytes": 26089,
+      "bars": 559,
+      "first": "2024-07-24",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-07-24",
+      "listingDate": "2024-07-24",
+      "listingDateSource": "registry-evidence",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "NOT_YET_LISTED",
+          "listingDate": "2024-07-24"
+        }
+      ]
+    },
+    "MOM30IETF": {
+      "id": "NSE:MOM30IETF",
+      "kind": "ETF",
+      "path": "etf/MOM30IETF.json",
+      "sha256": "f8334fddae75b2d6d4952a630611902082678c444bd7438d949e281d219468ce",
+      "bytes": 47381,
+      "bars": 1040,
+      "first": "2022-08-12",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-08-10",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-08-12"
+        }
+      ]
+    },
+    "MONQ50": {
+      "id": "NSE:MONQ50",
+      "kind": "ETF",
+      "path": "etf/MONQ50.json",
+      "sha256": "b6085565fb7c6b881a147d692b0b85ce6fc301be912f4ff7c8d550c78cf39e75",
+      "bytes": 53814,
+      "bars": 1195,
+      "first": "2021-12-29",
+      "last": "2026-10-23",
+      "firstObservedDate": "2021-12-29",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "international",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2026-09-07",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2026-09-08",
+          "provenance": "migrated-v2-2026-09-11"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-12-29"
+        }
+      ]
+    },
+    "MOMENTUM50": {
+      "id": "NSE:MOMENTUM50",
+      "kind": "ETF",
+      "path": "etf/MOMENTUM50.json",
+      "sha256": "3b3a369a2f0aba6b4b31c0fb84fe4f198403ad1fed3f3dd86ed7b5958c2074d6",
+      "bytes": 23451,
+      "bars": 512,
+      "first": "2024-09-30",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-09-30",
+      "listingDate": "2024-09-30",
+      "listingDateSource": "registry-evidence",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "NOT_YET_LISTED",
+          "listingDate": "2024-09-30"
+        }
+      ]
+    },
+    "ICICIB22": {
+      "id": "NSE:ICICIB22",
+      "kind": "ETF",
+      "path": "etf/ICICIB22.json",
+      "sha256": "6f775e15c646825130f723fb7393ddc3d42da1b7e4a1d987fb20e0163ffe3a17",
+      "bytes": 101641,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2017-11-28",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "PVTBANIETF": {
+      "id": "NSE:PVTBANIETF",
+      "kind": "ETF",
+      "path": "etf/PVTBANIETF.json",
+      "sha256": "4fd466b157f4890556c5a8f1de49945a077e889eda3af293f632f5705b3dba0b",
+      "bytes": 84034,
+      "bars": 1781,
+      "first": "2019-08-14",
+      "last": "2026-10-23",
+      "firstObservedDate": "2019-08-14",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2019-08-14"
+        }
+      ]
+    },
+    "PHARMABEES": {
+      "id": "NSE:PHARMABEES",
+      "kind": "ETF",
+      "path": "etf/PHARMABEES.json",
+      "sha256": "377bca81f1a97ff540abee80a15f824f5942ee0b1e1150b7c4aaaaeeb1b6c0a2",
+      "bytes": 60669,
+      "bars": 1314,
+      "first": "2021-07-07",
+      "last": "2026-10-23",
+      "firstObservedDate": "2021-07-07",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-07-07"
+        }
+      ]
+    },
+    "HEALTHIETF": {
+      "id": "NSE:HEALTHIETF",
+      "kind": "ETF",
+      "path": "etf/HEALTHIETF.json",
+      "sha256": "710cd6e8985aece6f55078249720462fd0d6a8e48a80f45d01e0e359478484ec",
+      "bytes": 62404,
+      "bars": 1345,
+      "first": "2021-05-25",
+      "last": "2026-10-23",
+      "firstObservedDate": "2021-05-25",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-05-25"
+        }
+      ]
+    },
+    "MODEFENCE": {
+      "id": "NSE:MODEFENCE",
+      "kind": "ETF",
+      "path": "etf/MODEFENCE.json",
+      "sha256": "ec0c06c97b9cc8bd87b8730e2c9c51ddff285de6db28366f655b73a0e72853c2",
+      "bytes": 25113,
+      "bars": 536,
+      "first": "2024-08-27",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-08-27",
+      "listingDate": "2024-08-27",
+      "listingDateSource": "registry-evidence",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "NOT_YET_LISTED",
+          "listingDate": "2024-08-27"
+        }
+      ]
+    },
+    "INFRAIETF": {
+      "id": "NSE:INFRAIETF",
+      "kind": "ETF",
+      "path": "etf/INFRAIETF.json",
+      "sha256": "3ec0eff2add9195e11e176867f1b0edff919f9fc1e3725c9bdb4f4f1af38b0a0",
+      "bytes": 46013,
+      "bars": 1033,
+      "first": "2022-08-24",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-08-23",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-08-24"
+        }
+      ]
+    },
+    "CONSUMBEES": {
+      "id": "NSE:CONSUMBEES",
+      "kind": "ETF",
+      "path": "etf/CONSUMBEES.json",
+      "sha256": "bb3f8edfc6ed982fab27fa5d8501acbfc7a55e6f36deb38c37c6baa750bc76ad",
+      "bytes": 98750,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2014-04-22",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ]
+    },
+    "FMCGIETF": {
+      "id": "NSE:FMCGIETF",
+      "kind": "ETF",
+      "path": "etf/FMCGIETF.json",
+      "sha256": "ccb9056860c2ae408ffe24c2b5823d06a461f3099131fd57b00927d938a586df",
+      "bytes": 60409,
+      "bars": 1291,
+      "first": "2021-08-10",
+      "last": "2026-10-23",
+      "firstObservedDate": "2021-08-10",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-08-10"
+        }
+      ]
+    },
+    "HDFCSML250": {
+      "id": "NSE:HDFCSML250",
+      "kind": "ETF",
+      "path": "etf/HDFCSML250.json",
+      "sha256": "0d1060c4c6f2fa493f4a1109665dca4b39cb7b150806438632fcb3db4fc3b9e7",
+      "bytes": 44512,
+      "bars": 909,
+      "first": "2023-02-21",
+      "last": "2026-10-23",
+      "firstObservedDate": "2023-02-21",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2023-02-21"
+        }
+      ]
+    },
+    "NEXT50IETF": {
+      "id": "NSE:NEXT50IETF",
+      "kind": "ETF",
+      "path": "etf/NEXT50IETF.json",
+      "sha256": "81d62403cb59881b45bc777c46d7709c9eb00bbf3b103a1080fb8286f668a0d4",
+      "bytes": 87175,
+      "bars": 1964,
+      "first": "2018-11-16",
+      "last": "2026-10-23",
+      "firstObservedDate": "2018-08-31",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ],
+      "warmupTruncatedFrom": "2018-11-16"
+    },
+    "NIF100BEES": {
+      "id": "NSE:NIF100BEES",
+      "kind": "ETF",
+      "path": "etf/NIF100BEES.json",
+      "sha256": "9df17a084d605d2771d59c09a5efebfa9b54c44fa2a1b13100533f5c7826c3d3",
+      "bytes": 102697,
+      "bars": 2190,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2013-03-28",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "APPROVAL_EVIDENCE_MISSING",
+          "date": "2020-03-12",
+          "provenance": "migrated-v2-2026-09-11"
+        }
+      ],
+      "noTradeDays": [
+        "2020-03-25"
+      ]
+    },
+    "EQUAL50ADD": {
+      "id": "NSE:EQUAL50ADD",
+      "kind": "ETF",
+      "path": "etf/EQUAL50ADD.json",
+      "sha256": "dadec7fede50f4f065f90bd93087898ec7f248890c1b2ff4779a2c0574a0b665",
+      "bytes": 58294,
+      "bars": 1227,
+      "first": "2021-11-12",
+      "last": "2026-10-23",
+      "firstObservedDate": "2021-11-12",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-11-12"
+        }
+      ]
+    },
+    "MIDSMALL": {
+      "id": "NSE:MIDSMALL",
+      "kind": "ETF",
+      "path": "etf/MIDSMALL.json",
+      "sha256": "c44e7a98c65044865d664546c2c003996e2f75b441368cdd4119f901a8603944",
+      "bytes": 27348,
+      "bars": 598,
+      "first": "2024-05-28",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-05-28",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2024-05-28"
+        }
+      ]
+    },
+    "MOM100": {
+      "id": "NSE:MOM100",
+      "kind": "ETF",
+      "path": "etf/MOM100.json",
+      "sha256": "985f31ab8e6e1322f7fd89c7cf1490980811a7e539028ddc3e9a9f4393cdcbdf",
+      "bytes": 97771,
+      "bars": 2193,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2011-02-04",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ],
+      "noTradeDays": [
+        "2022-05-11"
+      ]
+    },
+    "MOREALTY": {
+      "id": "NSE:MOREALTY",
+      "kind": "ETF",
+      "path": "etf/MOREALTY.json",
+      "sha256": "feceab94ea8f198ac919c6dfeb1426c3aab563bbfff11c6e23eb6f800cabeece",
+      "bytes": 29784,
+      "bars": 641,
+      "first": "2024-03-21",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-03-21",
+      "listingDate": "2024-03-21",
+      "listingDateSource": "registry-evidence",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "NOT_YET_LISTED",
+          "listingDate": "2024-03-21"
+        }
+      ]
+    },
+    "ALPHA": {
+      "id": "NSE:ALPHA",
+      "kind": "ETF",
+      "path": "etf/ALPHA.json",
+      "sha256": "6a560de1d772e9db5494d561df9a9c07968cd33d54018f5372ebe720911a1efa",
+      "bytes": 54597,
+      "bars": 1194,
+      "first": "2021-12-29",
+      "last": "2026-10-23",
+      "firstObservedDate": "2021-12-29",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO",
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2021-12-29"
+        }
+      ],
+      "noTradeDays": [
+        "2022-05-11"
+      ]
+    },
+    "EVINDIA": {
+      "id": "NSE:EVINDIA",
+      "kind": "ETF",
+      "path": "etf/EVINDIA.json",
+      "sha256": "620a0ea47c5528a43a33378707bc38e6fde52fde0b6e03e59989bc607edb3fcc",
+      "bytes": 25781,
+      "bars": 564,
+      "first": "2024-07-16",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-07-16",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2024-07-16"
+        }
+      ]
+    },
+    "MOENERGY": {
+      "id": "NSE:MOENERGY",
+      "kind": "ETF",
+      "path": "etf/MOENERGY.json",
+      "sha256": "2df81f6cca192850bdc77f5348b460e702d7271489bf0f7c2adc26eb7d58112d",
+      "bytes": 11581,
+      "bars": 252,
+      "first": "2025-10-16",
+      "last": "2026-10-23",
+      "firstObservedDate": "2025-10-16",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2025-10-16"
+        }
+      ]
+    },
+    "TNIDETF": {
+      "id": "NSE:TNIDETF",
+      "kind": "ETF",
+      "path": "etf/TNIDETF.json",
+      "sha256": "34b524f06a0e52d7bd6d1fc05f5818d42b0248db2f718e46410315b1de8c420e",
+      "bytes": 49834,
+      "bars": 1125,
+      "first": "2022-04-08",
+      "last": "2026-10-23",
+      "firstObservedDate": "2022-04-08",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "LIFO"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2022-04-08"
+        }
+      ],
+      "noTradeDays": [
+        "2022-05-11"
+      ]
+    },
+    "TATAGOLD": {
+      "id": "NSE:TATAGOLD",
+      "kind": "ETF",
+      "path": "etf/TATAGOLD.json",
+      "sha256": "09f7e98fdb3200d97f68c2fa1ad3db8168160e13076035b2cbef54e72b02f41c",
+      "bytes": 30852,
+      "bars": 686,
+      "first": "2024-01-17",
+      "last": "2026-10-23",
+      "firstObservedDate": "2024-01-17",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2024-01-17"
+        }
+      ]
+    },
+    "GOLDIETF": {
+      "id": "NSE:GOLDIETF",
+      "kind": "ETF",
+      "path": "etf/GOLDIETF.json",
+      "sha256": "a0827404508136996415793a9fd15238698f09ab122595f95e7c20043b26a9c9",
+      "bytes": 90030,
+      "bars": 1964,
+      "first": "2018-11-15",
+      "last": "2026-10-23",
+      "firstObservedDate": "2010-09-02",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "gold",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        }
+      ],
+      "noTradeDays": [
+        "2022-05-11"
+      ],
+      "warmupTruncatedFrom": "2018-11-15"
+    },
+    "GROWWPOWER": {
+      "id": "NSE:GROWWPOWER",
+      "kind": "ETF",
+      "path": "etf/GROWWPOWER.json",
+      "sha256": "27422244e94847d877e3bb3437d34c89b0483ac173a11b79801a9d20d7a8b697",
+      "bytes": 13745,
+      "bars": 299,
+      "first": "2025-08-07",
+      "last": "2026-10-23",
+      "firstObservedDate": "2025-08-07",
+      "listingDate": "2025-08-07",
+      "listingDateSource": "registry-evidence",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "equity",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "NOT_YET_LISTED",
+          "listingDate": "2025-08-07"
+        }
+      ]
+    },
+    "NIFTY 50": {
+      "id": "IDX:NIFTY 50",
+      "kind": "INDEX",
+      "path": "index/NIFTY_50.json",
+      "sha256": "8577bc6a970b77ab48eb8e924253eaaa8bb845b8983591f7d344e5c1e2aeddd2",
+      "bytes": 129409,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2012-02-21",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": null,
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "OK",
+      "reasons": []
+    },
+    "NIFTY BANK": {
+      "id": "IDX:NIFTY BANK",
+      "kind": "INDEX",
+      "path": "index/NIFTY_BANK.json",
+      "sha256": "e6d8fb722f977f50708e8860ad2d139bef866d74671bff8f9115eb3436a975bd",
+      "bytes": 129590,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2012-02-21",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": null,
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "OK",
+      "reasons": []
+    },
+    "NIFTY IT": {
+      "id": "IDX:NIFTY IT",
+      "kind": "INDEX",
+      "path": "index/NIFTY_IT.json",
+      "sha256": "cec009df3247e44611af7e50aa6c70da201ad34b45e6d36d3f211973e0beb9ae",
+      "bytes": 127465,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2012-02-21",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": null,
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "OK",
+      "reasons": []
+    },
+    "NIFTY MIDCAP 150": {
+      "id": "IDX:NIFTY MIDCAP 150",
+      "kind": "INDEX",
+      "path": "index/NIFTY_MIDCAP_150.json",
+      "sha256": "f30fd3f31335c80f4cfcc784054b372e20e5e95cabb98372e67f8a337652b624",
+      "bytes": 112217,
+      "bars": 1925,
+      "first": "2019-01-14",
+      "last": "2026-10-23",
+      "firstObservedDate": "2019-01-14",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": null,
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "OK",
+      "reasons": []
+    },
+    "NIFTY NEXT 50": {
+      "id": "IDX:NIFTY NEXT 50",
+      "kind": "INDEX",
+      "path": "index/NIFTY_NEXT_50.json",
+      "sha256": "6396c967b1a05ad7e66c011db104464a2ff5d66cca87b06b4eca77bf5b0cea37",
+      "bytes": 129738,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2012-02-21",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": null,
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "OK",
+      "reasons": []
+    },
+    "NIFTY AUTO": {
+      "id": "IDX:NIFTY AUTO",
+      "kind": "INDEX",
+      "path": "index/NIFTY_AUTO.json",
+      "sha256": "594b6bb62685bf47769e1f976b5083fc07c4d260db8933d59f2096400346c3be",
+      "bytes": 125436,
+      "bars": 2194,
+      "first": "2017-12-11",
+      "last": "2026-10-23",
+      "firstObservedDate": "2012-02-21",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": null,
+      "engines": [],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "OK",
+      "reasons": []
+    }
+  },
+  "excluded": {},
+  "quarantined": {
+    "HDFCSILVER": {
+      "code": "ANOMALOUS_MOVE_UNRESOLVED",
+      "events": [
+        {
+          "date": "2026-01-30",
+          "prevClose": 355.42,
+          "close": 297.24,
+          "ret": -0.1637
+        },
+        {
+          "date": "2026-02-03",
+          "prevClose": 215.21,
+          "close": 248.35,
+          "ret": 0.154
+        }
+      ],
+      "reasons": [
+        {
+          "code": "ANOMALOUS_MOVE_UNRESOLVED",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "prevClose": 355.42,
+              "close": 297.24,
+              "ret": -0.1637
+            },
+            {
+              "date": "2026-02-03",
+              "prevClose": 215.21,
+              "close": 248.35,
+              "ret": 0.154
+            }
+          ]
+        }
+      ]
+    },
+    "SILVERIETF": {
+      "code": "ANOMALOUS_MOVE_UNRESOLVED",
+      "events": [
+        {
+          "date": "2026-01-30",
+          "prevClose": 367.25,
+          "close": 293.3,
+          "ret": -0.2014
+        }
+      ],
+      "reasons": [
+        {
+          "code": "ANOMALOUS_MOVE_UNRESOLVED",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "prevClose": 367.25,
+              "close": 293.3,
+              "ret": -0.2014
+            }
+          ]
+        },
+        {
+          "code": "MISSING_EXPECTED_SESSION",
+          "count": 1,
+          "dates": [
+            "2022-05-11"
+          ]
+        }
+      ]
+    },
+    "HDFCGOLD": {
+      "code": "ANOMALOUS_MOVE_UNRESOLVED",
+      "events": [
+        {
+          "date": "2021-02-17",
+          "prevClose": 4242.0,
+          "close": 41.8,
+          "ret": -0.9901
+        }
+      ],
+      "reasons": [
+        {
+          "code": "ANOMALOUS_MOVE_UNRESOLVED",
+          "events": [
+            {
+              "date": "2021-02-17",
+              "prevClose": 4242.0,
+              "close": 41.8,
+              "ret": -0.9901
+            }
+          ]
+        },
+        {
+          "code": "MISSING_EXPECTED_SESSION",
+          "count": 1,
+          "dates": [
+            "2022-05-11"
+          ]
+        }
+      ]
+    },
+    "SBISILVER": {
+      "code": "ANOMALOUS_MOVE_UNRESOLVED",
+      "events": [
+        {
+          "date": "2026-01-30",
+          "prevClose": 358.24,
+          "close": 284.81,
+          "ret": -0.205
+        }
+      ],
+      "reasons": [
+        {
+          "code": "ANOMALOUS_MOVE_UNRESOLVED",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "prevClose": 358.24,
+              "close": 284.81,
+              "ret": -0.205
+            }
+          ]
+        }
+      ]
+    },
+    "SILVER": {
+      "code": "ANOMALOUS_MOVE_UNRESOLVED",
+      "events": [
+        {
+          "date": "2026-01-30",
+          "prevClose": 367.12,
+          "close": 299.19,
+          "ret": -0.185
+        }
+      ],
+      "reasons": [
+        {
+          "code": "ANOMALOUS_MOVE_UNRESOLVED",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "prevClose": 367.12,
+              "close": 299.19,
+              "ret": -0.185
+            }
+          ]
+        },
+        {
+          "code": "MISSING_EXPECTED_SESSION",
+          "count": 1,
+          "dates": [
+            "2022-05-11"
+          ]
+        }
+      ]
+    },
+    "GOLD1": {
+      "code": "ANOMALOUS_MOVE_UNRESOLVED",
+      "events": [
+        {
+          "date": "2021-07-22",
+          "prevClose": 419.35,
+          "close": 41.75,
+          "ret": -0.9004
+        }
+      ],
+      "reasons": [
+        {
+          "code": "ANOMALOUS_MOVE_UNRESOLVED",
+          "events": [
+            {
+              "date": "2021-07-22",
+              "prevClose": 419.35,
+              "close": 41.75,
+              "ret": -0.9004
+            }
+          ]
+        },
+        {
+          "code": "MISSING_EXPECTED_SESSION",
+          "count": 1,
+          "dates": [
+            "2022-05-11"
+          ]
+        }
+      ]
+    }
+  },
+  "summary": {
+    "requested": 62,
+    "ok": 6,
+    "warn": 50,
+    "excluded": 0,
+    "quarantined": 6
+  }
+}
