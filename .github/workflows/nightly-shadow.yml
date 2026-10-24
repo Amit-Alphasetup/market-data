@@ -72,6 +72,11 @@ jobs:
       - name: Apply the local EOD2 patch (config/eod2_patch.txt)
         run: python market-data/scripts/apply_eod2_patch.py eod2/src
 
+      # Cloud copy only (Apd 2026-10-24): EOD2's "is it today" check compares the day of the month, which stopped
+      # the catch-up from the 09-22 seed at 2026-09-22 / 09-23 on the 10-22 and 10-23 runs.
+      - name: Fix EOD2's day-of-month check (this run's checkout only)
+        run: python market-data/scripts/ci_patch_eod2_dates.py eod2/src
+
       - name: Generate a Linux-native layout for this checkout
         run: python market-data/scripts/ci_discover_layout.py eod2/src "$RUNNER_TEMP/eod2_layout_ci.json"
 
