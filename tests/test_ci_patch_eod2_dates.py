@@ -3,22 +3,19 @@ today's day of the month (the 2026-10-22/23 shadow-run stalls)."""
 import importlib.util
 import os
 import sys
-import types
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 import ci_patch_eod2_dates as patcher  # noqa: E402
 
-IST = ZoneInfo("Asia/Kolkata")
+IST = timezone(timedelta(hours=5, minutes=30))   # India has no DST; the CI runner has no tz database
 
 # The relevant part of EOD2 @ 5c8c8dd src/defs/dates.py (nextDate), as read from C:\dev\eod2.
-DATES_PY = '''from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
+DATES_PY = '''from datetime import datetime, timedelta, timezone
 import logging
 logger = logging.getLogger(__name__)
-tz_IN = ZoneInfo("Asia/Kolkata")
+tz_IN = timezone(timedelta(hours=5, minutes=30))  # EOD2 uses ZoneInfo("Asia/Kolkata"); same offset, no DST
 
 
 class Dates:
