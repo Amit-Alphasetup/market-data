@@ -84,8 +84,10 @@ jobs:
           DATAOPS_LAYOUT: ${{ runner.temp }}/eod2_layout_ci.json
           DATAOPS_LOCK_FILE: ${{ runner.temp }}/dataops.lock
 
-      - name: Show EOD2 update log (only if sync failed)
-        if: failure()
+      # Always shown (2026-10-24): the 10-22 and 10-23 runs "finished" but EOD2 stayed at 2026-09-22 / 09-23,
+      # and only a failed sync used to print the log.
+      - name: Show EOD2 update log
+        if: always()
         run: tail -n 80 market-data/logs/eod2_*.log || true
 
       - name: dataops export -> v3 snapshot + datasetHash
@@ -111,3 +113,14 @@ jobs:
           print("datasetHash: ", d.get("datasetHash"))
           print("latestSession:", d.get("latestCompletedSession") or d.get("latestSession"))
           PY
+          cp "$manifest" "$RUNNER_TEMP/shadow-manifest.json"
+
+      # Per-file hashes, so a datasetHash mismatch with the laptop can be traced to the files that differ.
+      - name: Keep the shadow manifest (7 days)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shadow-manifest
+          path: ${{ runner.temp }}/shadow-manifest.json
+          retention-days: 7
+          if-no-files-found: ignore
