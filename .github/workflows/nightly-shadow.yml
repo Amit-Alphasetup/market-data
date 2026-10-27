@@ -21,9 +21,8 @@
 # datasetHash comparison against the laptop.
 name: "D6 phase 3: nightly shadow-mode sync + export"
 
+# Schedule removed 2026-10-27 at cutover: nightly.yml now runs the real pipeline. Kept for manual comparisons.
 on:
-  schedule:
-    - cron: '30 17 * * 1-5'   # 17:30 UTC = 23:00 IST, Mon-Fri
   workflow_dispatch:
 
 jobs:

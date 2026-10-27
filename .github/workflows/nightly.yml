@@ -1,0 +1,143 @@
+# D6 phase 4 - the daily pipeline runs in the cloud (cut over 2026-10-27 after 5 matching shadow sessions:
+# 10-19, 10-21, 10-23, 10-26 and the first match; see BUILD_STATE.md).
+#
+# Same steps as nightly-shadow.yml, plus the two it deliberately left out:
+#   1. `dataops run` PUBLISHES (sync -> export -> publish -> live verify), pushing data/ to this repo.
+#   2. The synced EOD2 archive is SAVED BACK to the eod2-data mirror, so the next run only downloads the new
+#      day(s). It is saved only if `dataops check-eod2` finds the archive clean - the same check that stopped
+#      the corrupt-mirror outage in October.
+# Control-panel requests (Repair / Diagnose / Run from AlphaDesk) arrive as files under data/control/requests/;
+# a push there starts this workflow in `poll` mode instead of the laptop's 10-minute poll.
+#
+# The laptop tasks (EOD2 Publish, Market Data Run / Retry / Poll) are DISABLED, not deleted, for rollback:
+#   Enable-ScheduledTask -TaskName 'Market Data Run'   (and the other three)
+name: "D6 phase 4: nightly sync + export + publish"
+
+on:
+  schedule:
+    - cron: '30 14 * * 1-5'   # 20:00 IST Mon-Fri (GitHub often starts scheduled jobs hours late)
+    - cron: '30 18 * * 1-5'   # 00:00 IST retry - does nothing if the session is already published
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['data/control/requests/**']
+
+concurrency:
+  group: dataops            # never two pipeline runs at once (replaces the laptop's on-disk lock)
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout market-data (with push access)
+        uses: actions/checkout@v4
+        with:
+          path: market-data
+          token: ${{ secrets.DATA_MIRROR_PAT }}
+
+      - name: Checkout eod2 @ pinned commit (no submodules)
+        uses: actions/checkout@v4
+        with:
+          repository: BennyThadikaran/eod2
+          ref: 5c8c8dd65cc951899a8853c6628935c990f36ed5
+          path: eod2
+
+      - name: Checkout eod2-data mirror
+        uses: actions/checkout@v4
+        with:
+          repository: Amit-Alphasetup/eod2-data
+          token: ${{ secrets.DATA_MIRROR_PAT }}
+          path: eod2-data-mirror
+          fetch-depth: 1
+
+      - name: Preflight - push access to both repos
+        run: |
+          for r in market-data eod2-data-mirror; do
+            git -C "$r" push --dry-run origin HEAD:refs/heads/main >/dev/null 2>&1 \
+              || { echo "::error::no push access to $r with DATA_MIRROR_PAT"; exit 1; }
+          done
+          echo "push access OK"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dataops + EOD2 dependencies
+        run: |
+          pip install psutil
+          pip install -r eod2/requirements.txt
+          pip install "httpx==0.28.1"
+
+      - name: Restore the archive into the fresh eod2 checkout
+        run: |
+          rm -rf eod2/src/eod2_data
+          cp -r eod2-data-mirror eod2/src/eod2_data
+          rm -rf eod2/src/eod2_data/.git
+          test -d eod2/src/eod2_data/daily || { echo "::error::restore failed - no daily/ after copy"; exit 1; }
+          test -f eod2/src/eod2_data/meta.json || { echo "::error::restore failed - no meta.json after copy"; exit 1; }
+          echo "mirror lastUpdate: $(python -c "import json;print(json.load(open('eod2/src/eod2_data/meta.json'))['lastUpdate'])")"
+
+      - name: Apply the local EOD2 patch (config/eod2_patch.txt)
+        run: python market-data/scripts/apply_eod2_patch.py eod2/src
+
+      - name: Fix EOD2's day-of-month check (this run's checkout only)
+        run: python market-data/scripts/ci_patch_eod2_dates.py eod2/src
+
+      - name: Generate a Linux-native layout for this checkout
+        run: python market-data/scripts/ci_discover_layout.py eod2/src "$RUNNER_TEMP/eod2_layout_ci.json"
+
+      - name: Git identity for the pipeline's commits
+        run: |
+          for r in market-data eod2-data-mirror; do
+            git -C "$r" config user.name "Amit-Alphasetup"
+            git -C "$r" config user.email "apdash95@gmail.com"
+          done
+
+      - name: dataops (run on schedule / dispatch, poll on a control-panel request)
+        id: pipeline
+        continue-on-error: true
+        working-directory: market-data
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            python -m dataops poll
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            python -m dataops run --only-if-needed
+          else
+            python -m dataops run
+          fi
+        env:
+          PYTHONUTF8: '1'
+          PYTHONPATH: src
+          DATAOPS_LAYOUT: ${{ runner.temp }}/eod2_layout_ci.json
+          DATAOPS_LOCK_FILE: ${{ runner.temp }}/dataops.lock
+
+      - name: Show EOD2 update log
+        if: always()
+        run: tail -n 80 market-data/logs/eod2_*.log 2>/dev/null || echo "(no EOD2 log - sync did not run)"
+
+      - name: Integrity scan before saving the archive back
+        id: integrity
+        working-directory: market-data
+        run: python -m dataops check-eod2 --data-root ../eod2/src/eod2_data
+        env: { PYTHONPATH: src, PYTHONUTF8: '1' }
+
+      - name: Save the archive back to the eod2-data mirror
+        run: |
+          rsync -a --delete --exclude .git eod2/src/eod2_data/ eod2-data-mirror/
+          cd eod2-data-mirror
+          git add -A
+          if git diff --cached --quiet; then echo "mirror unchanged"; exit 0; fi
+          upd=$(python -c "import json;print(json.load(open('meta.json'))['lastUpdate'][:10])")
+          git commit -q -m "data: EOD2 archive through $upd (cloud run ${{ github.run_id }})"
+          git push origin HEAD:main
+          git log --oneline -1
+
+      - name: Result
+        run: |
+          cat market-data/data/control/status.json 2>/dev/null || true
+          if [ "${{ steps.pipeline.outcome }}" != "success" ]; then
+            echo "::error::dataops failed - see the step above (the archive was still saved if it was clean)"
+            exit 1
+          fi
