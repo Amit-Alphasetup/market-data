@@ -11,5 +11,5 @@
     "quarantined": 6
   },
   "message": "published 2026-10-28-r1 (PARTIAL); retention kept 10, removed 1",
-  "liveVerify": "PENDING"
+  "liveVerify": "FAIL: NEXT50IETF: ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host"
 }
