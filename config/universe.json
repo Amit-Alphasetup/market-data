@@ -1213,8 +1213,8 @@
   ],
   "splits": [
     {
-      "symbol": "NIFTYBEES",
-      "date": "2019-12-19",
+      "symbol": "AUTOIETF",
+      "date": "2024-03-01",
       "ratioNum": 10,
       "ratioDen": 1,
       "evidence": null,
@@ -1231,6 +1231,24 @@
       "provenance": "migrated-v2-2026-09-11"
     },
     {
+      "symbol": "FMCGIETF",
+      "date": "2024-05-10",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "GOLD1",
+      "date": "2021-07-22",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": "Price ratio 10.04 (nearest round 10, off 0.4%) with volume x15 on the same session; consistent with a 10:1 unit split. Inside the data window (starts 2019-01-14). Apd asked for splits to be recorded 2026-11-04.",
+      "approvedAt": "2026-11-04T17:07:30+05:30",
+      "provenance": "dataops"
+    },
+    {
       "symbol": "GOLDBEES",
       "date": "2019-12-19",
       "ratioNum": 100,
@@ -1240,8 +1258,17 @@
       "provenance": "migrated-v2-2026-09-11"
     },
     {
-      "symbol": "PSUBNKBEES",
-      "date": "2019-12-19",
+      "symbol": "HDFCGOLD",
+      "date": "2021-02-17",
+      "ratioNum": 100,
+      "ratioDen": 1,
+      "evidence": "Price ratio 101.48 (nearest round 100, off 1.5%) with volume x159 on the same session; consistent with a 100:1 unit split. Inside the data window (starts 2019-01-14). Apd asked for splits to be recorded 2026-11-04.",
+      "approvedAt": "2026-11-04T17:07:15+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "HDFCNIFBAN",
+      "date": "2024-02-02",
       "ratioNum": 10,
       "ratioDen": 1,
       "evidence": null,
@@ -1258,24 +1285,6 @@
       "provenance": "migrated-v2-2026-09-11"
     },
     {
-      "symbol": "MON100",
-      "date": "2021-06-17",
-      "ratioNum": 10,
-      "ratioDen": 1,
-      "evidence": null,
-      "approvedAt": null,
-      "provenance": "migrated-v2-2026-09-11"
-    },
-    {
-      "symbol": "SETFGOLD",
-      "date": "2022-01-06",
-      "ratioNum": 100,
-      "ratioDen": 1,
-      "evidence": null,
-      "approvedAt": null,
-      "provenance": "migrated-v2-2026-09-11"
-    },
-    {
       "symbol": "ITIETF",
       "date": "2022-09-01",
       "ratioNum": 10,
@@ -1285,8 +1294,8 @@
       "provenance": "migrated-v2-2026-09-11"
     },
     {
-      "symbol": "HDFCNIFBAN",
-      "date": "2024-02-02",
+      "symbol": "MON100",
+      "date": "2021-06-17",
       "ratioNum": 10,
       "ratioDen": 1,
       "evidence": null,
@@ -1294,8 +1303,17 @@
       "provenance": "migrated-v2-2026-09-11"
     },
     {
-      "symbol": "AUTOIETF",
-      "date": "2024-03-01",
+      "symbol": "NIFTYBEES",
+      "date": "2019-12-19",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": null,
+      "approvedAt": null,
+      "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "PSUBNKBEES",
+      "date": "2019-12-19",
       "ratioNum": 10,
       "ratioDen": 1,
       "evidence": null,
@@ -1312,9 +1330,9 @@
       "provenance": "migrated-v2-2026-09-11"
     },
     {
-      "symbol": "FMCGIETF",
-      "date": "2024-05-10",
-      "ratioNum": 10,
+      "symbol": "SETFGOLD",
+      "date": "2022-01-06",
+      "ratioNum": 100,
       "ratioDen": 1,
       "evidence": null,
       "approvedAt": null,
@@ -1425,6 +1443,20 @@
       "date": "2026-10-07",
       "evidence": "Apd 2026-10-17: MONQ50 anomalies are real moves (same ETF as the approved 16-23 Sep moves). 2026-10-07 close 258.57 vs 219.20 (+18.0%) on 2.9M volume; next sessions 243-254, no reversal.",
       "approvedAt": "2026-10-17T23:46:08+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "HDFCSILVER",
+      "date": "2026-01-30",
+      "evidence": "Apd confirmed 2026-11-04 that silver really moved this sharply (late Jan to Mar 2026). Corroborated by SILVERBEES-class peers: HDFCSILVER, SILVERIETF, SBISILVER and SILVER all print the same sharp move on the same session, which independent funds would not do for a bad print.",
+      "approvedAt": "2026-11-04T17:08:24+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "HDFCSILVER",
+      "date": "2026-02-03",
+      "evidence": "Apd confirmed 2026-11-04 that silver really moved this sharply (late Jan to Mar 2026). Corroborated by SILVERBEES-class peers: HDFCSILVER, SILVERIETF, SBISILVER and SILVER all print the same sharp move on the same session, which independent funds would not do for a bad print.",
+      "approvedAt": "2026-11-04T17:08:35+05:30",
       "provenance": "dataops"
     }
   ],
