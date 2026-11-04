@@ -1,11 +1,11 @@
 {
   "contract": "alphadesk-eod2/3",
   "dataset": "EOD2",
-  "datasetId": "2026-10-29-r5",
-  "datasetHash": "960a5fc05973186b30f1fa115d45e6734d788f50cb7711994fe08d5eedd753ce",
-  "policyHash": "21e763f9c2e6607f8b4c4c60e2b87847411aca0a90d2e8dd373c523e989c16c1",
-  "snapshotBase": "snapshots/2026-10-29-r5/",
-  "createdAt": "2026-11-04T17:08:41+05:30",
+  "datasetId": "2026-10-29-r7",
+  "datasetHash": "ee4bfeb0bef5c432e9fc4a63e6b3b0c7f519215ecfcf3c3b23cad5ad16ba8e9f",
+  "policyHash": "20e87af82e71ad4368c855db056c0bbc1ef3413b2725999a1b56ffaa4ff9f76f",
+  "snapshotBase": "snapshots/2026-10-29-r7/",
+  "createdAt": "2026-11-04T17:11:47+05:30",
   "exporterVersion": "3.0.0",
   "latestSession": "2026-10-29",
   "latestCompletedSession": "2026-10-29",
@@ -1903,6 +1903,43 @@
       ],
       "warmupTruncatedFrom": "2018-11-15"
     },
+    "SBISILVER": {
+      "id": "NSE:SBISILVER",
+      "kind": "ETF",
+      "path": "etf/SBISILVER.json",
+      "sha256": "5e0a0acd16b9c33f6fe58581a3517fe25ce8cbb10845e081b8106bea838ab1ee",
+      "bytes": 27657,
+      "bars": 574,
+      "first": "2024-07-08",
+      "last": "2026-10-29",
+      "firstObservedDate": "2024-07-08",
+      "listingDate": null,
+      "listingDateSource": "none",
+      "fields": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "assetClass": "silver",
+      "engines": [
+        "DM"
+      ],
+      "linkedIndex": null,
+      "isin": "",
+      "status": "WARN",
+      "reasons": [
+        {
+          "code": "ISIN_MISSING"
+        },
+        {
+          "code": "LISTING_DATE_UNVERIFIED",
+          "firstObservedDate": "2024-07-08"
+        }
+      ]
+    },
     "GROWWPOWER": {
       "id": "NSE:GROWWPOWER",
       "kind": "ETF",
@@ -2104,6 +2141,19 @@
     }
   },
   "excluded": {
+    "SILVERIETF": {
+      "code": "MISSING_EXPECTED_SESSION",
+      "detail": "{\"count\": 1, \"dates\": [\"2022-05-11\"]}",
+      "reasons": [
+        {
+          "code": "MISSING_EXPECTED_SESSION",
+          "count": 1,
+          "dates": [
+            "2022-05-11"
+          ]
+        }
+      ]
+    },
     "HDFCGOLD": {
       "code": "MISSING_EXPECTED_SESSION",
       "detail": "{\"count\": 1, \"dates\": [\"2022-05-11\"]}",
@@ -2132,61 +2182,6 @@
     }
   },
   "quarantined": {
-    "SILVERIETF": {
-      "code": "ANOMALOUS_MOVE_UNRESOLVED",
-      "events": [
-        {
-          "date": "2026-01-30",
-          "prevClose": 367.25,
-          "close": 293.3,
-          "ret": -0.2014
-        }
-      ],
-      "reasons": [
-        {
-          "code": "ANOMALOUS_MOVE_UNRESOLVED",
-          "events": [
-            {
-              "date": "2026-01-30",
-              "prevClose": 367.25,
-              "close": 293.3,
-              "ret": -0.2014
-            }
-          ]
-        },
-        {
-          "code": "MISSING_EXPECTED_SESSION",
-          "count": 1,
-          "dates": [
-            "2022-05-11"
-          ]
-        }
-      ]
-    },
-    "SBISILVER": {
-      "code": "ANOMALOUS_MOVE_UNRESOLVED",
-      "events": [
-        {
-          "date": "2026-01-30",
-          "prevClose": 358.24,
-          "close": 284.81,
-          "ret": -0.205
-        }
-      ],
-      "reasons": [
-        {
-          "code": "ANOMALOUS_MOVE_UNRESOLVED",
-          "events": [
-            {
-              "date": "2026-01-30",
-              "prevClose": 358.24,
-              "close": 284.81,
-              "ret": -0.205
-            }
-          ]
-        }
-      ]
-    },
     "SILVER": {
       "code": "ANOMALOUS_MOVE_UNRESOLVED",
       "events": [
@@ -2222,8 +2217,8 @@
   "summary": {
     "requested": 62,
     "ok": 6,
-    "warn": 51,
-    "excluded": 2,
-    "quarantined": 3
+    "warn": 52,
+    "excluded": 3,
+    "quarantined": 1
   }
 }

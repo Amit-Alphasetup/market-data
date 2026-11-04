@@ -1458,6 +1458,20 @@
       "evidence": "Apd confirmed 2026-11-04 that silver really moved this sharply (late Jan to Mar 2026). Corroborated by SILVERBEES-class peers: HDFCSILVER, SILVERIETF, SBISILVER and SILVER all print the same sharp move on the same session, which independent funds would not do for a bad print.",
       "approvedAt": "2026-11-04T17:08:35+05:30",
       "provenance": "dataops"
+    },
+    {
+      "symbol": "SILVERIETF",
+      "date": "2026-01-30",
+      "evidence": "Apd confirmed 2026-11-04 that silver really moved this sharply (late Jan to Mar 2026). Corroborated by SILVERBEES-class peers: HDFCSILVER, SILVERIETF, SBISILVER and SILVER all print the same sharp move on the same session, which independent funds would not do for a bad print.",
+      "approvedAt": "2026-11-04T17:11:28+05:30",
+      "provenance": "dataops"
+    },
+    {
+      "symbol": "SBISILVER",
+      "date": "2026-01-30",
+      "evidence": "Apd confirmed 2026-11-04 that silver really moved this sharply (late Jan to Mar 2026). Corroborated by SILVERBEES-class peers: HDFCSILVER, SILVERIETF, SBISILVER and SILVER all print the same sharp move on the same session, which independent funds would not do for a bad print.",
+      "approvedAt": "2026-11-04T17:11:40+05:30",
+      "provenance": "dataops"
     }
   ],
   "quarantine": {},
