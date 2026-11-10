@@ -179,7 +179,6 @@
       "name": "Nifty IT",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -218,7 +217,6 @@
       "name": "Automobiles",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -331,7 +329,6 @@
       "name": "CPSE Govt PSU",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -351,9 +348,7 @@
       "isin": "",
       "name": "Liquid BeES (Debt)",
       "assetClass": "liquid",
-      "engines": [
-        "LIFO"
-      ],
+      "engines": [],
       "linkedIndex": null,
       "listingDate": null,
       "listingDateEvidence": null,
@@ -455,7 +450,6 @@
       "name": "Nifty Metal",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -494,7 +488,6 @@
       "name": "Oil & Gas",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -616,7 +609,6 @@
       "name": "Nifty Pharma",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -655,7 +647,6 @@
       "name": "Defence",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -676,7 +667,6 @@
       "name": "Infrastructure",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -697,7 +687,6 @@
       "name": "Consumption",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -857,7 +846,6 @@
       "name": "MOREALTY",
       "assetClass": "equity",
       "engines": [
-        "LIFO",
         "DM"
       ],
       "linkedIndex": null,
@@ -898,9 +886,7 @@
       "isin": "",
       "name": "EVINDIA",
       "assetClass": "equity",
-      "engines": [
-        "LIFO"
-      ],
+      "engines": [],
       "linkedIndex": null,
       "listingDate": null,
       "listingDateEvidence": null,
@@ -918,9 +904,7 @@
       "isin": "",
       "name": "MOENERGY",
       "assetClass": "equity",
-      "engines": [
-        "LIFO"
-      ],
+      "engines": [],
       "linkedIndex": null,
       "listingDate": null,
       "listingDateEvidence": null,
@@ -938,9 +922,7 @@
       "isin": "",
       "name": "TNIDETF",
       "assetClass": "equity",
-      "engines": [
-        "LIFO"
-      ],
+      "engines": [],
       "linkedIndex": null,
       "listingDate": null,
       "listingDateEvidence": null,
