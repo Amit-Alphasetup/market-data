@@ -1111,6 +1111,60 @@
       "eod2File": null,
       "historyStart": null,
       "enabled": true
+    },
+    {
+      "id": "NSE:NIFTYIETF",
+      "symbol": "NIFTYIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "ICICI Pru Nifty 50 ETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": null,
+      "listingDateEvidence": null,
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:BANKIETF",
+      "symbol": "BANKIETF",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "ICICI Pru Nifty Bank ETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": "2019-07-15",
+      "listingDateEvidence": "Apd 2026-10-20 rule: first EOD2 bar = listing date. First EOD2 bar = 2019-07-15.",
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "NSE:BFSI",
+      "symbol": "BFSI",
+      "kind": "ETF",
+      "exchange": "NSE",
+      "isin": "",
+      "name": "Mirae Nifty Financial Services ETF",
+      "assetClass": "equity",
+      "engines": [],
+      "linkedIndex": null,
+      "listingDate": "2021-08-05",
+      "listingDateEvidence": "Apd 2026-10-20 rule: first EOD2 bar = listing date. First EOD2 bar = 2021-08-05.",
+      "delistingDate": null,
+      "aliases": [],
+      "eod2File": null,
+      "historyStart": null,
+      "enabled": true
     }
   ],
   "indices": [
@@ -1182,6 +1236,19 @@
     {
       "id": "IDX:NIFTY AUTO",
       "name": "NIFTY AUTO",
+      "kind": "INDEX",
+      "eod2File": null,
+      "requiredFields": [
+        "open",
+        "high",
+        "close"
+      ],
+      "historyStart": null,
+      "enabled": true
+    },
+    {
+      "id": "IDX:NIFTY FINANCIAL SERVICES",
+      "name": "NIFTY FINANCIAL SERVICES",
       "kind": "INDEX",
       "eod2File": null,
       "requiredFields": [
@@ -1319,6 +1386,15 @@
       "evidence": null,
       "approvedAt": null,
       "provenance": "migrated-v2-2026-09-11"
+    },
+    {
+      "symbol": "BANKIETF",
+      "date": "2022-09-01",
+      "ratioNum": 10,
+      "ratioDen": 1,
+      "evidence": "EOD2 close 396.50 -> 39.45 on 2022-09-01 (unadjusted 10:1 unit split)",
+      "approvedAt": "2026-11-12",
+      "provenance": "apd-tenet-pairs-2026-11-12"
     }
   ],
   "genuineMoves": [
@@ -1499,6 +1575,15 @@
         "2022-05-11"
       ],
       "SILVER": [
+        "2022-05-11"
+      ],
+      "NIFTYIETF": [
+        "2022-05-11"
+      ],
+      "BANKIETF": [
+        "2022-05-11"
+      ],
+      "BFSI": [
         "2022-05-11"
       ]
     },
