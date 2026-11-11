@@ -123,8 +123,8 @@
         "DM"
       ],
       "linkedIndex": null,
-      "listingDate": null,
-      "listingDateEvidence": null,
+      "listingDate": "2024-01-17",
+      "listingDateEvidence": "Apd 2026-10-20 rule: first EOD2 bar = listing date. First EOD2 bar = 2024-01-17.",
       "delistingDate": null,
       "aliases": [],
       "eod2File": null,
