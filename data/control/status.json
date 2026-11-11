@@ -1,15 +1,15 @@
 {
-  "lastRun": "2026-11-10T05:00:13+05:30",
+  "lastRun": "2026-11-12T02:59:36+05:30",
   "result": "PUBLISHED",
-  "datasetId": "2026-11-09-r1",
-  "latestCompletedSession": "2026-11-09",
+  "datasetId": "2026-11-11-r1",
+  "latestCompletedSession": "2026-11-11",
   "summary": {
-    "requested": 59,
-    "ok": 6,
-    "warn": 53,
+    "requested": 63,
+    "ok": 7,
+    "warn": 56,
     "excluded": 0,
     "quarantined": 0
   },
-  "message": "published 2026-11-09-r1 (PASS); retention kept 10, removed 1",
-  "liveVerify": "FAIL: manifest https://amit-alphasetup.github.io/market-data/data/snapshots/2026-11-09-r1/manifest.json: HTTPError: HTTP Error 404: Not Found"
+  "message": "published 2026-11-11-r1 (PASS); retention kept 10, removed 1",
+  "liveVerify": "PENDING"
 }
