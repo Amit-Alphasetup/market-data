@@ -243,6 +243,39 @@ def test_publish_records_live_verify_and_pushes_the_status_commit(tmp_path, pair
     assert st2["result"] == "PUBLISHED" and st2["liveVerify"].startswith("FAIL: calendar: sha256")
 
 
+def flaky_fetch(repo, fail_first, base="https://example.test/market-data/"):
+    """The live site answers 404 for the first `fail_first` requests (Pages has not deployed the new snapshot yet), then serves the repo."""
+    inner, calls = local_fetch(repo, base), []
+    def fetch(url):
+        calls.append(url)
+        if len(calls) <= fail_first:
+            raise OSError("HTTP Error 404: Not Found")
+        return inner(url)
+    return fetch
+
+
+def test_live_verify_waits_for_a_late_pages_deploy(tmp_path, pair):
+    # 2026-11-09: the manifest was still 404 after the fixed 90 s wait, so a good publish was recorded as "live verify FAILED".
+    repo, bare = pair
+    res, _ = make_work_snapshot(repo, tmp_path)
+    waited = []
+    st = pub.publish(repo, res.dataset_id, now=NOW, base_url="https://example.test/market-data/", verify_wait=90, fetch=flaky_fetch(repo, 2), sleep=waited.append)
+    assert st["liveVerify"] == "OK" and waited == [90, 60, 60]
+    assert sh("git", "-C", repo, "log", "-1", "--format=%s").endswith("live verify ok") and remote_head(bare) == local_head(repo)
+
+
+def test_live_verify_gives_up_after_the_retries_and_never_retries_a_hash_mismatch(tmp_path, pair):
+    repo, _ = pair
+    res, _ = make_work_snapshot(repo, tmp_path)
+    waited = []
+    st = pub.publish(repo, res.dataset_id, now=NOW, base_url="https://example.test/market-data/", verify_wait=90, fetch=flaky_fetch(repo, 10**6), sleep=waited.append)
+    assert st["liveVerify"].startswith("FAIL: manifest") and waited == [90] + [60] * 5
+    res2, _ = make_work_snapshot(repo, tmp_path)
+    waited2 = []
+    st2 = pub.publish(repo, res2.dataset_id, now=NOW, base_url="https://example.test/market-data/", verify_wait=90, fetch=local_fetch(repo, tamper="calendar.json"), sleep=waited2.append)
+    assert st2["liveVerify"].startswith("FAIL: calendar: sha256") and waited2 == [90]          # wrong bytes are a real failure: reported at once
+
+
 # ── Telegram (Q4: skipped without secrets) ───────────────────────────────────────────────────────────────────────────────
 def test_notify_message_formats():
     st = {"result": "PUBLISHED", "latestCompletedSession": "2026-09-18", "datasetId": "2026-09-18-r1", "liveVerify": "OK",
