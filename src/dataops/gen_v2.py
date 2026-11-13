@@ -31,7 +31,7 @@ def _ratio(num, den):
 def gen_v2(reg):
     """Pure function: registry dict -> v2 config dict (same key order as the original file)."""
     su.assert_valid(reg)
-    enabled = [x for x in reg["instruments"] if x["enabled"]]
+    enabled = [x for x in reg["instruments"] if x["enabled"] and x.get("kind", "ETF") != "EQ"]   # the legacy v2 export never carried stocks
     enabled_syms = {x["symbol"] for x in enabled}
     legacy = reg.get("legacyV2", {})
     gp = reg.get("gapPolicy", {})

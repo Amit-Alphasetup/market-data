@@ -9,6 +9,10 @@ from . import lock as lk
 USAGE = """usage: py -m dataops <command> [args]
   sync                              make sure EOD2 is up to date (patch check, skip if synced, never concurrent with the legacy job)
   export [--out DIR]                build a v3 snapshot into work/ (read-only on EOD2)
+  export --v4 --out DIR             build the v4 tree (ETFs + indices + stocks, hist/tail files) into an empty folder
+  run-v4 [--eod2-data-root DIR] [--remote URL]   v4 export -> verify -> ONE orphan commit force-pushed to nse-data `pub`
+  verify-v4 [--base-url URL] [--symbols N]       fetch the live v4 manifest + N history files + tails, sha256 over raw bytes
+  actions propose                   list every unapproved overnight gap beyond the price band for stocks, with a suggested factor
   publish [--id ID] [--no-verify]   atomic publish of a work/ snapshot to the market-data repo (never alphadesk)
   run [--only-if-needed]            sync -> export -> publish -> notify
   add SYMBOL [--kind ETF] [--engines LIFO,DM] [--asset-class C] [--isin I]
@@ -97,7 +101,11 @@ def main(argv=None):
         from . import gen_v2
         return _locked("gen-v2", lambda: gen_v2.main(rest))
     if cmd == "export":
-        return _export(rest)
+        return _export_v4(rest) if "--v4" in rest else _export(rest)
+    if cmd == "actions":
+        return _actions(rest)
+    if cmd in ("run-v4", "verify-v4"):
+        return _v4(cmd, rest)
     ctx = _ctx()
     if cmd == "check-eod2":
         from . import integrity as ig
@@ -269,6 +277,62 @@ def _export(argv):
     if res.out_dir:
         print("snapshot folder: " + res.out_dir)
     return 0 if res.publish_status == "PUBLISHABLE" else 1
+
+
+def _export_v4(argv):
+    from . import export as ex
+    from . import export_v4 as x4
+    ap = argparse.ArgumentParser(prog="dataops export --v4")
+    ap.add_argument("--v4", action="store_true")
+    ap.add_argument("--eod2-data-root", default=os.environ.get("DATAOPS_EOD2_ROOT", r"C:\dev\eod2\src\eod2_data"))
+    ap.add_argument("--config", default=os.path.join(ex.REPO, "config", "universe.json"))
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--revision", type=int, default=1)
+    a = ap.parse_args(argv)
+    res = x4.build_v4(a.eod2_data_root, a.config, a.out, revision=a.revision)       # read-only on EOD2 and on the repo: no lock needed
+    print(x4.format_summary(res))
+    return 0 if res.publish_status == "PUBLISHABLE" else 1
+
+
+def _v4(cmd, argv):
+    from . import export as ex
+    from . import publish_v4 as p4
+    ap = argparse.ArgumentParser(prog="dataops " + cmd)
+    if cmd == "verify-v4":
+        ap.add_argument("--base-url", default=p4.BASE_URL)
+        ap.add_argument("--symbols", type=int, default=10)
+        a = ap.parse_args(argv)
+        r = p4.verify_live_v4(a.base_url, a.symbols)
+        print(json.dumps(r, indent=2, ensure_ascii=False))
+        return 0 if r["ok"] else 1
+    ap.add_argument("--eod2-data-root", default=os.environ.get("DATAOPS_EOD2_ROOT", r"C:\dev\eod2\src\eod2_data"))
+    ap.add_argument("--config", default=os.path.join(ex.REPO, "config", "universe.json"))
+    ap.add_argument("--remote", default=os.environ.get("DATAOPS_V4_REMOTE", p4.REMOTE))
+    a = ap.parse_args(argv)
+    try:
+        r = p4.run_v4(a.eod2_data_root, a.config, remote=a.remote)
+    except p4.PublishV4Refused as e:
+        print("v4 publish refused: %s" % e, file=sys.stderr)
+        return 1
+    print("v4 %s%s" % (r["result"], (" " + r.get("datasetId", "")) if r.get("datasetId") else ""))
+    print(r.get("summary") or r.get("message") or "")
+    return 0 if r["result"] in ("PUBLISHED", "SKIPPED") else 1
+
+
+def _actions(argv):
+    from . import export as ex
+    from . import export_v4 as x4
+    ap = argparse.ArgumentParser(prog="dataops actions")
+    ap.add_argument("what", choices=["propose"])
+    ap.add_argument("--eod2-data-root", default=os.environ.get("DATAOPS_EOD2_ROOT", r"C:\dev\eod2\src\eod2_data"))
+    ap.add_argument("--config", default=os.path.join(ex.REPO, "config", "universe.json"))
+    a = ap.parse_args(argv)
+    rows = x4.propose_actions(a.eod2_data_root, a.config)
+    print("symbol,date,gapPct,prevClose,open,suggestedFactor,historyStartsHere")
+    for sym, d, gap, pc, o, f, last in rows:
+        print("%s,%s,%.2f,%s,%s,%s,%s" % (sym, d, gap * 100, pc, o, f, "yes" if last else ""))
+    print("%d unapproved gap(s) in %d stock(s)" % (len(rows), len({r[0] for r in rows})))
+    return 0
 
 
 REBUILDABLE = ("NOT_IN_EXPORT", "EXPORT_FAILED", "MISSING_EXPECTED_SESSION")

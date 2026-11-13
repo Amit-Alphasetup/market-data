@@ -14,6 +14,10 @@ ETF_REQUIRED = ("open", "high", "low", "close")
 PRICE_FIELDS = ("open", "high", "low", "close")
 ROUND_SPLITS = (2, 3, 4, 5, 10, 20, 25, 50, 100)
 IMPLIED_LO, IMPLIED_HI = 0.8, 1.25   # v2: declared split accepted when implied ratio within [0.8r, 1.25r]
+# Stocks (kind EQ, v4 only): a corporate action always shows as an OVERNIGHT gap (ex-date open vs previous close). The widest exchange price
+# band is 20%, so a gap beyond it is not ordinary trading: unless approved (genuineMoves / splits / actions) the stock's published history
+# starts at that bar. Big moves made by trading during the day are real prices and are kept.
+EQ_GAP_THRESHOLD = 0.205
 
 
 class Prepared:
@@ -30,6 +34,7 @@ class Prepared:
         self.approvals_used = []
         self.quarantine_kind = False    # True when the block belongs in manifest.quarantined (anomaly / corporate action / registry)
         self.warmup_truncated = None    # {'from': date, 'events': [...]} when an unresolved pre-window anomaly cut the warm-up short
+        self.history_truncated = None   # EQ: {'from': date, 'events': [...]} unapproved overnight gaps beyond the price band; history starts at 'from'
 
     def add(self, code, **detail):
         self.reasons.append(R.reason(code, **detail))
@@ -99,9 +104,27 @@ def _apply_splits(prep, rows, splits):
         prep.adjustments.append({"date": rows[idx]["date"], "ratioNum": s["ratioNum"], "ratioDen": s["ratioDen"], "implied": round(implied, 3)})
 
 
+def _apply_actions(prep, rows, actions):
+    """Reviewed corporate actions (registry `actions`): O/H/L/C before the action date are multiplied by `factor`, volume divided by it."""
+    for a in actions:
+        idx = next((i for i, b in enumerate(rows) if b["date"] >= a["date"]), None)
+        if idx is None or idx == 0:
+            prep.add("CORPORATE_ACTION_UNRESOLVED", date=a["date"], detail="declared action (%s), date not found inside the bars" % a["type"])
+            prep.quarantine_kind = True
+            continue
+        f = float(a["factor"])
+        for b in rows[:idx]:
+            for k in PRICE_FIELDS:
+                if b[k] is not None:
+                    b[k] = b[k] * f
+            if b["volume"] is not None:
+                b["volume"] = b["volume"] / f
+        prep.adjustments.append({"date": rows[idx]["date"], "type": a["type"], "factor": f})
+
+
 def prepare(kind, item, rows, findings, registry, src_isin_check=None):
-    """kind: 'ETF' | 'INDEX'. item: registry instrument/index dict. rows: raw parsed rows (may contain eod2_reader.BAD)."""
-    key = item["symbol"] if kind == "ETF" else item["name"]
+    """kind: 'ETF' | 'EQ' | 'INDEX'. item: registry instrument/index dict. rows: raw parsed rows (may contain eod2_reader.BAD)."""
+    key = item["name"] if kind == "INDEX" else item["symbol"]
     prep = Prepared(kind, key)
     inv_dates = [f["date"] for f in findings if f["code"] == "INVALID_DATE"]
     if inv_dates:
@@ -109,13 +132,15 @@ def prepare(kind, item, rows, findings, registry, src_isin_check=None):
     for f in findings:
         if f["code"] == "SCHEMA_INVALID":
             prep.add("SCHEMA_INVALID", detail=f.get("detail"))
+    if kind == "EQ":                      # stocks: bars before the floor are never published, so their defects cannot block the stock
+        rows = [b for b in rows if b["date"] >= max(item.get("historyStart") or "", registry.eq_floor)]
     fields = ("open", "high", "low", "close", "volume")
-    bad = [(b["date"], k) for b in rows for k in fields if b[k] is er.BAD]
+    bad =[(b["date"], k) for b in rows for k in fields if b[k] is er.BAD]
     if bad:
         prep.add("NONFINITE_VALUE", count=len(bad), first=[{"date": d, "field": k} for d, k in _first(bad)])
         return prep                       # numbers are unusable; nothing else can be checked reliably
 
-    required = ETF_REQUIRED if kind == "ETF" else tuple(item["requiredFields"])
+    required = tuple(item["requiredFields"]) if kind == "INDEX" else ETF_REQUIRED
     # trim leading rows missing required fields (v2), later missing rows are errors
     i0 = next((i for i, b in enumerate(rows) if all(b[k] is not None for k in required)), None)
     if i0 is None:
@@ -134,13 +159,44 @@ def prepare(kind, item, rows, findings, registry, src_isin_check=None):
     if negv:
         prep.add("SCHEMA_INVALID", detail="negative volume", dates=_first(negv))
 
-    if kind == "ETF":
+    if kind != "INDEX":
         _apply_splits(prep, rows, registry.splits_for(prep.key))
+    if kind == "EQ":
+        _apply_actions(prep, rows, registry.actions_for(prep.key))
 
-    start = item.get("historyStart") or registry.default_start
-    keep_from = start if item.get("historyStart") else er.add_days(start, -R.WARMUP_DAYS)
+    if kind == "EQ":                      # stocks: everything from the floor (no 2019 window, no warm-up margin)
+        start = max(item.get("historyStart") or "", registry.eq_floor)
+        keep_from = start
+    else:
+        start = item.get("historyStart") or registry.default_start
+        keep_from = start if item.get("historyStart") else er.add_days(start, -R.WARMUP_DAYS)
     rows = [b for b in rows if b["date"] >= keep_from]
     prep.rows = rows
+
+    if kind == "EQ":
+        bad_dates = registry.bad_prints_on(prep.key)
+        if bad_dates:
+            rows = [b for b in rows if b["date"] not in bad_dates]
+            prep.rows = rows
+        approvals = registry.approvals_on(prep.key)
+        events = []
+        for i in range(1, len(rows)):
+            p, o = rows[i - 1]["close"], rows[i]["open"]
+            if not p or not o:
+                continue
+            gap = o / p - 1
+            if abs(gap) < EQ_GAP_THRESHOLD:
+                continue
+            d = rows[i]["date"]
+            if d in approvals:
+                prep.approvals_used.append(d)
+                continue
+            events.append({"date": d, "prevClose": round(p, 4), "open": round(o, 4), "gap": round(gap, 4), "suggestedFactor": round(o / p, 6)})
+        if events:
+            cut = events[-1]["date"]
+            prep.history_truncated = {"from": cut, "events": events}
+            rows = [b for b in rows if b["date"] >= cut]
+            prep.rows = rows
 
     # anomaly gate FIRST (ETFs; indices cannot split — same as v2): an unresolved move BEFORE the window start (i.e. only inside the warm-up
     # range that v2 never looked at) truncates the warm-up right after it instead of quarantining an ETF whose window data is clean.
@@ -191,7 +247,7 @@ def prepare(kind, item, rows, findings, registry, src_isin_check=None):
         prep.add("SMALL_OHLC_DISCREPANCY", count=len(warn_dates), dates=_first(warn_dates))
 
     # registry quarantine
-    q = registry.quarantine_reason(prep.key) if kind == "ETF" else None
+    q = registry.quarantine_reason(prep.key) if kind != "INDEX" else None
     if q is not None:
         prep.add("EXPORT_FAILED", detail="REGISTRY_QUARANTINE: %s" % (q if isinstance(q, str) else "; ".join(map(str, q))))
         prep.quarantine_kind = True
@@ -204,12 +260,17 @@ def check_coverage(prep, item, registry, cal, latest):
         return
     kind = prep.kind
     last = prep.rows[-1]["date"]
-    delisted = item.get("delistingDate") if kind == "ETF" else None
+    delisted = item.get("delistingDate") if kind != "INDEX" else None
     window_start = registry.default_start
     if delisted and delisted < window_start:
         prep.add("DELISTED_BEFORE_WINDOW", delistingDate=delisted)
     elif not delisted and last < latest:
         prep.add("STALE_DATASET", last=last, expected=latest)
+    if kind == "EQ":                      # stocks: no certification window; a session without a bar is a no-trade day (suspension), never a block
+        have = {b["date"] for b in prep.rows}
+        end = min(last, delisted) if delisted else last
+        prep.no_trade_days = [d for d in sorted(cal["sessions"]) if prep.rows[0]["date"] <= d <= end and d not in have]
+        return
     listing = item.get("listingDate") if kind == "ETF" else None
     start = item.get("historyStart") or registry.default_start
     if listing:

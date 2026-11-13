@@ -162,9 +162,11 @@ def push_or_rebase(repo, allowed_prefixes=("data/control/requests/",), guard=Non
 
 
 def publish(repo=REPO, dataset_id=None, now=None, base_url=BASE_URL, verify_wait=90, fetch=fetch_bytes, sleep=time.sleep, push=True, live_verify=True, work_root=None,
-            verify_retries=5, verify_retry_wait=60):
+            verify_retries=None, verify_retry_wait=60):
     """Publish one snapshot. Returns the status dict (also written to data/control/status.json). Raises PublishRefused if nothing was published
     because the snapshot is UNPUBLISHABLE/missing; PublishFail after the status was recorded as FAIL."""
+    if verify_retries is None:                  # DATAOPS_VERIFY_RETRIES=0: no waiting for a late Pages deploy (tests, offline use)
+        verify_retries = int(os.environ.get("DATAOPS_VERIFY_RETRIES", "5"))
     work = work_root or os.path.join(repo, "work")
     snaps = os.path.join(repo, "data", "snapshots")
     sid = dataset_id or latest_work_snapshot(work)

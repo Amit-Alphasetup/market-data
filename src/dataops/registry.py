@@ -4,17 +4,26 @@ import json
 from . import schema_universe as su
 
 
+# Stocks (v4): EOD2's stock prices are split/bonus adjusted only from about 2007 (measured 2026-11-13: prices across known 2009-2024 splits and
+# bonuses are continuous; before 2007 there are hundreds of unadjusted -50%..-90% overnight gaps). Nothing older is published for stocks.
+EQ_HISTORY_FLOOR = "2007-01-01"
+
+
 class Registry:
     def __init__(self, data):
         su.assert_valid(data)
         self.data = data
         self.default_start = data["defaultHistoryStart"]
         self.cutoff_ist = data["calendar"]["cutoffIST"]
-        self.etfs = [x for x in data["instruments"] if x["enabled"]]
+        self.etfs = [x for x in data["instruments"] if x["enabled"] and x.get("kind", "ETF") != "EQ"]   # v3 publishes ETFs + indices only
+        self.stocks = [x for x in data["instruments"] if x["enabled"] and x.get("kind") == "EQ"]       # v4 only (export_v4)
+        self.eq_floor = data.get("eqHistoryFloor", EQ_HISTORY_FLOOR)
         self.indices = [x for x in data["indices"] if x["enabled"]]
         self.quarantine = data["quarantine"]
         self.gap_policy = data["gapPolicy"]
-        self._splits, self._moves, self._bad = {}, {}, {}
+        self._splits, self._moves, self._bad, self._actions = {}, {}, {}, {}
+        for a in data.get("actions", []):
+            self._actions.setdefault(a["symbol"], []).append(a)
         for s in data["splits"]:
             self._splits.setdefault(s["symbol"], []).append(s)
         for m in data["genuineMoves"]:
@@ -37,7 +46,12 @@ class Registry:
             out[e["date"]] = e
         for e in self._splits.get(sym, []):
             out.setdefault(e["date"], e)
+        for e in self._actions.get(sym, []):
+            out.setdefault(e["date"], e)
         return out
+
+    def actions_for(self, sym):
+        return sorted(self._actions.get(sym, []), key=lambda a: a["date"])
 
     def bad_prints_on(self, sym):
         """Dates flagged as not-real prints for sym — dropped from its bars before the anomaly scan runs,

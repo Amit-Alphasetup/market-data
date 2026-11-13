@@ -1,4 +1,6 @@
-/* EOD2 data client v3 — classic script (no `export`), defines globalThis.EOD2Client. Vendored into AlphaDesk (A2-5). Contract "alphadesk-eod2/3".
+/* EOD2 data client — classic script (no `export`), defines globalThis.EOD2Client. Vendored into AlphaDesk (A2-5) and Backtest Lab.
+ * Reads BOTH contracts with one API: "alphadesk-eod2/3" (one file per symbol under data/snapshots/<id>/) and "alphadesk-eod2/4" (one
+ * content-addressed history file per symbol + one "tail" file per kind for the current year). The contract is read from the manifest.
  *
  *   const client = EOD2Client.create({ baseUrl, cache: 'memory' | 'indexeddb', dbName: 'eod2_v3', fetch });
  *   const snap = await client.openSnapshot();          // {ok:false, code, detail} on any data problem, otherwise a frozen handle
@@ -6,6 +8,7 @@
  *   await snap.getSeries(sym [, {force}])              // {ok:true, bars, meta} | {ok:false, code, detail}
  *   snap.checkCoverage(sym, {from, to, fields, warmupSessions, mode, execDates})   // synchronous; series must have been loaded
  *   await snap.verifyAll({force, onProgress})
+ *   await snap.getMany(symbols, {concurrency: 6, onProgress})   // {SYMBOL: getSeries result}
  *   client.clearCache({datasetId, symbol})
  *
  * Rules: a handle never reloads the manifest and fetches only under its own snapshotBase; cache key eod2v3:<datasetId>:<symbol>:<sha256>,
@@ -15,7 +18,8 @@
 (function (root) {
   'use strict';
   var CONTRACT = 'alphadesk-eod2/3';
-  var VERSION = '3.0.0';
+  var CONTRACT4 = 'alphadesk-eod2/4';
+  var VERSION = '4.0.0';
   var FIELDS = ['date', 'open', 'high', 'low', 'close', 'volume'];
   var MIGRATED = 'migrated-v2-2026-09-11';
   var OHLC_WARN = 0.0005;
@@ -78,14 +82,14 @@
     if (l !== null && present.length && l > 0) worst = Math.max(worst, (l - Math.min.apply(null, present)) / l);
     return Math.max(0, worst);
   }
-  function validateSeries(doc, entry) {
+  function validateSeries(doc, entry, contract) {
     if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return fail('SCHEMA_INVALID', 'series is not an object');
-    if (doc.contract !== CONTRACT || doc.provider !== 'EOD2') return fail('SCHEMA_INVALID', 'contract/provider');
+    if (doc.contract !== (contract || CONTRACT) || doc.provider !== 'EOD2') return fail('SCHEMA_INVALID', 'contract/provider');
     if (doc.kind !== entry.kind || doc.id !== entry.id) return fail('WRONG_EXCHANGE_OR_KIND', 'series says ' + doc.kind + ' ' + doc.id + ', manifest says ' + entry.kind + ' ' + entry.id);
     if (!Array.isArray(doc.fields) || doc.fields.join(',') !== FIELDS.join(',')) return fail('SCHEMA_INVALID', 'fields');
     if (typeof doc.adjustment !== 'string' || !doc.adjustment) return fail('ADJUSTMENT_POLICY_UNKNOWN', 'adjustment');
     if (!Array.isArray(doc.bars) || !doc.bars.length) return fail('SCHEMA_INVALID', 'no bars');
-    var etf = entry.kind === 'ETF', warn = 0, prev = null, i, j, r;
+    var etf = entry.kind === 'ETF' || entry.kind === 'EQ', warn = 0, prev = null, i, j, r;
     for (i = 0; i < doc.bars.length; i++) {
       r = doc.bars[i];
       if (!Array.isArray(r) || r.length !== 6) return fail('SCHEMA_INVALID', 'row ' + i + ' is not a 6-tuple');
@@ -129,9 +133,10 @@
       if (got.err) return got.err;
       var m;
       try { m = JSON.parse(decode(got.bytes)); } catch (e) { return fail('SCHEMA_INVALID', 'manifest is not JSON'); }
-      if (!m || m.contract !== CONTRACT) return fail('SCHEMA_INVALID', 'manifest contract');
+      if (!m || (m.contract !== CONTRACT && m.contract !== CONTRACT4)) return fail('SCHEMA_INVALID', 'manifest contract');
       if (m.publishStatus !== 'PUBLISHABLE') return fail('SOURCE_UNAVAILABLE', 'snapshot is ' + m.publishStatus);
       if (typeof m.datasetId !== 'string' || typeof m.snapshotBase !== 'string' || !m.files || typeof m.files !== 'object' || !m.calendar || typeof m.calendar.path !== 'string' || !/^[0-9a-f]{64}$/.test(m.calendar.sha256 || '')) return fail('SCHEMA_INVALID', 'manifest fields');
+      if (m.contract === CONTRACT4 && (!m.tails || typeof m.tails !== 'object' || !isDate(m.histEnd))) return fail('SCHEMA_INVALID', 'manifest fields (v4 tails/histEnd)');
       var sbase = baseUrl + 'data/' + m.snapshotBase;
       var cb = await getBytes(sbase + m.calendar.path, true);
       if (cb.err) return cb.err;
@@ -139,7 +144,38 @@
       var cal;
       try { cal = JSON.parse(decode(cb.bytes)); } catch (e) { return fail('CALENDAR_UNVERIFIED', 'calendar is not JSON'); }
       if (!cal || !Array.isArray(cal.sessions) || !cal.sessions.length || !isDate(cal.verifiedThrough)) return fail('CALENDAR_UNVERIFIED', 'calendar content');
+      if (m.contract === CONTRACT4) await purgeV4(m);
       return buildHandle(m, cal, sbase);
+    }
+
+    /* v4: history files are cached by content hash for ever; an entry whose hash is no longer in the manifest can never be used again */
+    async function purgeV4(m) {
+      try {
+        var keep = new Set();
+        Object.keys(m.files).forEach(function (k) { if (m.files[k].hist) keep.add(m.files[k].hist.sha256); });
+        Object.keys(m.tails).forEach(function (k) { keep.add(m.tails[k].sha256); });
+        await cache.del(function (k) { var p = String(k).split(':'); return p[0] === 'eod2v4' && !keep.has(p[p.length - 1]); });
+      } catch (e) { /* a cache that cannot be listed is only slower, never wrong: every hit is re-hashed */ }
+    }
+    function encPath(p) { return String(p).split('/').map(encodeURIComponent).join('/'); }
+    /* fetch-or-cache one content-addressed file; returns {bytes, fromCache, cacheStatus} or {err} */
+    async function getHashed(ckey, url, sha, force, label) {
+      var bytes = null, fromCache = false, cacheStatus = 'MISS';
+      if (!force) {
+        var cached = await cache.get(ckey);
+        if (cached) {
+          if ((await sha256(cached)) === sha) { bytes = cached; fromCache = true; cacheStatus = 'HIT'; }
+          else { await cache.del(function (k) { return k === ckey; }); cacheStatus = 'REPAIRED'; }
+        }
+      } else cacheStatus = 'BYPASSED';
+      if (!bytes) {
+        var g = await getBytes(url, true);
+        if (g.err) return { err: g.err };
+        if ((await sha256(g.bytes)) !== sha) return { err: fail('HASH_MISMATCH', label + ': file bytes do not match the manifest sha256') };
+        bytes = g.bytes;
+        await cache.put(ckey, bytes);
+      }
+      return { bytes: bytes, fromCache: fromCache, cacheStatus: cacheStatus };
     }
 
     function buildHandle(m, cal, sbase) {
@@ -157,12 +193,59 @@
         if (x) return { blocked: fail(m.excluded[x].code || 'EXPORT_FAILED', m.excluded[x].detail || '') };
         return { blocked: fail('NOT_IN_EXPORT', String(sym)) };
       }
+      var v4 = m.contract === CONTRACT4, tails = {}, tailForced = {};
+      /* v4: the tail of a kind (current-year bars of every symbol) is fetched and hash-checked once per handle; `force` re-reads the network once */
+      function tailOf(kind, force) {
+        var t = m.tails[kind];
+        if (!t) return Promise.resolve({ series: {}, sha256: null, fromCache: true, cacheStatus: 'HIT' });
+        if (tails[kind] && !(force && !tailForced[kind])) return tails[kind];
+        if (force) tailForced[kind] = true;
+        var p = (async function () {
+          var g = await getHashed('eod2v4:tail:' + kind + ':' + t.sha256, sbase + encPath(t.path), t.sha256, force, 'tail ' + kind);
+          if (g.err) return g;
+          var doc;
+          try { doc = JSON.parse(decode(g.bytes)); } catch (err) { return { err: fail('SCHEMA_INVALID', 'tail ' + kind + ' is not JSON') }; }
+          if (!doc || doc.kind !== kind || doc.datasetId !== m.datasetId || !doc.series || typeof doc.series !== 'object') return { err: fail('SCHEMA_INVALID', 'tail ' + kind + ' header') };
+          return { series: doc.series, sha256: t.sha256, fromCache: g.fromCache, cacheStatus: g.cacheStatus };
+        })();
+        tails[kind] = p;
+        p.then(function (r) { if (r.err && tails[kind] === p) delete tails[kind]; });
+        return p;
+      }
+      async function getSeriesV4(key, entry, force) {
+        var h = entry.hist, hb = [], hist = null;
+        if (h) {
+          hist = await getHashed('eod2v4:hist:' + key + ':' + h.sha256, sbase + encPath(h.path), h.sha256, force, key);
+          if (hist.err) return hist.err;
+          var hd;
+          try { hd = JSON.parse(decode(hist.bytes)); } catch (err) { return fail('SCHEMA_INVALID', key + ' is not JSON'); }
+          var hv = validateSeries(hd, entry, CONTRACT4);
+          if (!hv.ok) return hv;
+          hb = hd.bars;
+        }
+        var t = await tailOf(entry.kind, force);
+        if (t.err) return t.err;
+        var tb = t.series[key] || [];
+        if (!Array.isArray(tb) || tb.length !== entry.tailBars) return fail('SCHEMA_INVALID', key + ': tail holds ' + (tb && tb.length) + ' bars, manifest says ' + entry.tailBars);
+        if (tb.length && hb.length && !(tb[0][0] > hb[hb.length - 1][0])) return fail('SCHEMA_INVALID', key + ': tail overlaps the history file');
+        var bars = hb.concat(tb.map(function (r) { return Array.isArray(r) ? r.slice() : r; }));
+        var v = validateSeries({ contract: CONTRACT4, provider: 'EOD2', id: entry.id, kind: entry.kind, fields: FIELDS, adjustment: m.adjustmentPolicy, bars: bars }, entry, CONTRACT4);
+        if (!v.ok) return v;
+        if (bars.length !== entry.bars) return fail('SCHEMA_INVALID', key + ': ' + bars.length + ' bars, manifest says ' + entry.bars);
+        var src = hist || t;
+        var reasons = (entry.reasons || []).map(function (r) { return Object.freeze(Object.assign({}, r)); });
+        var result = { ok: true, bars: freezeRows(bars), meta: Object.freeze({ symbol: key, id: entry.id, kind: entry.kind, sha256: h ? h.sha256 : t.sha256, first: bars[0][0], last: bars[bars.length - 1][0], bars: bars.length, status: entry.status, reasons: Object.freeze(reasons), noTradeDays: Object.freeze((entry.noTradeDays || []).slice()), smallOhlcDiscrepancies: v.smallOhlc, fromCache: src.fromCache, cacheStatus: src.cacheStatus, historyTruncatedFrom: entry.historyTruncatedFrom || null }) };
+        Object.freeze(result);
+        loaded[key] = { result: result, entry: entry };
+        return result;
+      }
       async function getSeries(sym, o) {
         var force = !!(o && o.force);
         var e = entryFor(sym);
         if (e.blocked) return e.blocked;
         var key = e.key, entry = e.entry;
         if (!force && loaded[key] && loaded[key].result) return loaded[key].result;
+        if (v4) return getSeriesV4(key, entry, force);
         var ckey = 'eod2v3:' + m.datasetId + ':' + key + ':' + entry.sha256;
         var bytes = null, fromCache = false, cacheStatus = 'MISS';
         if (!force) {
@@ -260,7 +343,25 @@
         return { ok: failures.length === 0, checked: keys.length, failures: failures };
       }
 
-      return Object.freeze({ ok: true, id: m.datasetId, manifest: m, calendar: cal, getSeries: getSeries, checkCoverage: checkCoverage, verifyAll: verifyAll });
+      /* many symbols with bounded parallelism: {SYMBOL (as asked): getSeries result}. Never throws for a data problem. */
+      async function getMany(symbols, o) {
+        o = o || {};
+        var list = (symbols || []).slice(), out = {}, next = 0, done = 0, n = Math.max(1, Math.min(o.concurrency || 6, 16));
+        async function worker() {
+          while (next < list.length) {
+            var s = list[next++];
+            try { out[s] = await getSeries(s, { force: !!o.force }); } catch (err) { out[s] = fail('SOURCE_UNAVAILABLE', (err && err.message) || err); }
+            done++;
+            if (o.onProgress) o.onProgress(done, list.length, s);
+          }
+        }
+        var ws = [];
+        for (var i = 0; i < n; i++) ws.push(worker());
+        await Promise.all(ws);
+        return out;
+      }
+
+      return Object.freeze({ ok: true, id: m.datasetId, contract: m.contract, manifest: m, calendar: cal, getSeries: getSeries, getMany: getMany, checkCoverage: checkCoverage, verifyAll: verifyAll });
     }
 
     async function clearCache(o) {
@@ -268,6 +369,7 @@
       var pre = 'eod2v3:' + (o.datasetId || '');
       return cache.del(function (k) {
         var p = String(k).split(':');
+        if (p[0] === 'eod2v4') return o.symbol ? (p[1] === 'hist' && p[2] === o.symbol) : true;      // v4 keys carry no dataset id: eod2v4:hist:<SYM>:<sha> / eod2v4:tail:<KIND>:<sha>
         return (!o.datasetId || p[1] === o.datasetId) && (!o.symbol || p[2] === o.symbol) && String(k).indexOf('eod2v3:') === 0 && pre.length >= 0;
       });
     }
@@ -282,5 +384,5 @@
     return Object.freeze({ openSnapshot: openSnapshot, clearCache: clearCache, __test: testHooks, cacheKind: cache.kind });
   }
 
-  root.EOD2Client = Object.freeze({ create: create, VERSION: VERSION, CONTRACT: CONTRACT });
+  root.EOD2Client = Object.freeze({ create: create, VERSION: VERSION, CONTRACT: CONTRACT, CONTRACTS: Object.freeze([CONTRACT, CONTRACT4]) });
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof self !== 'undefined' ? self : this));

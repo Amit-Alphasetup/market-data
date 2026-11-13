@@ -7,6 +7,7 @@ from datetime import date, datetime
 
 ASSET_CLASSES = ("equity", "gold", "silver", "international", "debt", "liquid")
 ENGINES = ("LIFO", "DM", "TENET")
+ACTION_TYPES = ("demerger", "merger", "rename", "rights", "capital-reduction", "other")
 INDEX_FIELDS = ("open", "high", "low", "close", "volume")
 HOLIDAY_SOURCES = ("eod2_meta",)
 MIGRATED_PROVENANCE = "migrated-v2-2026-09-11"
@@ -16,7 +17,8 @@ TIME_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\d\Z")
 ISIN_RE = re.compile(r"^[A-Z]{2}[A-Z0-9]{9}\d\Z")
 
 _TOP_REQUIRED = ("version", "defaultHistoryStart", "calendar", "instruments", "indices", "splits", "genuineMoves", "quarantine", "gapPolicy")
-_TOP_OPTIONAL = ("legacyV2", "badPrints")  # badPrints: per-date flags that a printed bar is not real data (dropped before the anomaly
+_TOP_OPTIONAL = ("legacyV2", "badPrints", "actions", "eqHistoryFloor")  # actions / eqHistoryFloor: v4 (stocks), see the end of validate().
+                                            # badPrints: per-date flags that a printed bar is not real data (dropped before the anomaly
                                             # scan, treated like a missing session) — optional so it need not be migrated into every
                                             # existing registry; absent means none flagged, same as an empty list.
 _INSTR_KEYS = ("id", "symbol", "kind", "exchange", "isin", "name", "assetClass", "engines", "linkedIndex", "listingDate",
@@ -226,6 +228,33 @@ def validate(reg):
             seen.add(key)
             if "note" in e and not isinstance(e["note"], str):
                 errs.append(f"{p}.note: must be text")
+
+    # v4 (stocks): reviewed corporate actions other than the splits/bonuses EOD2 already adjusts. Evidence and approval are REQUIRED.
+    acts = reg.get("actions", [])
+    if not isinstance(acts, list):
+        errs.append("$.actions: must be a list")
+        acts = []
+    seen = set()
+    for i, e in enumerate(acts):
+        p = f"$.actions[{i}]"
+        if not _check_keys(e, ("symbol", "date", "type", "factor", "evidence", "approvedAt", "provenance"), p, errs, optional=("note",)):
+            continue
+        _check_approval(e, p, errs, symbols, "action")
+        if e.get("type") not in ACTION_TYPES:
+            errs.append(f"{p}.type: must be one of {ACTION_TYPES} ({e.get('type')!r})")
+        f = e.get("factor")
+        if not (isinstance(f, (int, float)) and not isinstance(f, bool) and 0 < f < 1000 and f == f):
+            errs.append(f"{p}.factor: must be a positive number ({f!r})")
+        if not _nonempty_str(e.get("evidence")):
+            errs.append(f"{p}.evidence: required for an action")
+        if not is_iso_datetime(e.get("approvedAt")):
+            errs.append(f"{p}.approvedAt: required for an action")
+        key = (e.get("symbol"), e.get("date"))
+        if key in seen:
+            errs.append(f"{p}: duplicate action for {key[0]} on {key[1]}")
+        seen.add(key)
+    if "eqHistoryFloor" in reg and not is_date(reg["eqHistoryFloor"]):
+        errs.append("$.eqHistoryFloor: must be a real YYYY-MM-DD date")
 
     q = reg.get("quarantine")
     if not isinstance(q, (dict, list)):

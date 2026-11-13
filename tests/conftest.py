@@ -23,5 +23,6 @@ def child_env(lock_file, **extra):
     env["DATAOPS_LOCK_FILE"] = lock_file
     env.pop("DATAOPS_LOCK_TOKEN", None)
     env["PYTHONPATH"] = SRC + os.pathsep + env.get("PYTHONPATH", "")
+    env["DATAOPS_VERIFY_RETRIES"] = "0"          # a child CLI that publishes a test snapshot must not wait minutes for a Pages deploy that never comes
     env.update(extra)
     return env

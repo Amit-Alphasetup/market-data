@@ -8,7 +8,12 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def _reg():
     with open(os.path.join(REPO, "config", "universe.json"), encoding="utf-8") as fh:
-        return json.load(fh)
+        reg = json.load(fh)
+    reg["instruments"] = [x for x in reg["instruments"] if x["kind"] != "EQ"]      # the real registry holds the Nifty 500 since P2: start without stocks
+    for k in ("splits", "genuineMoves", "badPrints", "actions"):
+        if k in reg:
+            reg[k] = [e for e in reg[k] if any(x["symbol"] == e["symbol"] for x in reg["instruments"])]
+    return reg
 
 
 def test_adds_valid_eq_rows_and_is_idempotent(tmp_path):
