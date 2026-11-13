@@ -161,7 +161,8 @@ def push_or_rebase(repo, allowed_prefixes=("data/control/requests/",), guard=Non
         raise PublishFail("push failed after rebase: %s (commit kept locally; the next run pushes it)" % e)
 
 
-def publish(repo=REPO, dataset_id=None, now=None, base_url=BASE_URL, verify_wait=90, fetch=fetch_bytes, sleep=time.sleep, push=True, live_verify=True, work_root=None):
+def publish(repo=REPO, dataset_id=None, now=None, base_url=BASE_URL, verify_wait=90, fetch=fetch_bytes, sleep=time.sleep, push=True, live_verify=True, work_root=None,
+            verify_retries=5, verify_retry_wait=60):
     """Publish one snapshot. Returns the status dict (also written to data/control/status.json). Raises PublishRefused if nothing was published
     because the snapshot is UNPUBLISHABLE/missing; PublishFail after the status was recorded as FAIL."""
     work = work_root or os.path.join(repo, "work")
@@ -210,6 +211,13 @@ def publish(repo=REPO, dataset_id=None, now=None, base_url=BASE_URL, verify_wait
     if push and live_verify:                                                             # 8
         sleep(verify_wait)
         lv = verify_live(base_url, sid, fetch)
+        # GitHub Pages can take longer than verify_wait to deploy (2026-11-09: manifest still 404). Files that cannot be FETCHED are retried;
+        # a sha256 mismatch means wrong bytes are live and is reported at once.
+        for _ in range(verify_retries):
+            if lv["ok"] or any(": sha256 " in x for x in lv["failures"]):
+                break
+            sleep(verify_retry_wait)
+            lv = verify_live(base_url, sid, fetch)
         st = _status(now, "PUBLISHED", sid, latest, summary, st["message"], "OK" if lv["ok"] else "FAIL: " + "; ".join(lv["failures"][:3]))
         write_status(repo, st)
         git(repo, "add", "-A", "data/control")
