@@ -29,6 +29,10 @@ jobs:
   shadow-sync:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      v4DatasetHash: ${{ steps.v4hash.outputs.v4DatasetHash }}
+      v4DatasetId: ${{ steps.v4hash.outputs.v4DatasetId }}
+      v4Session: ${{ steps.v4hash.outputs.v4Session }}
     steps:
       - name: Checkout market-data
         uses: actions/checkout@v4
@@ -123,12 +127,38 @@ jobs:
           PY
           cp "$manifest" "$RUNNER_TEMP/shadow-manifest.json"
 
+      # P7 (Backtest Lab v2): v4 export (stocks + ETFs + indices) in shadow mode - nothing published.
+      - name: dataops export --v4 -> v4 dataset + datasetHash
+        working-directory: market-data
+        run: python -m dataops export --v4 --eod2-data-root ../eod2/src/eod2_data --out "$RUNNER_TEMP/v4"
+        env:
+          PYTHONUTF8: '1'
+          PYTHONPATH: src
+
+      - name: Report the v4 datasetHash (job output v4DatasetHash)
+        id: v4hash
+        run: |
+          manifest=$(find "$RUNNER_TEMP/v4" -maxdepth 2 -name manifest.json -print -quit)
+          test -n "$manifest" || { echo "::error::v4 export produced no manifest.json"; exit 1; }
+          cp "$manifest" "$RUNNER_TEMP/v4-manifest.json"
+          python - "$manifest" "$GITHUB_OUTPUT" <<'PY'
+          import json, sys
+          d = json.load(open(sys.argv[1], encoding="utf-8"))
+          lines = ["v4DatasetId=%s" % d.get("datasetId"), "v4DatasetHash=%s" % d.get("datasetHash"),
+                   "v4Session=%s" % (d.get("latestCompletedSession") or d.get("latestSession"))]
+          open(sys.argv[2], "a", encoding="utf-8").write("\n".join(lines) + "\n")
+          print("\n".join(lines))
+          print("::notice::v4 SHADOW " + " ".join(lines))
+          PY
+
       # Per-file hashes, so a datasetHash mismatch with the laptop can be traced to the files that differ.
       - name: Keep the shadow manifest (7 days)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: shadow-manifest
-          path: ${{ runner.temp }}/shadow-manifest.json
+          path: |
+            ${{ runner.temp }}/shadow-manifest.json
+            ${{ runner.temp }}/v4-manifest.json
           retention-days: 7
           if-no-files-found: ignore
