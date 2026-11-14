@@ -70,6 +70,11 @@ jobs:
           pip install -r eod2/requirements.txt
           pip install "httpx==0.28.1"
 
+      # NSE moved www.nseindia.com to www.nseindia.in (301) on 2026-11-13; the nse package has the old host
+      # hard-coded and fails its session warm-up. This run's Python environment only.
+      - name: Point the nse package at NSE's new website host
+        run: python market-data/scripts/ci_patch_nse_domain.py
+
       - name: Restore the archive into the fresh eod2 checkout
         run: |
           rm -rf eod2/src/eod2_data
