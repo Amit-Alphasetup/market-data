@@ -58,7 +58,8 @@ def content_key(manifest):
     serve): latest session, policy, every history hash and every symbol's bar count/last date."""
     return json.dumps([manifest["latestCompletedSession"], manifest["policyHash"], manifest["calendar"]["sha256"],
                        sorted((k, (f["hist"] or {}).get("sha256"), f["bars"], f["last"], f["status"]) for k, f in manifest["files"].items()),
-                       sorted(manifest["excluded"]), sorted(manifest["quarantined"])], sort_keys=True)
+                       sorted(manifest["excluded"]), sorted(manifest["quarantined"]),
+                       sorted((k, r["sha256"]) for k, r in (manifest.get("ref") or {}).items())], sort_keys=True)
 
 
 def publish_tree(tree_dir, remote=REMOTE, branch=BRANCH, push=True):

@@ -152,6 +152,11 @@ def verify_v4(out_dir, manifest):
     if cp:
         with open(cp, encoding="utf-8") as fh:
             problems += cal_mod.validate_calendar(json.load(fh))
+    for name, r in (manifest.get("ref") or {}).items():
+        if r.get("path") != "ref/%s.json" % name:
+            problems.append("ref %s has an unexpected path" % name)
+        else:
+            check(r["path"], r["sha256"], r["bytes"], "ref " + name)
     if not problems and dataset_hash_v4(manifest["files"], manifest["tails"], c["sha256"], manifest["policyHash"]) != manifest["datasetHash"]:
         problems.append("datasetHash mismatch")
     return problems
@@ -295,6 +300,16 @@ def build_v4(eod2_dir, config_path, out_dir, now=None, revision=1, exporter_vers
     with open(os.path.join(out_dir, "cal", cal_sha[:12], "calendar.json"), "wb") as f:
         f.write(cal_bytes)
     total += len(cal_bytes)
+    ref = {}
+    mem_src = os.path.join(os.path.dirname(os.path.abspath(config_path)), "membership.json")
+    if os.path.isfile(mem_src):  # P6: point-in-time index membership (scripts/build_membership.py), published as-is
+        with open(mem_src, "rb") as f:
+            mem_bytes = f.read()
+        os.makedirs(os.path.join(out_dir, "ref"), exist_ok=True)
+        with open(os.path.join(out_dir, "ref", "membership.json"), "wb") as f:
+            f.write(mem_bytes)
+        total += len(mem_bytes)
+        ref["membership"] = {"path": "ref/membership.json", "sha256": H.sha256_bytes(mem_bytes), "bytes": len(mem_bytes)}
     pol = policy_hash_v4(reg)
     by_kind = {k: {"published": sum(1 for f in files.values() if f["kind"] == k), "excluded": sum(1 for v in excluded.values() if v["kind"] == k),
                    "quarantined": sum(1 for v in quarantined.values() if v["kind"] == k)} for k in KINDS}
@@ -308,7 +323,7 @@ def build_v4(eod2_dir, config_path, out_dir, now=None, revision=1, exporter_vers
         "calendar": {"id": cal["id"], "path": cal_rel, "sha256": cal_sha, "bytes": len(cal_bytes), "cutoffIST": cal["cutoffIST"],
                      "coverageFrom": cal["coverageFrom"], "coverageTo": cal["coverageTo"], "verifiedThrough": cal["verifiedThrough"]},
         "adjustmentPolicy": ADJUSTMENT_V4, "tails": tails, "files": files, "excluded": excluded, "quarantined": quarantined,
-        "pendingActions": pending,
+        "pendingActions": pending, "ref": ref,
         "summary": {"requested": len(items), "ok": n_ok, "warn": len(files) - n_ok, "excluded": len(excluded), "quarantined": len(quarantined),
                     "byKind": by_kind, "historyTruncated": len(pending), "bytes": total},
     }
